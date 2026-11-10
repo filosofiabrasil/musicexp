@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "PANDEIRO.APP — Laboratório",
+    "name": "PANDEIRO.APP — Estudos",
     "slug": "pandeiro-apps-experimentais",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "orientation": "default",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#090909",
@@ -23,7 +23,7 @@
     "web": {
       "bundler": "metro",
       "output": "single",
-      "name": "PANDEIRO.APP — Laboratório"
+      "name": "PANDEIRO.APP — Estudos"
     },
     "plugins": [
       "expo-font",

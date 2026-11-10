@@ -14,6 +14,7 @@ import kit from "../src/data/kit.json";
 import { mixCycle } from "../src/audio/mixCycle";
 import { toPattern, barDuration } from "../src/pandeiro-ui-base/types";
 import rhythms from "../src/data/rhythms.json";
+import { PLAYBACK_RATE } from "../src/audio/sampleLibrary";
 import { waitForAudioLoad } from "../src/audio/waitForAudioLoad";
 
 test("o timbre normaliza cruzamentos de zero entre 16, 44,1 e 48 kHz", () => {
@@ -88,7 +89,9 @@ test("os 148 ritmos têm exatamente os frames da grade, sem tempo adicional", ()
     const pcm = mixCycle(config);
     assert.equal(
       pcm.length,
-      Math.round(barDuration(100, config.steps, config.subdivision) * kit.rate),
+      Math.round(
+        barDuration(100, config.steps, config.subdivision) * PLAYBACK_RATE,
+      ),
       rhythm.name,
     );
     assert.ok(

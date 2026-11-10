@@ -1,6 +1,6 @@
 {
   "name": "pandeiro-apps-experimentais",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "private": true,
   "main": "index.ts",
   "scripts": {
@@ -14,10 +14,12 @@
     "test": "tsx --test tests/*.test.ts",
     "test:browser": "playwright test",
     "import:rhythms": "node tools/import-rhythms.cjs",
-    "build:kit": "tsx tools/build-kit.ts",
+    "build:kit": "tsx tools/build-kit.ts && tsx tools/build-playback.ts",
     "export:web": "expo export --platform web",
     "export:native": "expo export --platform ios --platform android",
-    "preview": "node tools/preview.cjs"
+    "preview": "node tools/preview.cjs",
+    "build:analysis": "tsx tools/build-kit.ts",
+    "build:sounds": "tsx tools/build-kit.ts && tsx tools/build-playback.ts"
   },
   "dependencies": {
     "@expo-google-fonts/cormorant-garamond": "^0.4.0",
@@ -37,6 +39,7 @@
     "expo-haptics": "~15.0.0",
     "expo-linear-gradient": "~15.0.0",
     "expo-modules-core": "~3.0.30",
+    "expo-sharing": "~14.0.8",
     "expo-status-bar": "~3.0.0",
     "react": "19.1.0",
     "react-dom": "^19.1.0",
@@ -53,5 +56,6 @@
     "babel-preset-expo": "~54.0.0",
     "tsx": "^4.23.15",
     "typescript": "~5.9.0"
-  }
+  },
+  "description": "Laboratório de estudo do pandeiro: leitura rítmica, articulações, escuta e análise de tomadas."
 }

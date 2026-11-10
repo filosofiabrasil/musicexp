@@ -30,6 +30,11 @@ export type Rhythm = {
   sources: string[];
   confidence: string;
   padbt: boolean;
+  origin?: "library" | "study" | "custom";
+  meter?: string;
+  groups?: number[];
+  accents?: number[];
+  objective?: string;
 };
 export const THEME = {
   black: "#090909",

@@ -1,11 +1,13 @@
 import { createAudioPlayer, setAudioModeAsync, AudioPlayer } from "expo-audio";
-import { Kind, barDuration } from "../pandeiro-ui-base/types";
-import kit from "../data/kit.json";
+import { Kind, CODES, STROKES } from "../pandeiro-ui-base/types";
 import { wavBytes } from "./pcm";
 import { wavSource } from "./wavSource";
-import { mixCycle, PlaybackConfig } from "./mixCycle";
+import { mixPlayback, PlaybackConfig } from "./mixCycle";
 import { waitForAudioLoad } from "./waitForAudioLoad";
 export { mixCycle, PlaybackConfig } from "./mixCycle";
+import { PLAYBACK_RATE, soundVariant } from "./sampleLibrary";
+import { SAMPLE_ASSETS } from "../data/sampleAssets";
+import { SampleChoices } from "../music/score";
 
 /** Um WAV por ciclo: o agendamento está nos frames de áudio, sem setInterval. */
 export class AudioEngine {
@@ -18,6 +20,7 @@ export class AudioEngine {
   private generation = 0;
   private startRevision = 0;
   private cancelLoad: (() => void) | null = null;
+  private volume = 1;
   running = false;
   ready = false;
   async prepare(config: PlaybackConfig) {
@@ -30,8 +33,9 @@ export class AudioEngine {
       playsInSilentMode: true,
       shouldPlayInBackground: false,
     });
-    const pcm = mixCycle(config);
-    const source = await wavSource(wavBytes(pcm, kit.rate));
+    const playback = mixPlayback(config);
+    const pcm = playback.pcm;
+    const source = await wavSource(wavBytes(pcm, PLAYBACK_RATE));
     if (generation !== this.generation) {
       source.dispose();
       return;
@@ -42,8 +46,9 @@ export class AudioEngine {
     );
     this.player = player;
     this.disposeSource = source.dispose;
-    this.duration = barDuration(config.bpm, config.steps, config.subdivision);
-    this.actualDuration = pcm.length / kit.rate;
+    this.duration = playback.logicalDuration;
+    this.actualDuration = pcm.length / PLAYBACK_RATE;
+    player.volume = this.volume;
     player.loop = true;
     const load = waitForAudioLoad(player);
     this.cancelLoad = load.cancel;
@@ -73,6 +78,10 @@ export class AudioEngine {
     this.player?.pause();
     this.running = false;
   }
+  setVolume(value: number) {
+    this.volume = Math.max(0, Math.min(1, value));
+    if (this.player) this.player.volume = this.volume;
+  }
   getTime = () => {
     if (!this.player) return 0;
     const position = this.player.currentTime;
@@ -98,37 +107,44 @@ export class AudioEngine {
   }
 }
 
-const soundFiles: Record<Kind, number> = {
-  grave: require("../../assets/kit/grave.wav"),
-  abafado: require("../../assets/kit/abafado.wav"),
-  dedos: require("../../assets/kit/dedos.wav"),
-  punho: require("../../assets/kit/punho.wav"),
-  tapa: require("../../assets/kit/tapa.wav"),
-  tapaPolegar: require("../../assets/kit/tapaPolegar.wav"),
-  graveDedos: require("../../assets/kit/graveDedos.wav"),
-  medio: require("../../assets/kit/medio.wav"),
-  rulo: require("../../assets/kit/rulo.wav"),
-};
 export class PadSounds {
-  private players = new Map<Kind, AudioPlayer[]>();
-  private index = new Map<Kind, number>();
+  private players = new Map<string, AudioPlayer[]>();
+  private index = new Map<string, number>();
   private generation = 0;
-  prepare() {
-    this.dispose();
-    Object.entries(soundFiles).forEach(([kind, asset]) => {
-      this.players.set(kind as Kind, [
-        createAudioPlayer(asset),
-        createAudioPlayer(asset),
-      ]);
-    });
+  private volume = 1;
+  private pool(kind: Kind, variantId?: string) {
+    const variant = soundVariant(kind, variantId);
+    if (!this.players.has(variant.id)) {
+      const asset = SAMPLE_ASSETS[variant.id];
+      const players = [createAudioPlayer(asset), createAudioPlayer(asset)];
+      players.forEach((player) => {
+        player.volume = this.volume;
+      });
+      this.players.set(variant.id, players);
+    }
+    return { id: variant.id, players: this.players.get(variant.id)! };
   }
-  async play(kind: Kind) {
-    const pool = this.players.get(kind);
-    if (!pool) return;
-    const index = (this.index.get(kind) || 0) % pool.length;
-    this.index.set(kind, index + 1);
-    const player = pool[index];
-    const generation = this.generation;
+  prepare(choices: SampleChoices = {}) {
+    this.dispose();
+    for (const code of CODES) {
+      const kind = STROKES[code].kind;
+      this.pool(kind, choices[kind]);
+    }
+  }
+  setVolume(value: number) {
+    this.volume = Math.max(0, Math.min(1, value));
+    this.players.forEach((pool) =>
+      pool.forEach((player) => {
+        player.volume = this.volume;
+      }),
+    );
+  }
+  async play(kind: Kind, variantId?: string) {
+    const { id, players } = this.pool(kind, variantId);
+    const index = (this.index.get(id) || 0) % players.length;
+    this.index.set(id, index + 1);
+    const player = players[index],
+      generation = this.generation;
     try {
       await player.seekTo(0);
       if (generation === this.generation) player.play();
@@ -140,5 +156,6 @@ export class PadSounds {
     this.generation++;
     this.players.forEach((pool) => pool.forEach((player) => player.remove()));
     this.players.clear();
+    this.index.clear();
   }
 }

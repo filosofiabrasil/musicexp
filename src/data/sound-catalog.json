@@ -1,0 +1,399 @@
+{
+  "rate": 44100,
+  "normalization": "Pico de referência 0,8; ganho não corresponde a dB SPL.",
+  "excluded": [
+    {
+      "file": "a.m4a",
+      "reason": "Gravação longa, sem identificação de golpe isolado."
+    }
+  ],
+  "samples": [
+    {
+      "id": "DEDOS1",
+      "file": "DEDOS1.m4a",
+      "kind": "dedos",
+      "frames": 22527,
+      "durationMs": 511,
+      "trimMs": 65,
+      "sourceFrames": 25401
+    },
+    {
+      "id": "DEDOS2",
+      "file": "DEDOS2.m4a",
+      "kind": "dedos",
+      "frames": 11537,
+      "durationMs": 262,
+      "trimMs": 37,
+      "sourceFrames": 13172
+    },
+    {
+      "id": "DEDOS3",
+      "file": "DEDOS3.m4a",
+      "kind": "dedos",
+      "frames": 11170,
+      "durationMs": 253,
+      "trimMs": 45,
+      "sourceFrames": 13172
+    },
+    {
+      "id": "DEDOS4",
+      "file": "DEDOS4.m4a",
+      "kind": "dedos",
+      "frames": 10240,
+      "durationMs": 232,
+      "trimMs": 45,
+      "sourceFrames": 12231
+    },
+    {
+      "id": "DEDOS5",
+      "file": "DEDOS5.m4a",
+      "kind": "dedos",
+      "frames": 19679,
+      "durationMs": 446,
+      "trimMs": 66,
+      "sourceFrames": 22580
+    },
+    {
+      "id": "DEDOS6",
+      "file": "DEDOS6.m4a",
+      "kind": "dedos",
+      "frames": 22437,
+      "durationMs": 509,
+      "trimMs": 67,
+      "sourceFrames": 25401
+    },
+    {
+      "id": "GRAVEABAFADO",
+      "file": "GRAVEABAFADO.m4a",
+      "kind": "abafado",
+      "frames": 19481,
+      "durationMs": 442,
+      "trimMs": 49,
+      "sourceFrames": 21639
+    },
+    {
+      "id": "GRAVEABAFADO1",
+      "file": "GRAVEABAFADO1.m4a",
+      "kind": "abafado",
+      "frames": 29802,
+      "durationMs": 676,
+      "trimMs": 114,
+      "sourceFrames": 34809
+    },
+    {
+      "id": "GRAVEABAFADO2",
+      "file": "GRAVEABAFADO2.m4a",
+      "kind": "abafado",
+      "frames": 19124,
+      "durationMs": 434,
+      "trimMs": 57,
+      "sourceFrames": 21639
+    },
+    {
+      "id": "GRAVEABAFADO3",
+      "file": "GRAVEABAFADO3.m4a",
+      "kind": "abafado",
+      "frames": 19041,
+      "durationMs": 432,
+      "trimMs": 80,
+      "sourceFrames": 22580
+    },
+    {
+      "id": "GRAVEABAFADO5",
+      "file": "GRAVEABAFADO5.m4a",
+      "kind": "abafado",
+      "frames": 46577,
+      "durationMs": 1056,
+      "trimMs": 117,
+      "sourceFrames": 51744
+    },
+    {
+      "id": "GRAVEDEDOS",
+      "file": "GRAVEDEDOS.m4a",
+      "kind": "graveDedos",
+      "frames": 20185,
+      "durationMs": 458,
+      "trimMs": 76,
+      "sourceFrames": 23520
+    },
+    {
+      "id": "GRAVEDEDOS1",
+      "file": "GRAVEDEDOS1.m4a",
+      "kind": "graveDedos",
+      "frames": 23329,
+      "durationMs": 529,
+      "trimMs": 90,
+      "sourceFrames": 27284
+    },
+    {
+      "id": "GRAVEDEDOS2",
+      "file": "GRAVEDEDOS2.m4a",
+      "kind": "graveDedos",
+      "frames": 28469,
+      "durationMs": 646,
+      "trimMs": 58,
+      "sourceFrames": 31047
+    },
+    {
+      "id": "GRAVESDEDOS3",
+      "file": "GRAVESDEDOS3.m4a",
+      "kind": "graveDedos",
+      "frames": 25110,
+      "durationMs": 569,
+      "trimMs": 92,
+      "sourceFrames": 29165
+    },
+    {
+      "id": "GRAVESOLTO",
+      "file": "GRAVESOLTO.m4a",
+      "kind": "grave",
+      "frames": 21351,
+      "durationMs": 484,
+      "trimMs": 49,
+      "sourceFrames": 23520
+    },
+    {
+      "id": "GRAVESOLTO1",
+      "file": "GRAVESOLTO1.m4a",
+      "kind": "grave",
+      "frames": 19491,
+      "durationMs": 442,
+      "trimMs": 49,
+      "sourceFrames": 21639
+    },
+    {
+      "id": "GRAVESOLTO2",
+      "file": "GRAVESOLTO2.m4a",
+      "kind": "grave",
+      "frames": 20048,
+      "durationMs": 455,
+      "trimMs": 57,
+      "sourceFrames": 22580
+    },
+    {
+      "id": "GRAVESOLTO3",
+      "file": "GRAVESOLTO3.m4a",
+      "kind": "grave",
+      "frames": 19047,
+      "durationMs": 432,
+      "trimMs": 59,
+      "sourceFrames": 21639
+    },
+    {
+      "id": "GRAVESOLTO4",
+      "file": "GRAVESOLTO4.m4a",
+      "kind": "grave",
+      "frames": 41829,
+      "durationMs": 949,
+      "trimMs": 76,
+      "sourceFrames": 45159
+    },
+    {
+      "id": "GRAVESOLTO6",
+      "file": "GRAVESOLTO6.m4a",
+      "kind": "grave",
+      "frames": 55691,
+      "durationMs": 1263,
+      "trimMs": 60,
+      "sourceFrames": 58329
+    },
+    {
+      "id": "MEDIO",
+      "file": "MEDIO.m4a",
+      "kind": "medio",
+      "frames": 33984,
+      "durationMs": 771,
+      "trimMs": 61,
+      "sourceFrames": 36692
+    },
+    {
+      "id": "MEDIO1",
+      "file": "MEDIO1.m4a",
+      "kind": "medio",
+      "frames": 20679,
+      "durationMs": 469,
+      "trimMs": 86,
+      "sourceFrames": 24461
+    },
+    {
+      "id": "MEDIO2",
+      "file": "MEDIO2.m4a",
+      "kind": "medio",
+      "frames": 26818,
+      "durationMs": 608,
+      "trimMs": 139,
+      "sourceFrames": 32928
+    },
+    {
+      "id": "MEDIO3",
+      "file": "MEDIO3.m4a",
+      "kind": "medio",
+      "frames": 21006,
+      "durationMs": 476,
+      "trimMs": 57,
+      "sourceFrames": 23520
+    },
+    {
+      "id": "PUNHO1",
+      "file": "PUNHO1.m4a",
+      "kind": "punho",
+      "frames": 16543,
+      "durationMs": 375,
+      "trimMs": 52,
+      "sourceFrames": 18816
+    },
+    {
+      "id": "PUNHO2",
+      "file": "PUNHO2.m4a",
+      "kind": "punho",
+      "frames": 11143,
+      "durationMs": 253,
+      "trimMs": 46,
+      "sourceFrames": 13172
+    },
+    {
+      "id": "PUNHO3",
+      "file": "PUNHO3.m4a",
+      "kind": "punho",
+      "frames": 11376,
+      "durationMs": 258,
+      "trimMs": 41,
+      "sourceFrames": 13172
+    },
+    {
+      "id": "PUNHO4",
+      "file": "PUNHO4.m4a",
+      "kind": "punho",
+      "frames": 12311,
+      "durationMs": 279,
+      "trimMs": 41,
+      "sourceFrames": 14112
+    },
+    {
+      "id": "PUNHO5",
+      "file": "PUNHO5.m4a",
+      "kind": "punho",
+      "frames": 23737,
+      "durationMs": 538,
+      "trimMs": 59,
+      "sourceFrames": 26343
+    },
+    {
+      "id": "PUNHO6",
+      "file": "PUNHO6.m4a",
+      "kind": "punho",
+      "frames": 25371,
+      "durationMs": 575,
+      "trimMs": 65,
+      "sourceFrames": 28224
+    },
+    {
+      "id": "RULO",
+      "file": "RULO.m4a",
+      "kind": "rulo",
+      "frames": 26923,
+      "durationMs": 610,
+      "trimMs": 51,
+      "sourceFrames": 29165
+    },
+    {
+      "id": "RULO1",
+      "file": "RULO1.m4a",
+      "kind": "rulo",
+      "frames": 27094,
+      "durationMs": 614,
+      "trimMs": 68,
+      "sourceFrames": 30105
+    },
+    {
+      "id": "RULO2",
+      "file": "RULO2.m4a",
+      "kind": "rulo",
+      "frames": 25795,
+      "durationMs": 585,
+      "trimMs": 98,
+      "sourceFrames": 30105
+    },
+    {
+      "id": "RULO3",
+      "file": "RULO3.m4a",
+      "kind": "rulo",
+      "frames": 23925,
+      "durationMs": 543,
+      "trimMs": 55,
+      "sourceFrames": 26343
+    },
+    {
+      "id": "TAPA1",
+      "file": "TAPA1.m4a",
+      "kind": "tapa",
+      "frames": 25032,
+      "durationMs": 568,
+      "trimMs": 94,
+      "sourceFrames": 29165
+    },
+    {
+      "id": "TAPA2",
+      "file": "TAPA2.m4a",
+      "kind": "tapa",
+      "frames": 26409,
+      "durationMs": 599,
+      "trimMs": 105,
+      "sourceFrames": 31047
+    },
+    {
+      "id": "TAPA3",
+      "file": "TAPA3.m4a",
+      "kind": "tapa",
+      "frames": 37038,
+      "durationMs": 840,
+      "trimMs": 77,
+      "sourceFrames": 40455
+    },
+    {
+      "id": "TAPA4",
+      "file": "TAPA4.m4a",
+      "kind": "tapa",
+      "frames": 21483,
+      "durationMs": 487,
+      "trimMs": 89,
+      "sourceFrames": 25401
+    },
+    {
+      "id": "TAPAPOLEGAR",
+      "file": "TAPAPOLEGAR.m4a",
+      "kind": "tapaPolegar",
+      "frames": 55729,
+      "durationMs": 1264,
+      "trimMs": 187,
+      "sourceFrames": 63975
+    },
+    {
+      "id": "TAPAPOLEGAR1",
+      "file": "TAPAPOLEGAR1.m4a",
+      "kind": "tapaPolegar",
+      "frames": 58161,
+      "durationMs": 1319,
+      "trimMs": 217,
+      "sourceFrames": 67737
+    },
+    {
+      "id": "TAPAPOLEGAR2",
+      "file": "TAPAPOLEGAR2.m4a",
+      "kind": "tapaPolegar",
+      "frames": 68381,
+      "durationMs": 1551,
+      "trimMs": 199,
+      "sourceFrames": 77145
+    },
+    {
+      "id": "TAPAPOLEGAR4",
+      "file": "TAPAPOLEGAR4.m4a",
+      "kind": "tapaPolegar",
+      "frames": 60808,
+      "durationMs": 1379,
+      "trimMs": 136,
+      "sourceFrames": 66797
+    }
+  ]
+}

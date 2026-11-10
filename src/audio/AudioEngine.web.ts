@@ -1,8 +1,9 @@
-import { Kind, barDuration } from "../pandeiro-ui-base/types";
-import kit from "../data/kit.json";
-import { decodePcm16 } from "./pcm";
-import { mixCycle, PlaybackConfig } from "./mixCycle";
+import { Kind } from "../pandeiro-ui-base/types";
+import { mixPlayback, PlaybackConfig } from "./mixCycle";
 export { mixCycle, PlaybackConfig } from "./mixCycle";
+import { PLAYBACK_RATE, soundPcm, soundVariant } from "./sampleLibrary";
+import { SampleChoices } from "../music/score";
+import { CODES, STROKES } from "../pandeiro-ui-base/types";
 
 let context: AudioContext | null = null;
 function audioContext() {
@@ -12,7 +13,7 @@ function audioContext() {
   return context;
 }
 function bufferFromPcm(pcm: Float32Array) {
-  const buffer = audioContext().createBuffer(1, pcm.length, kit.rate);
+  const buffer = audioContext().createBuffer(1, pcm.length, PLAYBACK_RATE);
   buffer.copyToChannel(new Float32Array(pcm), 0);
   return buffer;
 }
@@ -26,15 +27,19 @@ export class AudioEngine {
   private durationScale = 1;
   private generation = 0;
   private starting: Promise<boolean> | null = null;
+  private output: GainNode | null = null;
+  private volume = 1;
   running = false;
   ready = false;
 
   async prepare(config: PlaybackConfig) {
     this.dispose();
-    this.buffer = bufferFromPcm(mixCycle(config));
-    this.durationScale =
-      barDuration(config.bpm, config.steps, config.subdivision) /
-      this.buffer.duration;
+    const playback = mixPlayback(config);
+    this.buffer = bufferFromPcm(playback.pcm);
+    this.durationScale = playback.logicalDuration / this.buffer.duration;
+    this.output = audioContext().createGain();
+    this.output.gain.value = this.volume;
+    this.output.connect(audioContext().destination);
     this.ready = true;
   }
   start(): Promise<boolean> {
@@ -58,7 +63,7 @@ export class AudioEngine {
       source.loop = true;
       source.loopStart = 0;
       source.loopEnd = buffer.duration;
-      source.connect(ctx.destination);
+      source.connect(this.output ?? ctx.destination);
       this.startedAt = ctx.currentTime;
       source.start(
         this.startedAt,
@@ -74,6 +79,10 @@ export class AudioEngine {
     };
     void pending.then(clear, clear);
     return pending;
+  }
+  setVolume(value: number) {
+    this.volume = Math.max(0, Math.min(1, value));
+    if (this.output) this.output.gain.value = this.volume;
   }
   getTime = () =>
     this.elapsed +
@@ -92,6 +101,8 @@ export class AudioEngine {
   }
   dispose() {
     this.pause();
+    this.output?.disconnect();
+    this.output = null;
     this.buffer = null;
     this.elapsed = 0;
     this.ready = false;
@@ -99,24 +110,38 @@ export class AudioEngine {
 }
 
 export class PadSounds {
-  private buffers = new Map<Kind, AudioBuffer>();
+  private buffers = new Map<string, AudioBuffer>();
   private voices = new Set<AudioBufferSourceNode>();
   private generation = 0;
-  prepare() {
+  private output: GainNode | null = null;
+  private volume = 1;
+  prepare(choices: SampleChoices = {}) {
     this.dispose();
-    for (const [kind, pcm] of Object.entries(kit.samples))
-      this.buffers.set(kind as Kind, bufferFromPcm(decodePcm16(pcm)));
+    this.output = audioContext().createGain();
+    this.output.gain.value = this.volume;
+    this.output.connect(audioContext().destination);
+    for (const code of CODES) {
+      const kind = STROKES[code].kind,
+        variant = soundVariant(kind, choices[kind]);
+      this.buffers.set(variant.id, bufferFromPcm(soundPcm(kind, variant.id)));
+    }
   }
-  async play(kind: Kind) {
-    const buffer = this.buffers.get(kind);
-    if (!buffer) return;
-    const generation = this.generation;
-    const ctx = audioContext();
+  setVolume(value: number) {
+    this.volume = Math.max(0, Math.min(1, value));
+    if (this.output) this.output.gain.value = this.volume;
+  }
+  async play(kind: Kind, variantId?: string) {
+    const variant = soundVariant(kind, variantId);
+    if (!this.buffers.has(variant.id))
+      this.buffers.set(variant.id, bufferFromPcm(soundPcm(kind, variant.id)));
+    const buffer = this.buffers.get(variant.id)!;
+    const generation = this.generation,
+      ctx = audioContext();
     if (ctx.state !== "running") await ctx.resume();
-    if (generation !== this.generation || !this.buffers.has(kind)) return;
+    if (generation !== this.generation || !this.output) return;
     const voice = ctx.createBufferSource();
     voice.buffer = buffer;
-    voice.connect(ctx.destination);
+    voice.connect(this.output);
     this.voices.add(voice);
     voice.onended = () => {
       voice.disconnect();
@@ -133,5 +158,7 @@ export class PadSounds {
     }
     this.voices.clear();
     this.buffers.clear();
+    this.output?.disconnect();
+    this.output = null;
   }
 }

@@ -1,58 +1,66 @@
-import React, { useMemo, useState } from "react";
-import appPackage from "./package.json";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
-import { CODES, STROKES, THEME as T } from "./src/pandeiro-ui-base/types";
+import appPackage from "./package.json";
+import {
+  CODES,
+  Kind,
+  Rhythm,
+  STROKES,
+  StrokeCode,
+  THEME as T,
+} from "./src/pandeiro-ui-base/types";
 import { HitBars } from "./src/pandeiro-ui-base/HitBars";
 import { RhythmRing } from "./src/pandeiro-ui-base/RhythmRing";
 import { TimingScatter } from "./src/pandeiro-ui-base/TimingScatter";
 import { usePractice } from "./src/hooks/usePractice";
+import { useJournal } from "./src/hooks/useJournal";
 import { sessionMetrics } from "./src/audio/timing";
+import { PLAYBACK_RATE } from "./src/audio/sampleLibrary";
+import { diagnoseHits, makeRecord, SessionExport } from "./src/study/records";
+import { SUBDIVISION_NAMES, scorePosition } from "./src/music/score";
 import { Pandeiro } from "./src/components/Pandeiro";
 import { RHYTHMS, RhythmLibrary } from "./src/components/RhythmLibrary";
-import { Button, fonts, Label, Separator } from "./src/components/ui";
+import { ScoreStrip } from "./src/components/ScoreStrip";
+import { SoundAtlas } from "./src/components/SoundAtlas";
+import {
+  ExerciseLibrary,
+  INITIAL_DRAFT,
+  EditorDraft,
+} from "./src/components/ExerciseLibrary";
+import { StudyJournal } from "./src/components/StudyJournal";
+import { PracticeControls, Transport } from "./src/components/PracticeControls";
+import { Button, Label, Separator, fonts } from "./src/components/ui";
 
 const MODES = [
-  {
-    id: "ring",
-    number: "01",
-    name: "Roda do tempo",
-    title: "Sinta o tempo",
-    subtitle: "Veja cada golpe encontrar o seu lugar no ciclo.",
-  },
-  {
-    id: "bars",
-    number: "02",
-    name: "Barras no tempo",
-    title: "Dê forma ao ritmo",
-    subtitle: "O contorno é o caminho. O preenchimento é a sua mão.",
-  },
-  {
-    id: "scatter",
-    number: "03",
-    name: "Precisão",
-    title: "Encontre o centro",
-    subtitle: "Cada golpe deixa uma marca. O centro é o tempo perfeito.",
-  },
+  { id: "ring", number: "01", name: "Roda do tempo" },
+  { id: "bars", number: "02", name: "Barras no tempo" },
+  { id: "scatter", number: "03", name: "Precisão" },
 ] as const;
+type Section = "practice" | "studies" | "sounds" | "journal";
+const SECTIONS: { id: Section; name: string }[] = [
+  { id: "practice", name: "Prática" },
+  { id: "studies", name: "Estudos e escrita" },
+  { id: "sounds", name: "Articulações e sons" },
+  { id: "journal", name: "Caderno" },
+];
 
 export default function App() {
   const [loaded, fontError] = useFonts({
     InterTight_900Black: require("@expo-google-fonts/inter-tight/900Black/InterTight_900Black.ttf"),
     InterTight_500Medium: require("@expo-google-fonts/inter-tight/500Medium/InterTight_500Medium.ttf"),
     JetBrainsMono_500Medium: require("@expo-google-fonts/jetbrains-mono/500Medium/JetBrainsMono_500Medium.ttf"),
+    CormorantGaramond_600SemiBold: require("@expo-google-fonts/cormorant-garamond/600SemiBold/CormorantGaramond_600SemiBold.ttf"),
   });
   if (!loaded && !fontError)
     return (
@@ -64,261 +72,171 @@ export default function App() {
           justifyContent: "center",
         }}
       >
-        <Text style={{ color: T.orange }}>PANDEIRO.APP</Text>
+        <Text style={{ color: T.ivory }}>PANDEIRO.APP · Estudos</Text>
       </View>
     );
   return (
     <SafeAreaProvider>
       <StatusBar style="light" />
-      <PracticeScreen />
+      <Laboratory />
     </SafeAreaProvider>
   );
 }
-function PracticeScreen() {
+function Laboratory() {
   const [rhythm, setRhythm] = useState(RHYTHMS.find((r) => r.id === "lw77")!);
-  const [modeIndex, setModeIndex] = useState(0),
+  const [section, setSection] = useState<Section>("practice"),
+    [modeIndex, setModeIndex] = useState(0),
     [library, setLibrary] = useState(false),
-    [extended, setExtended] = useState(false),
-    [details, setDetails] = useState(false);
-  const practice = usePractice(rhythm),
-    { width } = useWindowDimensions(),
+    [selectedUnit, setSelectedUnit] = useState(0);
+  const [draft, setDraft] = useState<EditorDraft>(INITIAL_DRAFT),
+    [notes, setNotes] = useState(""),
+    [savedMessage, setSavedMessage] = useState("");
+  const practice = usePractice(rhythm, section === "practice" && !library),
+    journal = useJournal();
+  const { width } = useWindowDimensions(),
     wide = width >= 1000;
-  const mode = MODES[modeIndex],
-    { clock, hits, pattern, bpm, subdivision } = practice;
-  const chartWidth = wide
-    ? Math.min(690, width - 480)
-    : Math.max(200, Math.min(650, width - 76));
-  const ringSize = Math.min(wide ? 445 : 390, chartWidth);
-  const scoredSteps = Math.floor(clock.t / clock.stepDur + 1e-9);
+  const contentWidth = Math.max(
+    220,
+    Math.min(width, 1360) - 44 - (wide ? 328 : 0) - 36,
+  );
+  const chartWidth = Math.min(710, contentWidth);
+  const ringSize = Math.min(360, chartWidth),
+    mode = MODES[modeIndex];
+  const { clock, pattern, hits, sequence, subdivision, bpm, range } = practice;
+  const focused = Math.min(selectedUnit, rhythm.sequence.length - 1),
+    focusedCode = rhythm.sequence[focused] as StrokeCode | ".";
+  const evaluatedTime =
+    Math.floor(clock.t / clock.stepDur + 1e-9) * clock.stepDur;
   const metrics = useMemo(
     () =>
       sessionMetrics(
         hits,
         pattern,
-        rhythm.sequence.length,
+        sequence.length,
         bpm,
         subdivision,
         practice.tolerance,
-        scoredSteps * clock.stepDur,
+        evaluatedTime,
       ),
     [
       hits,
       pattern,
-      rhythm.sequence.length,
+      sequence.length,
       bpm,
       subdivision,
       practice.tolerance,
-      scoredSteps,
-      clock.stepDur,
+      evaluatedTime,
     ],
   );
-  const visibleCodes = extended
-    ? CODES
-    : CODES.filter(
-        (code) =>
-          ["P", "D", "T", "B"].includes(code) || rhythm.sequence.includes(code),
+  const diagnosis = useMemo(
+    () =>
+      diagnoseHits(
+        hits,
+        pattern,
+        sequence.length,
+        bpm,
+        subdivision,
+        practice.tolerance,
+        evaluatedTime,
+      ),
+    [
+      hits,
+      pattern,
+      sequence.length,
+      bpm,
+      subdivision,
+      practice.tolerance,
+      evaluatedTime,
+    ],
+  );
+  useEffect(() => {
+    setSelectedUnit(0);
+  }, [rhythm.id]);
+  useEffect(() => {
+    setSavedMessage("");
+  }, [practice.takeIdentity.id]);
+  const navigate = (next: Section) => {
+    if (next === section) return;
+    practice.setCalibrating(null);
+    setSection(next);
+  };
+  const openLibrary = () => {
+    practice.pause();
+    setLibrary(true);
+  };
+  const chooseRhythm = (next: Rhythm) => {
+    practice.pause();
+    practice.setIsolation(null);
+    setRhythm(next);
+    setSection("practice");
+  };
+  const snapshot = (): SessionExport => {
+    const record = makeRecord(
+      rhythm,
+      {
+        bpm,
+        subdivision,
+        tolerance: practice.tolerance,
+        range,
+        groups: practice.groups,
+        source: practice.source,
+        captureRate: practice.captureRate,
+        clickMode: practice.clickMode,
+        dynamic: practice.dynamic,
+        sampleChoices: practice.sampleChoices,
+        isolation: practice.isolation,
+        volume: practice.volume,
+        guide: practice.guide,
+        click: practice.click,
+        latencyMs: practice.latency,
+      },
+      pattern,
+      hits,
+      practice.readTime(),
+      notes,
+      practice.takeIdentity,
+    );
+    return {
+      schemaVersion: 1,
+      appVersion: appPackage.version,
+      timingUnit: "seconds",
+      errorUnit: "milliseconds",
+      timestampMeaning: `t e nominal no relógio da reprodução; t do microfone desconta ${practice.latency} ms. Associação à unidade mais próxima; escore de timbre não é probabilidade. Buffer de referência ${PLAYBACK_RATE} Hz; templates 16000 Hz; captura ${practice.captureRate ?? "não informada"} Hz. Configuração final da tomada; volume pode ter variado.`,
+      rhythm,
+      record,
+      hits: [...hits],
+    };
+  };
+  const saveTake = async () => {
+    practice.pause();
+    try {
+      if (!hits.length) return;
+      await journal.add(snapshot().record);
+      setSavedMessage(
+        "Resumo da tomada registrado. Exporte JSON/CSV para preservar os golpes individuais.",
       );
-  const current = pattern[clock.step],
+    } catch (error) {
+      practice.setError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível registrar a tomada.",
+      );
+    }
+  };
+  const currentKind = pattern[clock.step],
     pulse =
-      practice.running && current
+      practice.running && currentKind
         ? Math.exp(
             -(clock.t - clock.barStart - clock.step * clock.stepDur) * 22,
           )
         : 0;
-
-  const settings = (
-    <View style={[styles.settings, wide && { width: 306 }]}>
-      <Label orange>{wide ? "SEU TREINO" : "AJUSTES DO TREINO"}</Label>
-      {wide && (
-        <>
-          <View style={{ gap: 7 }}>
-            <Text style={styles.rhythmName}>{rhythm.name}</Text>
-            <Label>
-              {rhythm.sequence.length} PASSOS · {rhythm.group.toUpperCase()}
-            </Label>
-          </View>
-          <Button
-            onPress={() => setLibrary(true)}
-            label="Abrir biblioteca de ritmos"
-          >
-            Biblioteca de ritmos ↗
-          </Button>
-          <Separator />
-          <Transport practice={practice} />
-          <Separator />
-        </>
-      )}
-      <Toggle
-        label="Ouvir o pandeiro"
-        value={practice.guide && practice.source !== "mic"}
-        disabled={practice.source === "mic"}
-        onChange={practice.setGuide}
-      />
-      <Toggle
-        label="Metrônomo"
-        value={practice.click}
-        onChange={practice.setClick}
-      />
-      <View style={{ gap: 9 }}>
-        <Label>TOLERÂNCIA DE TEMPO</Label>
-        <View style={styles.row}>
-          {[15, 25, 40].map((ms) => (
-            <Button
-              key={ms}
-              active={practice.tolerance === ms}
-              style={{ flex: 1 }}
-              onPress={() => practice.setTolerance(ms)}
-            >
-              ±{ms} ms
-            </Button>
-          ))}
-        </View>
-      </View>
-      <Separator />
-      <View style={{ gap: 10 }}>
-        <Label>ENTRADA DOS GOLPES</Label>
-        <View style={styles.row}>
-          <Button
-            active={practice.source === "touch"}
-            style={{ flex: 1 }}
-            onPress={() => void practice.disableMicrophone()}
-          >
-            Toque
-          </Button>
-          <Button
-            active={practice.source === "mic"}
-            disabled={practice.micBusy}
-            style={{ flex: 1 }}
-            onPress={() => void practice.enableMicrophone()}
-          >
-            {practice.micBusy ? "Abrindo…" : "Microfone"}
-          </Button>
-        </View>
-        <Text style={styles.hint}>
-          {practice.source === "mic"
-            ? "● Microfone ligado · reconhecimento experimental. Use fones para o clique não virar um golpe."
-            : "Toque nos pads abaixo. Inicie o treino para medir seu tempo."}
-        </Text>
-      </View>
-      {practice.source === "mic" && (
-        <View style={{ gap: 12 }}>
-          <Text style={styles.hint}>
-            Calibre cada golpe com 3 ataques isolados. A calibração pausa o
-            treino.
-          </Text>
-          <View style={[styles.row, { flexWrap: "wrap" }]}>
-            {CODES.map((code) => {
-              const stroke = STROKES[code],
-                count = practice.profiles[stroke.kind]?.length || 0;
-              return (
-                <Button
-                  key={code}
-                  active={practice.calibrating === stroke.kind}
-                  label={`Calibrar ${stroke.name}`}
-                  onPress={() =>
-                    practice.setCalibrating(
-                      practice.calibrating === stroke.kind ? null : stroke.kind,
-                    )
-                  }
-                >
-                  {code} {count ? `· ${count}` : ""}
-                </Button>
-              );
-            })}
-          </View>
-          {practice.calibrating && (
-            <Text accessibilityLiveRegion="polite" style={styles.orangeText}>
-              Toque somente{" "}
-              {STROKES[
-                CODES.find((c) => STROKES[c].kind === practice.calibrating)!
-              ].name.toLowerCase()}
-              . {practice.profiles[practice.calibrating]?.length || 0} ataques
-              salvos. Toque na letra para concluir.
-            </Text>
-          )}
-          <Label>
-            CONFIANÇA{" "}
-            {practice.confidence === null
-              ? "—"
-              : `${Math.round(practice.confidence * 100)}%`}{" "}
-            · {practice.rejected} REJEITADOS
-          </Label>
-          <View style={{ gap: 8 }}>
-            <Label>COMPENSAÇÃO DO MICROFONE</Label>
-            <View style={styles.row}>
-              <Button
-                onPress={() =>
-                  practice.setLatency((n) => Math.max(-200, n - 5))
-                }
-                label="Diminuir compensação"
-              >
-                −
-              </Button>
-              <Text style={styles.offset}>
-                {practice.latency > 0 ? "+" : ""}
-                {practice.latency} ms
-              </Text>
-              <Button
-                onPress={() => practice.setLatency((n) => Math.min(200, n + 5))}
-                label="Aumentar compensação"
-              >
-                +
-              </Button>
-            </View>
-            <Text style={styles.hint}>
-              Valor positivo desconta atraso da captura. Ajuste com golpes de
-              referência.
-            </Text>
-          </View>
-          <Pressable
-            accessibilityRole="button"
-            onPress={practice.clearProfiles}
-          >
-            <Text style={styles.link}>Limpar calibração desta sessão</Text>
-          </Pressable>
-        </View>
-      )}
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => setDetails((n) => !n)}
-      >
-        <Text style={styles.link}>
-          {details ? "−" : "+"} Grade e fontes do ritmo
-        </Text>
-      </Pressable>
-      {details && (
-        <View style={{ gap: 10 }}>
-          <Text style={styles.hint}>{rhythm.description}</Text>
-          <Label>PASSOS POR TEMPO</Label>
-          <View style={[styles.row, { flexWrap: "wrap" }]}>
-            {[2, 3, 4, 6, 8].map((sub) => (
-              <Button
-                key={sub}
-                active={subdivision === sub}
-                onPress={() => practice.setSubdivision(sub)}
-              >
-                {sub}
-              </Button>
-            ))}
-          </View>
-          <Text style={styles.hint}>
-            Grade: {rhythm.subdivisionSource}. O ajuste permite estudar outras
-            subdivisões.
-          </Text>
-          {rhythm.sources.map((source, i) => (
-            <Text key={i} style={styles.hint}>
-              {i + 1}. {source}
-            </Text>
-          ))}
-        </View>
-      )}
-      <Text style={styles.smallPrint}>
-        Alterar ritmo, BPM, grade ou som reinicia o treino. A calibração vale
-        nesta sessão.
-      </Text>
-    </View>
-  );
-
+  const quarterSpan = (sequence.length / subdivision).toLocaleString("pt-BR", {
+    maximumFractionDigits: 3,
+  });
+  const reinterpreted =
+    subdivision !== rhythm.subdivision ||
+    range.start !== 0 ||
+    range.end !== rhythm.sequence.length;
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: T.black }}>
       <ScrollView
@@ -326,312 +244,561 @@ function PracticeScreen() {
         contentContainerStyle={styles.page}
       >
         <View style={styles.header}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 9 }}>
+          <View style={styles.inline}>
             <Pandeiro size={30} />
             <Text style={styles.brand}>
               PANDEIRO<Text style={{ color: T.orange }}>.APP</Text>
             </Text>
+            <Label>ESTUDOS</Label>
           </View>
           <Label>
-            {wide ? "ESTÚDIO DE PRÁTICA / EXPERIMENTAL" : "LAB / 03"}
+            {wide
+              ? "ESCUTA · LEITURA · ANÁLISE TEMPORAL"
+              : `v${appPackage.version}`}
           </Label>
         </View>
-        <View style={styles.intro}>
-          <Label orange>O RITMO ESTÁ NAS SUAS MÃOS</Label>
+        <View style={{ gap: 8 }}>
+          <Label orange>LABORATÓRIO DE PRÁTICA MUSICAL</Label>
           <Text
-            style={[
-              styles.hero,
-              { fontSize: wide ? 72 : width < 390 ? 39 : 46 },
-            ]}
+            testID="study-heading"
+            accessibilityRole="header"
+            style={[styles.title, { fontSize: wide ? 46 : 35 }]}
           >
-            {mode.title}
-            <Text style={{ color: T.orange }}>.</Text>
+            Estudo do pandeiro.
           </Text>
-          <Text style={styles.subtitle}>{mode.subtitle}</Text>
+          <Text style={styles.subtitle}>
+            Organizar a escuta, tornar a escrita explícita e documentar a
+            execução.
+          </Text>
         </View>
-        <View style={styles.tabs}>
-          {MODES.map((tab, index) => (
+        <View style={styles.navigation}>
+          {SECTIONS.map((item, index) => (
             <Pressable
-              key={tab.id}
+              key={item.id}
               accessibilityRole="tab"
-              accessibilityState={{ selected: modeIndex === index }}
-              accessibilityLabel={tab.name}
-              onPress={() => setModeIndex(index)}
+              accessibilityLabel={item.name}
+              accessibilityState={{ selected: section === item.id }}
+              {...(Platform.OS === "web"
+                ? { "aria-selected": section === item.id }
+                : {})}
+              onPress={() => navigate(item.id)}
+              {...tabKeys(index, SECTIONS.length, (next) =>
+                navigate(SECTIONS[next].id),
+              )}
               style={[
-                styles.tab,
-                modeIndex === index && { borderBottomColor: T.orange },
+                styles.navTab,
+                section === item.id && { borderBottomColor: T.orange },
               ]}
             >
               <Text
-                style={[
-                  styles.tabNumber,
-                  modeIndex === index && { color: T.orange },
-                ]}
+                style={{
+                  color: section === item.id ? T.ivory : T.muted,
+                  fontFamily: fonts.text,
+                  fontSize: wide ? 15 : 12,
+                }}
               >
-                {tab.number}
-              </Text>
-              <Text
-                style={[
-                  styles.tabName,
-                  modeIndex === index && { color: T.ivory },
-                ]}
-              >
-                {tab.name}
+                {item.name}
               </Text>
             </Pressable>
           ))}
         </View>
         {!!practice.error && (
-          <View accessibilityRole="alert" style={styles.error}>
-            <Text style={{ ...styles.hint, color: T.ivory, flex: 1 }}>
+          <View accessibilityRole="alert" style={styles.notice}>
+            <Text style={[styles.body, { flex: 1, color: T.ivory }]}>
               {practice.error}
             </Text>
-            <Button onPress={() => practice.setError("")} label="Fechar aviso">
+            <Button label="Fechar aviso" onPress={() => practice.setError("")}>
               ✕
             </Button>
           </View>
         )}
-        {!wide && (
-          <View style={styles.settings}>
-            <View style={styles.visualHeading}>
-              <View style={{ flex: 1, gap: 5 }}>
-                <Label orange>
-                  SEU TREINO · {rhythm.sequence.length} PASSOS
-                </Label>
-                <Text style={[styles.rhythmName, { fontSize: 23 }]}>
-                  {rhythm.name}
-                </Text>
-              </View>
-              <Button
-                label="Abrir biblioteca de ritmos"
-                onPress={() => setLibrary(true)}
-              >
-                Ritmos ↗
-              </Button>
-            </View>
-            <Transport practice={practice} compact />
+        {practice.source === "mic" && section !== "practice" && (
+          <View style={styles.notice}>
+            <Text style={[styles.body, { flex: 1 }]}>
+              Captura ainda ativa. A tomada está pausada.
+            </Text>
+            <Button onPress={() => void practice.disableMicrophone()}>
+              Encerrar captura
+            </Button>
           </View>
         )}
-        <View
-          style={[styles.workspace, { flexDirection: wide ? "row" : "column" }]}
-        >
-          <View style={{ flex: wide ? 1 : undefined, minWidth: 0, gap: 18 }}>
-            <View style={styles.visual}>
-              <View style={styles.visualHeading}>
+        {section === "practice" && (
+          <>
+            <View
+              style={[
+                styles.studyHeading,
+                !wide && { flexDirection: "column", alignItems: "stretch" },
+              ]}
+            >
+              <View style={{ flex: wide ? 1 : undefined, gap: 7 }}>
                 <Label>
-                  {mode.number} / {mode.name.toUpperCase()}
+                  {rhythm.origin === "study"
+                    ? "ESTUDO ORIGINAL DO PROJETO"
+                    : rhythm.origin === "custom"
+                      ? "ESCRITA PESSOAL"
+                      : `${rhythm.group.toUpperCase()} · BIBLIOTECA`}
                 </Label>
-                <Label orange>
-                  {practice.running ? "● EM CURSO" : "○ EM PAUSA"}
-                </Label>
+                <Text style={styles.studyTitle}>{rhythm.name}</Text>
+                <Text style={styles.body}>
+                  {rhythm.objective ?? rhythm.description}
+                </Text>
               </View>
-              <View
-                style={{
-                  minHeight: wide ? 455 : ringSize + 30,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  paddingVertical: 12,
-                }}
-              >
-                {mode.id === "ring" && (
-                  <RhythmRing
-                    pattern={pattern}
-                    phase={clock.phase}
-                    bpm={bpm}
-                    steps={rhythm.sequence.length}
-                    subdivision={subdivision}
-                    size={ringSize}
-                    pulse={pulse}
-                    running={practice.running}
-                  >
-                    <View style={styles.ringCenter}>
-                      <Pandeiro size={ringSize * 0.25} />
-                      <Text style={styles.stepNumber}>
-                        {String(clock.step + 1).padStart(2, "0")}
-                        <Text style={{ color: T.muted, fontSize: 13 }}>
-                          {" "}
-                          / {rhythm.sequence.length}
-                        </Text>
-                      </Text>
-                      <Label>
-                        {current
-                          ? STROKES[
-                              CODES.find((c) => STROKES[c].kind === current)!
-                            ].name.toUpperCase()
-                          : "PAUSA"}
-                      </Label>
-                    </View>
-                  </RhythmRing>
-                )}
-                {mode.id === "bars" && (
-                  <HitBars
-                    pattern={pattern}
-                    hits={hits}
-                    now={clock.t}
-                    phase={clock.phase}
-                    barStart={clock.barStart}
-                    barDur={clock.bar}
-                    steps={rhythm.sequence.length}
-                    subdivision={subdivision}
-                    toleranceMs={practice.tolerance}
-                    width={chartWidth}
-                    height={wide ? 350 : 280}
-                  />
-                )}
-                {mode.id === "scatter" && (
-                  <TimingScatter
-                    hits={hits}
-                    now={clock.t}
-                    bpm={bpm}
-                    toleranceMs={practice.tolerance}
-                    width={chartWidth}
-                    height={wide ? 300 : 260}
-                    rangeMs={Math.max(
-                      100,
-                      Math.ceil(30000 / bpm / subdivision / 50) * 50,
-                    )}
-                  />
-                )}
-              </View>
-              <View style={styles.visualFooter}>
-                <Label>
-                  {mode.id === "scatter"
-                    ? "ADIANTADO ←"
-                    : mode.id === "bars"
-                      ? "CONTORNO · ESPERADO"
-                      : `${rhythm.sequence.length} PASSOS / ${subdivision} POR TEMPO`}
-                </Label>
-                <Label orange>
-                  {mode.id === "scatter"
-                    ? "→ ATRASADO"
-                    : mode.id === "bars"
-                      ? "BRANCO · SUA MÃO"
-                      : `${clock.bar.toFixed(2)} s / CICLO`}
-                </Label>
-              </View>
-            </View>
-            <View style={styles.stats}>
-              <Metric
-                name="ACERTOS NA GRADE"
-                value={
-                  metrics.expected
-                    ? `${metrics.correct}/${metrics.expected}`
-                    : "—"
-                }
-                detail={
-                  metrics.expected
-                    ? `${metrics.accuracy}% no tempo e golpe`
-                    : "Comece a tocar"
-                }
-              />
-              <Metric
-                name="ERRO MÉDIO ABS."
-                value={metrics.count ? `${Math.round(metrics.mae)}` : "—"}
-                detail={
-                  metrics.count
-                    ? `ms · desvio ${Math.round(metrics.std)} ms`
-                    : "Nenhum golpe registrado"
-                }
-              />
-              <Metric
-                name="GOLPES TOCADOS"
-                value={String(hits.length).padStart(2, "0")}
-                detail={
-                  metrics.count
-                    ? Math.abs(metrics.mean) < 2
-                      ? "Tendência central"
-                      : metrics.mean < 0
-                        ? "Tendência: adiantado"
-                        : "Tendência: atrasado"
-                    : "Seu treino começa aqui"
-                }
-              />
-            </View>
-            <View style={styles.padSection}>
-              <View style={styles.visualHeading}>
-                <Label>TOQUE COM A SUA MÃO</Label>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => setExtended((n) => !n)}
+              {!wide && (
+                <Button
+                  label="Abrir biblioteca de ritmos"
+                  style={{ alignSelf: "flex-start" }}
+                  onPress={openLibrary}
                 >
-                  <Text style={styles.link}>
-                    {extended ? "Menos golpes −" : "9 golpes +"}
-                  </Text>
-                </Pressable>
-              </View>
-              <View style={[styles.row, { flexWrap: "wrap" }]}>
-                {visibleCodes.map((code) => (
-                  <Pressable
-                    key={code}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Tocar ${STROKES[code].name}`}
-                    disabled={practice.source === "mic" || practice.micBusy}
-                    {...(Platform.OS === "web" ? { delayPressIn: 0 } : {})}
-                    onPressIn={() => practice.tap(STROKES[code].kind)}
-                    style={({ pressed }) => [
-                      styles.pad,
-                      {
-                        flexBasis: wide ? "17%" : "21%",
-                        backgroundColor: pressed ? T.orange : T.panel,
-                        opacity: practice.source === "mic" ? 0.4 : 1,
-                        borderColor: pressed ? T.orange : T.line,
-                      },
-                    ]}
-                  >
-                    <View style={styles.padTop}>
-                      <Text style={styles.padLetter}>{code}</Text>
-                      {Platform.OS === "web" && (
-                        <Text style={styles.key}>
-                          {STROKES[code].key.toUpperCase()}
-                        </Text>
-                      )}
-                    </View>
-                    <Text style={styles.padName}>{STROKES[code].name}</Text>
-                  </Pressable>
-                ))}
-              </View>
-              <Text style={styles.hint}>
-                {practice.source === "mic"
-                  ? "Os pads ficam desativados durante a captura. Calibre os timbres no painel do treino."
-                  : Platform.OS === "web"
-                    ? "Teclado: A grave · S dedos · D tapa · F punho · Espaço inicia/pausa."
-                    : "O instante do primeiro contato com o pad registra o golpe."}
-              </Text>
+                  Biblioteca ↗
+                </Button>
+              )}
             </View>
-            {mode.id === "ring" && (
-              <View style={[styles.row, { flexWrap: "wrap" }]}>
-                {visibleCodes.map((code) => (
-                  <View key={code} style={styles.legend}>
-                    <View
-                      style={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: 3,
-                        backgroundColor: T.kind[STROKES[code].kind],
-                      }}
-                    />
-                    <Text style={styles.legendText}>
-                      {code} {STROKES[code].name}
-                    </Text>
-                  </View>
-                ))}
+            {!wide && (
+              <View style={styles.card}>
+                <Transport practice={practice} compact />
               </View>
             )}
-          </View>
-          {settings}
-        </View>
-        <View style={styles.footer}>
-          <Label>TREINE ATÉ VIRAR REFLEXO.</Label>
+            <View
+              style={{
+                flexDirection: wide ? "row" : "column",
+                gap: 22,
+                alignItems: "stretch",
+              }}
+            >
+              <View
+                style={{ flex: wide ? 1 : undefined, minWidth: 0, gap: 18 }}
+              >
+                <View style={styles.card}>
+                  <View style={styles.between}>
+                    <Label>ESCRITA E POSIÇÃO NO CICLO</Label>
+                    <Label orange>
+                      {rhythm.meter && !reinterpreted
+                        ? `COMPASSO ${rhythm.meter}`
+                        : "CICLO DE ESTUDO"}
+                    </Label>
+                  </View>
+                  <ScoreStrip
+                    rhythm={rhythm}
+                    subdivision={subdivision}
+                    width={contentWidth}
+                    current={practice.running ? range.start + clock.step : null}
+                    selected={focused}
+                    range={range}
+                    isolation={practice.isolation}
+                    onSelect={setSelectedUnit}
+                  />
+                  <Separator />
+                  <View style={styles.between}>
+                    <Label>
+                      UNIDADE {String(focused + 1).padStart(2, "0")} ·{" "}
+                      {focusedCode === "."
+                        ? "PAUSA"
+                        : STROKES[focusedCode].name.toUpperCase()}
+                    </Label>
+                    <Label>POS. ♩ {scorePosition(focused, subdivision)}</Label>
+                  </View>
+                  <View style={[styles.inline, { flexWrap: "wrap" }]}>
+                    <Button
+                      disabled={
+                        focusedCode === "." ||
+                        practice.source === "mic" ||
+                        practice.micBusy
+                      }
+                      label="Ouvir unidade selecionada"
+                      onPress={() =>
+                        focusedCode !== "." &&
+                        void practice.audition(STROKES[focusedCode].kind)
+                      }
+                    >
+                      ▶ Ouvir posição
+                    </Button>
+                    <Button
+                      onPress={() =>
+                        practice.setRange(
+                          focused,
+                          Math.max(focused + 1, range.end),
+                        )
+                      }
+                    >
+                      Definir início
+                    </Button>
+                    <Button
+                      disabled={focused < range.start}
+                      onPress={() =>
+                        practice.setRange(range.start, focused + 1)
+                      }
+                    >
+                      Definir fim
+                    </Button>
+                    <Button
+                      onPress={() =>
+                        practice.setRange(0, rhythm.sequence.length)
+                      }
+                    >
+                      Ciclo completo
+                    </Button>
+                  </View>
+                  <Text style={styles.caption}>
+                    Recorte {range.start + 1}–{range.end} de{" "}
+                    {rhythm.sequence.length} · {SUBDIVISION_NAMES[subdivision]}{" "}
+                    · {quarterSpan} semínimas/ciclo
+                    {reinterpreted ? " · recorte ou grade reinterpretada" : ""}.
+                  </Text>
+                </View>
+                <View style={styles.card}>
+                  <View style={styles.modeTabs}>
+                    {MODES.map((tab, index) => (
+                      <Pressable
+                        key={tab.id}
+                        accessibilityRole="tab"
+                        accessibilityLabel={tab.name}
+                        accessibilityState={{ selected: index === modeIndex }}
+                        {...(Platform.OS === "web"
+                          ? { "aria-selected": index === modeIndex }
+                          : {})}
+                        onPress={() => setModeIndex(index)}
+                        {...tabKeys(index, MODES.length, setModeIndex)}
+                        style={[
+                          styles.modeTab,
+                          index === modeIndex && {
+                            borderBottomColor: T.orange,
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            color: index === modeIndex ? T.ivory : T.muted,
+                            fontFamily: fonts.text,
+                            fontSize: 12,
+                          }}
+                        >
+                          {tab.name}
+                        </Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                  <View style={styles.between}>
+                    <Label>
+                      {mode.number} / {mode.name.toUpperCase()}
+                    </Label>
+                    <Label orange>
+                      {practice.running ? "● EM CURSO" : "○ EM PAUSA"}
+                    </Label>
+                  </View>
+                  <View
+                    style={{
+                      minHeight: ringSize + 12,
+                      paddingVertical: 8,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {mode.id === "ring" && (
+                      <RhythmRing
+                        pattern={pattern}
+                        phase={clock.phase}
+                        bpm={bpm}
+                        steps={sequence.length}
+                        subdivision={subdivision}
+                        size={ringSize}
+                        pulse={pulse}
+                        running={practice.running}
+                      >
+                        <View style={styles.ringCenter}>
+                          <Pandeiro size={76} />
+                          <Text
+                            style={{
+                              color: T.ivory,
+                              fontFamily: fonts.text,
+                              fontSize: 30,
+                            }}
+                          >
+                            {String(clock.step + 1).padStart(2, "0")}
+                            <Text style={{ color: T.muted, fontSize: 13 }}>
+                              {" "}
+                              / {sequence.length}
+                            </Text>
+                          </Text>
+                          <Label>
+                            {currentKind
+                              ? CODES.find(
+                                  (c) => STROKES[c].kind === currentKind,
+                                )
+                              : "PAUSA"}
+                          </Label>
+                        </View>
+                      </RhythmRing>
+                    )}
+                    {mode.id === "bars" && (
+                      <HitBars
+                        pattern={pattern}
+                        hits={hits}
+                        now={clock.t}
+                        phase={clock.phase}
+                        barStart={clock.barStart}
+                        barDur={clock.bar}
+                        steps={sequence.length}
+                        subdivision={subdivision}
+                        toleranceMs={practice.tolerance}
+                        width={chartWidth}
+                        height={270}
+                      />
+                    )}
+                    {mode.id === "scatter" && (
+                      <TimingScatter
+                        hits={hits}
+                        now={clock.t}
+                        bpm={bpm}
+                        toleranceMs={practice.tolerance}
+                        width={chartWidth}
+                        height={245}
+                        rangeMs={Math.max(
+                          100,
+                          Math.ceil(30000 / bpm / subdivision / 50) * 50,
+                        )}
+                      />
+                    )}
+                  </View>
+                  <View style={styles.between}>
+                    <Label>
+                      {mode.id === "scatter"
+                        ? "ADIANTADO ←"
+                        : `${sequence.length} UNIDADES · ${practice.groups.join("+")}`}
+                    </Label>
+                    <Label orange>
+                      {mode.id === "scatter"
+                        ? "→ ATRASADO"
+                        : `${clock.bar.toFixed(2)} s / CICLO`}
+                    </Label>
+                  </View>
+                  {mode.id === "scatter" && (
+                    <Text style={styles.caption}>
+                      Eixo horizontal: erro em ms. Eixo vertical: idade do golpe
+                      nos últimos 4 s. Semínima = {bpm} BPM; janela ±
+                      {practice.tolerance} ms.
+                    </Text>
+                  )}
+                  {mode.id === "bars" && (
+                    <Text style={styles.caption}>
+                      Contorno: articulação esperada. Branco: golpe no intervalo
+                      de tolerância. ×: articulação diferente. A altura da barra
+                      é uma categoria sonora, sem equivalência a Hz.
+                    </Text>
+                  )}
+                  {practice.isolation && (
+                    <Text style={[styles.caption, { color: T.orange }]}>
+                      Redução ativa:{" "}
+                      {
+                        STROKES[
+                          CODES.find(
+                            (c) => STROKES[c].kind === practice.isolation,
+                          )!
+                        ].name
+                      }
+                      . A avaliação considera somente essa articulação no
+                      recorte.
+                    </Text>
+                  )}
+                </View>
+                <View style={styles.stats}>
+                  <Metric
+                    name="ACERTOS NA GRADE"
+                    value={
+                      metrics.expected
+                        ? `${metrics.correct}/${metrics.expected}`
+                        : "—"
+                    }
+                    detail={
+                      metrics.expected
+                        ? `${metrics.accuracy}% das posições concluídas`
+                        : "Comece a tocar"
+                    }
+                  />
+                  <Metric
+                    name="ERRO MÉDIO ABS."
+                    value={metrics.count ? metrics.mae.toFixed(1) : "—"}
+                    detail={
+                      metrics.count
+                        ? `ms · σ ${metrics.std.toFixed(1)} ms`
+                        : "Nenhum golpe registrado"
+                    }
+                  />
+                  <Metric
+                    name="GOLPES TOCADOS"
+                    value={String(hits.length).padStart(2, "0")}
+                    detail={
+                      metrics.count
+                        ? `viés ${metrics.mean >= 0 ? "+" : ""}${metrics.mean.toFixed(1)} ms`
+                        : "Aguardando entrada"
+                    }
+                  />
+                </View>
+                <View style={styles.card}>
+                  <Label>LEITURA DO RESULTADO</Label>
+                  <Text style={styles.body}>
+                    Unidades sem golpe: {diagnosis.missing} · articulação
+                    divergente: {diagnosis.wrongKind} · fora da janela:{" "}
+                    {diagnosis.late} · em pausas: {diagnosis.unexpected} ·
+                    repetições: {diagnosis.duplicates}.
+                  </Text>
+                  <Text style={styles.caption}>
+                    As categorias podem se sobrepor. Acertos exigem articulação
+                    e tempo; métricas temporais incluem todos os golpes
+                    registrados. A associação usa a unidade mais próxima: mede
+                    ajuste local à grade e não reconhece deslocamentos de frase,
+                    qualidade do timbre ou intensidade.
+                  </Text>
+                  <View style={[styles.inline, { flexWrap: "wrap" }]}>
+                    <Button
+                      primary
+                      disabled={!hits.length || !journal.loaded}
+                      onPress={() => void saveTake()}
+                    >
+                      Registrar tomada
+                    </Button>
+                    <Button onPress={() => navigate("journal")}>
+                      Observações e exportação →
+                    </Button>
+                  </View>
+                  {!!savedMessage && (
+                    <Text
+                      accessibilityLiveRegion="polite"
+                      style={{ ...styles.caption, color: T.orange }}
+                    >
+                      {savedMessage}
+                    </Text>
+                  )}
+                </View>
+                <Pads practice={practice} />
+              </View>
+              <PracticeControls
+                practice={practice}
+                rhythm={rhythm}
+                wide={wide}
+                openLibrary={openLibrary}
+              />
+            </View>
+          </>
+        )}
+        {section === "studies" && (
+          <ExerciseLibrary
+            onChoose={chooseRhythm}
+            draft={draft}
+            setDraft={setDraft}
+          />
+        )}
+        {section === "sounds" && <SoundAtlas practice={practice} />}
+        {section === "journal" && (
+          <StudyJournal
+            journal={journal}
+            notes={notes}
+            setNotes={setNotes}
+            session={snapshot}
+            onSave={() => void saveTake()}
+            savedMessage={savedMessage}
+            exportError={practice.setError}
+          />
+        )}
+        <View
+          style={[
+            styles.between,
+            {
+              borderTopWidth: 1,
+              borderTopColor: T.line,
+              paddingTop: 22,
+              paddingBottom: 12,
+            },
+          ]}
+        >
+          <Label>ESTUDO · ESCUTA · DOCUMENTAÇÃO</Label>
           <Label>PANDEIRO.APP / LAB · v{appPackage.version}</Label>
         </View>
       </ScrollView>
       <RhythmLibrary
         open={library}
         selected={rhythm.id}
-        onSelect={setRhythm}
+        onSelect={chooseRhythm}
         onClose={() => setLibrary(false)}
       />
     </SafeAreaView>
+  );
+}
+function Pads({ practice }: { practice: ReturnType<typeof usePractice> }) {
+  const groups: { name: string; codes: StrokeCode[] }[] = [
+    { name: "MEMBRANA / GRAVES", codes: ["P", "A", "Q"] },
+    { name: "CONDUÇÃO", codes: ["D", "B", "M"] },
+    { name: "ATAQUES / TEXTURAS", codes: ["T", "X", "R"] },
+  ];
+  return (
+    <View style={{ gap: 14 }}>
+      <Label>ENTRADA MANUAL · NOVE ARTICULAÇÕES</Label>
+      {groups.map((group) => (
+        <View key={group.name} style={{ gap: 7 }}>
+          <Label>{group.name}</Label>
+          <View style={styles.inline}>
+            {group.codes.map((code) => (
+              <Pressable
+                key={code}
+                accessibilityRole="button"
+                accessibilityLabel={`Tocar ${STROKES[code].name}`}
+                disabled={practice.source === "mic" || practice.micBusy}
+                {...(Platform.OS === "web" ? { delayPressIn: 0 } : {})}
+                onPressIn={() => practice.tap(STROKES[code].kind)}
+                style={({ pressed }) => [
+                  styles.pad,
+                  {
+                    backgroundColor: pressed ? T.orange : T.panel,
+                    opacity:
+                      practice.source === "mic" || practice.micBusy ? 0.4 : 1,
+                  },
+                ]}
+              >
+                {({ pressed }) => (
+                  <>
+                    <View style={styles.between}>
+                      <Text
+                        style={{
+                          color: pressed ? T.black : T.ivory,
+                          fontFamily: fonts.text,
+                          fontSize: 23,
+                        }}
+                      >
+                        {code}
+                      </Text>
+                      {Platform.OS === "web" && (
+                        <Text
+                          style={{
+                            color: pressed ? T.black : T.muted,
+                            fontFamily: fonts.mono,
+                            fontSize: 10,
+                          }}
+                        >
+                          {STROKES[code].key.toUpperCase()}
+                        </Text>
+                      )}
+                    </View>
+                    <Text
+                      style={{
+                        color: pressed ? T.black : T.ivory,
+                        fontFamily: fonts.text,
+                        fontSize: 12,
+                      }}
+                    >
+                      {STROKES[code].name}
+                    </Text>
+                  </>
+                )}
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      ))}
+      <Text style={styles.caption}>
+        {practice.source === "mic"
+          ? "Os pads ficam desativados durante a captura."
+          : "Teclado: A grave · S dedos · D tapa · F base da mão. G/H/J/K/L: articulações adicionais. Espaço inicia/pausa fora dos controles."}
+      </Text>
+    </View>
   );
 }
 function Metric({
@@ -644,396 +811,164 @@ function Metric({
   detail: string;
 }) {
   return (
-    <View style={styles.metric}>
+    <View style={{ flex: 1, minWidth: 0, gap: 8, padding: 12 }}>
       <Label>{name}</Label>
-      <Text style={styles.metricValue}>{value}</Text>
-      <Text style={styles.metricDetail}>{detail}</Text>
+      <Text style={{ color: T.ivory, fontFamily: fonts.text, fontSize: 27 }}>
+        {value}
+      </Text>
+      <Text style={{ ...styles.caption, fontSize: 10 }}>{detail}</Text>
     </View>
   );
 }
-function Toggle({
-  label,
-  value,
-  onChange,
-  disabled,
-}: {
-  label: string;
-  value: boolean;
-  onChange: (value: boolean) => void;
-  disabled?: boolean;
-}) {
-  return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        minHeight: 34,
-      }}
-    >
-      <Text style={styles.toggleLabel}>{label}</Text>
-      <Switch
-        {...(Platform.OS === "web" ? { activeThumbColor: T.ivory } : {})}
-        accessibilityLabel={label}
-        value={value}
-        onValueChange={onChange}
-        disabled={disabled}
-        trackColor={{ false: T.line, true: T.orange }}
-        thumbColor={T.ivory}
-      />
-    </View>
-  );
-}
-function Transport({
-  practice,
-  compact = false,
-}: {
-  practice: ReturnType<typeof usePractice>;
-  compact?: boolean;
-}) {
-  const play = (
-    <Button
-      primary
-      disabled={
-        !practice.ready ||
-        practice.starting ||
-        practice.micBusy ||
-        !!practice.calibrating
+function tabKeys(
+  index: number,
+  length: number,
+  change: (index: number) => void,
+) {
+  return Platform.OS === "web"
+    ? {
+        onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => {
+          let next = index;
+          if (event.key === "ArrowRight") next = (index + 1) % length;
+          else if (event.key === "ArrowLeft")
+            next = (index + length - 1) % length;
+          else if (event.key === "Home") next = 0;
+          else if (event.key === "End") next = length - 1;
+          else if (event.key !== " ") return;
+          event.preventDefault();
+          event.stopPropagation();
+          change(next);
+          const tabs =
+            event.currentTarget.parentElement?.querySelectorAll<HTMLElement>(
+              '[role="tab"]',
+            );
+          tabs?.[next]?.focus();
+        },
       }
-      style={compact ? { flex: 1 } : undefined}
-      onPress={() => void practice.toggle()}
-      label={practice.running ? "Pausar treino" : "Iniciar treino"}
-    >
-      {practice.starting
-        ? "INICIANDO…"
-        : !practice.ready
-          ? "ÁUDIO…"
-          : practice.running
-            ? "Ⅱ PAUSAR"
-            : compact
-              ? "▶ INICIAR"
-              : "▶ INICIAR TREINO"}
-    </Button>
-  );
-  return (
-    <View style={{ gap: 13 }}>
-      {!compact && <Label>ANDAMENTO</Label>}
-      <View
-        style={{
-          flexDirection: compact ? "row" : "column",
-          gap: 12,
-          alignItems: compact ? "center" : "stretch",
-        }}
-      >
-        <View style={[styles.bpmRow, compact && { flex: 1.4 }]}>
-          <Button
-            onPress={() => practice.setBpm((n) => Math.max(30, n - 5))}
-            label="Diminuir BPM"
-          >
-            −
-          </Button>
-          <View style={{ alignItems: "center", flex: 1 }}>
-            <BpmInput
-              compact={compact}
-              value={practice.bpm}
-              onChange={practice.setBpm}
-            />
-            <Label>BPM</Label>
-          </View>
-          <Button
-            onPress={() => practice.setBpm((n) => Math.min(240, n + 5))}
-            label="Aumentar BPM"
-          >
-            +
-          </Button>
-        </View>
-        {play}
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Label>
-          {practice.running
-            ? `CICLO ${practice.clock.barIndex + 1} · PASSO ${practice.clock.step + 1}`
-            : practice.hits.length
-              ? "TREINO PAUSADO"
-              : "PRONTO PARA COMEÇAR"}
-        </Label>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Reiniciar treino"
-          onPress={practice.reset}
-          hitSlop={10}
-        >
-          <Text style={styles.link}>Reiniciar ↺</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
-}
-function BpmInput({
-  value,
-  onChange,
-  compact = false,
-}: {
-  value: number;
-  onChange: (n: number) => void;
-  compact?: boolean;
-}) {
-  const [draft, setDraft] = useState(String(value));
-  React.useEffect(() => {
-    setDraft(String(value));
-  }, [value]);
-  const commit = () => {
-    const n = Number(draft);
-    if (Number.isFinite(n) && n >= 30 && n <= 240) onChange(Math.round(n));
-    else setDraft(String(value));
-  };
-  return (
-    <TextInput
-      accessibilityLabel="BPM"
-      value={draft}
-      onChangeText={setDraft}
-      keyboardType="number-pad"
-      maxLength={3}
-      selectTextOnFocus
-      onBlur={commit}
-      onSubmitEditing={commit}
-      style={[styles.bpm, compact && { fontSize: 42, width: 74 }]}
-    />
-  );
+    : {};
 }
 const styles = StyleSheet.create({
   page: {
     width: "100%",
-    maxWidth: 1240,
+    maxWidth: 1360,
     alignSelf: "center",
     paddingHorizontal: 22,
-    paddingTop: 16,
-    paddingBottom: 28,
-    gap: 26,
+    paddingTop: 18,
+    paddingBottom: 24,
+    gap: 24,
   },
   header: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
+    alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: T.line,
     paddingBottom: 18,
     gap: 10,
   },
   brand: {
-    color: T.ivory,
     fontFamily: fonts.title,
-    fontSize: 20,
-    letterSpacing: -0.7,
-  },
-  intro: { gap: 12, paddingTop: 12 },
-  hero: {
+    fontSize: 18,
     color: T.ivory,
-    fontFamily: fonts.title,
-    letterSpacing: -1.7,
-    lineHeight: undefined,
+    letterSpacing: -0.5,
   },
+  title: { color: T.ivory, fontFamily: fonts.serif, letterSpacing: -0.5 },
   subtitle: {
     color: T.muted,
     fontFamily: fonts.text,
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 23,
   },
-  tabs: {
+  navigation: {
     flexDirection: "row",
     borderBottomWidth: 1,
     borderBottomColor: T.line,
   },
-  tab: {
+  navTab: {
     flex: 1,
-    flexDirection: "row",
-    gap: 8,
-    borderBottomWidth: 2,
-    borderBottomColor: "transparent",
-    paddingVertical: 16,
     alignItems: "center",
     justifyContent: "center",
+    minHeight: 50,
+    padding: 9,
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent",
   },
-  tabNumber: { color: T.muted, fontFamily: fonts.mono, fontSize: 10 },
-  tabName: {
-    color: T.muted,
-    fontFamily: fonts.text,
-    fontSize: 13,
-    flexShrink: 1,
-  },
-  workspace: { gap: 24, alignItems: "stretch" },
-  visual: {
-    backgroundColor: T.panel,
-    borderWidth: 1,
-    borderColor: T.line,
-    borderRadius: 8,
-    padding: 15,
-  },
-  visualHeading: {
+  inline: { flexDirection: "row", alignItems: "center", gap: 9 },
+  between: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    gap: 8,
-  },
-  visualFooter: {
-    flexDirection: "row",
     justifyContent: "space-between",
     gap: 10,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: T.line,
+    flexWrap: "wrap",
   },
-  ringCenter: {
-    backgroundColor: T.panel,
-    padding: 8,
-    borderRadius: 100,
-    alignItems: "center",
-    gap: 3,
-  },
-  stepNumber: {
-    fontFamily: fonts.title,
-    fontSize: 34,
-    color: T.ivory,
-    letterSpacing: -1,
-  },
-  settings: {
-    backgroundColor: T.panel,
+  studyHeading: { flexDirection: "row", alignItems: "center", gap: 16 },
+  studyTitle: { color: T.ivory, fontFamily: fonts.serif, fontSize: 31 },
+  card: {
+    padding: 17,
     borderWidth: 1,
     borderColor: T.line,
-    borderRadius: 8,
-    padding: 20,
-    gap: 19,
-    alignSelf: "flex-start",
-    width: "100%",
+    borderRadius: 6,
+    backgroundColor: T.panel,
+    gap: 15,
   },
-  rhythmName: {
-    fontFamily: fonts.title,
-    fontSize: 29,
-    letterSpacing: -0.6,
-    color: T.ivory,
+  modeTabs: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: T.line,
+    marginBottom: 4,
   },
-  bpmRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  bpm: {
-    fontFamily: fonts.title,
-    color: T.ivory,
-    fontSize: 57,
-    textAlign: "center",
-    padding: 0,
-    width: 130,
-    letterSpacing: -2,
+  modeTab: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    minHeight: 46,
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent",
   },
-  row: { flexDirection: "row", gap: 8, alignItems: "center" },
-  link: {
-    color: T.orange,
-    fontSize: 11,
-    fontFamily: fonts.mono,
-    lineHeight: 17,
+  ringCenter: {
+    alignItems: "center",
+    gap: 4,
+    borderRadius: 70,
+    padding: 9,
+    backgroundColor: T.panel,
   },
-  hint: {
-    color: T.muted,
-    fontFamily: fonts.text,
-    fontSize: 12,
-    lineHeight: 18,
-  },
-  smallPrint: {
-    color: T.muted,
-    fontFamily: fonts.text,
-    fontSize: 11,
-    lineHeight: 16,
-    opacity: 0.8,
-  },
-  toggleLabel: { fontFamily: fonts.text, color: T.ivory, fontSize: 15 },
   stats: {
     flexDirection: "row",
     borderWidth: 1,
     borderColor: T.line,
-    borderRadius: 7,
-  },
-  metric: { flex: 1, padding: 13, gap: 7 },
-  metricValue: {
-    color: T.ivory,
-    fontFamily: fonts.title,
-    fontSize: 34,
-    letterSpacing: -1,
-  },
-  metricDetail: {
-    color: T.muted,
-    fontFamily: fonts.text,
-    fontSize: 11,
-    lineHeight: 15,
-  },
-  padSection: { gap: 14 },
-  pad: {
-    flexGrow: 1,
-    minHeight: 97,
-    borderWidth: 1,
     borderRadius: 6,
-    padding: 13,
-    gap: 8,
   },
-  padTop: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  padLetter: { color: T.ivory, fontFamily: fonts.title, fontSize: 27 },
-  key: {
-    fontFamily: fonts.mono,
-    color: T.muted,
-    fontSize: 10,
+  pad: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: 92,
+    padding: 12,
+    gap: 10,
     borderWidth: 1,
     borderColor: T.line,
-    padding: 4,
-    borderRadius: 3,
+    borderRadius: 5,
   },
-  padName: {
-    color: T.ivory,
+  body: {
+    color: T.muted,
+    fontFamily: fonts.text,
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  caption: {
+    color: T.muted,
     fontFamily: fonts.text,
     fontSize: 12,
-    lineHeight: 16,
-  },
-  legend: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    marginRight: 7,
-  },
-  legendText: { fontFamily: fonts.mono, fontSize: 9, color: T.muted },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 10,
-    paddingTop: 22,
-    borderTopWidth: 1,
-    borderTopColor: T.line,
-  },
-  error: {
-    padding: 14,
-    backgroundColor: "#28170C",
-    borderWidth: 1,
-    borderColor: T.orange,
-    borderRadius: 6,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  orangeText: {
-    color: T.orange,
-    fontFamily: fonts.text,
-    fontSize: 13,
     lineHeight: 19,
   },
-  offset: {
-    flex: 1,
-    textAlign: "center",
-    color: T.ivory,
-    fontFamily: fonts.mono,
-    fontSize: 15,
+  notice: {
+    padding: 14,
+    borderWidth: 1,
+    borderColor: T.orange,
+    backgroundColor: "#22170F",
+    borderRadius: 5,
+    flexDirection: "row",
+    gap: 12,
+    alignItems: "center",
   },
 });

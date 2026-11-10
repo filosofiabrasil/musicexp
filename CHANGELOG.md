@@ -1,5 +1,19 @@
 # Alterações
 
+## 1.1.0 — Laboratório de estudos
+
+- Interface reorganizada em Prática, Estudos e escrita, Articulações e sons e Caderno, com tipografia de leitura, navegação por teclado e layout a partir de 320 px.
+- Escrita didática em três linhas, posições explícitas, inspeção e pré-escuta de cada unidade, recortes de repetição e redução por articulação. A notação é própria e não representa alturas afinadas.
+- Oito estudos originais com pausas, acentos, tercinas, sextinas, 6/8 e 7/8; editor de 1 a 32 unidades com validação de letras, subdivisão e grupos aditivos.
+- Separados ciclo, fórmula de compasso, agrupamento e unidade do BPM: a referência numérica é sempre a semínima. Preservados os 148 ritmos e suas referências, com novos filtros e consulta de fontes.
+- Corrigida a continuidade da semínima em ciclos fracionários. O buffer pode conter vários ciclos para fechar simultaneamente a escrita e o pulso; clique por subdivisão e por grupos também disponível.
+- Banco de reprodução reorganizado: 43 gravações em nove famílias, WAVs mono de 44,1 kHz, caudas completas, pré-escuta e escolha de variantes. Referências de análise em 16 kHz permanecem separadas. O clipe longo não identificado foi retirado da distribuição do app.
+- Níveis relativos p/mp/mf/f, acentos de referência e volume de saída que preserva a tomada. Esses ajustes não são medições acústicas calibradas.
+- Caderno local com observações, 50 resumos, identificadores estáveis, atualização sem duplicação, remoção com desfazer e recuperação de conteúdo ilegível. Exportação JSON/CSV da tomada atual e compartilhamento de arquivos no celular.
+- Escrita nativa do caderno usa arquivo temporário, cópia anterior e recuperação em falhas. Erros de armazenamento não criam resumos fictícios.
+- Reaplicar um estudo com as mesmas notas cria uma tomada independente; alterar a compensação de captura também reinicia a tomada para não misturar referências temporais.
+- Exportações explicitam unidades, configuração final, taxas de referência/captura e limites dos escores. Incluído protocolo de estudo e comparação de tomadas.
+
 ## 1.0.2
 
 - Corrigidos início duplicado de áudio e reprodução tardia após mudar o BPM ou reiniciar durante a inicialização.

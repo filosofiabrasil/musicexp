@@ -1,10 +1,18 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View, ViewStyle } from "react-native";
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 import { THEME as T } from "../pandeiro-ui-base/types";
 export const fonts = {
   title: "InterTight_900Black",
   text: "InterTight_500Medium",
   mono: "JetBrainsMono_500Medium",
+  serif: "CormorantGaramond_600SemiBold",
 };
 export function Label({
   children,
@@ -18,7 +26,7 @@ export function Label({
       style={{
         fontFamily: fonts.mono,
         fontSize: 10,
-        letterSpacing: 1.2,
+        letterSpacing: 0.65,
         color: orange ? T.orange : T.muted,
       }}
     >
@@ -29,7 +37,7 @@ export function Label({
 export function Button({
   children,
   onPress,
-  active = false,
+  active,
   primary = false,
   disabled = false,
   label,
@@ -48,6 +56,9 @@ export function Button({
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityState={{ selected: active, disabled }}
+      {...(Platform.OS === "web" && active !== undefined
+        ? { "aria-pressed": active }
+        : {})}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [

@@ -70,7 +70,7 @@ test("atalhos rápidos não criam duas fontes de áudio ao iniciar", async ({
   page,
 }) => {
   await holdAudioResume(page);
-  await page.getByText("O RITMO ESTÁ NAS SUAS MÃOS", { exact: true }).click();
+  await page.getByTestId("study-heading").click();
   await page.keyboard.press("Space");
   await page.keyboard.press("Space");
   await page.evaluate(() =>
@@ -123,7 +123,7 @@ test("o atalho Espaço respeita o bloqueio durante a calibração", async ({
   await expect(
     page.getByRole("button", { name: "Iniciar treino", exact: true }),
   ).toBeDisabled();
-  await page.getByText("O RITMO ESTÁ NAS SUAS MÃOS", { exact: true }).click();
+  await page.getByTestId("study-heading").click();
   await page.keyboard.press("Space");
   await expect(
     page.getByRole("button", { name: "Iniciar treino", exact: true }),

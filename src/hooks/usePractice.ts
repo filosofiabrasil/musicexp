@@ -5,6 +5,15 @@ import { classify, Onset, OnsetDetector, TemplateBank } from "../audio/dsp";
 import { startMicrophone } from "../audio/microphone";
 import { Microphone } from "../audio/microphone.types";
 import { nearestNominal } from "../audio/timing";
+import {
+  ClickMode,
+  Dynamic,
+  DYNAMIC_GAIN,
+  SampleChoices,
+  clampRange,
+  defaultGroups,
+  sliceGroups,
+} from "../music/score";
 import templates from "../data/templates.json";
 import {
   DetectedHit,
@@ -14,7 +23,21 @@ import {
 } from "../pandeiro-ui-base/types";
 import { useClock } from "../pandeiro-ui-base/useClock";
 
-export function usePractice(rhythm: Rhythm) {
+export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
+  const [takeIdentity, setTakeIdentity] = useState(() => ({
+    id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: new Date().toISOString(),
+  }));
+  const [region, setRegion] = useState({
+    id: rhythm.id,
+    start: 0,
+    end: rhythm.sequence.length,
+  });
+  const [isolation, setIsolation] = useState<Kind | null>(null);
+  const [clickMode, setClickMode] = useState<ClickMode>("pulse");
+  const [dynamic, setDynamic] = useState<Dynamic>("mf");
+  const [volume, setVolume] = useState(0.75);
+  const [sampleChoices, setSampleChoices] = useState<SampleChoices>({});
   const [bpm, setBpm] = useState(100),
     [subdivision, setSubdivision] = useState(rhythm.subdivision);
   const [running, setRunning] = useState(false),
@@ -27,6 +50,8 @@ export function usePractice(rhythm: Rhythm) {
     [error, setError] = useState("");
   const [source, setSource] = useState<"touch" | "mic">("touch"),
     [micBusy, setMicBusy] = useState(false);
+  const [captureRate, setCaptureRate] = useState<number | null>(null);
+  const captureRateRef = useRef<number | null>(null);
   const [latency, setLatency] = useState(0),
     [rejected, setRejected] = useState(0),
     [confidence, setConfidence] = useState<number | null>(null);
@@ -51,6 +76,7 @@ export function usePractice(rhythm: Rhythm) {
     source,
     calibrating,
     profiles,
+    sampleChoices,
   });
   settings.current = {
     bpm,
@@ -59,14 +85,48 @@ export function usePractice(rhythm: Rhythm) {
     source,
     calibrating,
     profiles,
+    sampleChoices,
   };
-  const pattern = useMemo(() => toPattern(rhythm.sequence), [rhythm.sequence]);
-  const clock = useClock(
-    engine.getTime,
-    bpm,
-    rhythm.sequence.length,
-    subdivision,
+  const range =
+    region.id === rhythm.id
+      ? clampRange(region.start, region.end, rhythm.sequence.length)
+      : { start: 0, end: rhythm.sequence.length };
+  const sequence = rhythm.sequence.slice(range.start, range.end);
+  const groups = useMemo(
+    () =>
+      sliceGroups(
+        subdivision === rhythm.subdivision && rhythm.groups
+          ? rhythm.groups
+          : defaultGroups(rhythm.sequence.length, subdivision),
+        range.start,
+        range.end,
+      ),
+    [
+      rhythm.groups,
+      rhythm.sequence.length,
+      rhythm.subdivision,
+      subdivision,
+      range.start,
+      range.end,
+    ],
   );
+  const accents = useMemo(
+    () =>
+      (rhythm.accents || [])
+        .filter((i) => i >= range.start && i < range.end)
+        .map((i) => i - range.start),
+    [rhythm.accents, range.start, range.end],
+  );
+  const pattern = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(toPattern(sequence)).filter(
+          ([, kind]) => !isolation || kind === isolation,
+        ),
+      ),
+    [sequence, isolation],
+  );
+  const clock = useClock(engine.getTime, bpm, sequence.length, subdivision);
 
   const record = useCallback(
     (kind: Kind, t: number, origin: "touch" | "mic", certainty?: number) => {
@@ -122,6 +182,15 @@ export function usePractice(rhythm: Rhythm) {
     () => new OnsetDetector((onset) => onOnset.current(onset)),
     [],
   );
+  const pause = useCallback(() => {
+    playbackRevision.current++;
+    startingRef.current = false;
+    inputSince.current = Infinity;
+    engine.pause();
+    detector.reset();
+    setRunning(false);
+    setStarting(false);
+  }, [engine, detector]);
   const disableMicrophone = useCallback(async () => {
     micGeneration.current++;
     micOpening.current = false;
@@ -129,6 +198,8 @@ export function usePractice(rhythm: Rhythm) {
     const active = microphone.current;
     microphone.current = null;
     setSource("touch");
+    captureRateRef.current = null;
+    setCaptureRate(null);
     setMicBusy(false);
     setCalibrating(null);
     detector.reset();
@@ -146,8 +217,7 @@ export function usePractice(rhythm: Rhythm) {
       finishOpening = resolve;
     });
     const generation = ++micGeneration.current;
-    engine.pause();
-    setRunning(false);
+    pause();
     setMicBusy(true);
     setError("");
     try {
@@ -156,13 +226,17 @@ export function usePractice(rhythm: Rhythm) {
       if (generation !== micGeneration.current) return;
       const active = await startMicrophone(
         (pcm, rate, time) => {
-          if (generation === micGeneration.current && microphone.current)
+          if (generation === micGeneration.current && microphone.current) {
+            if (captureRateRef.current !== rate) {
+              captureRateRef.current = rate;
+              setCaptureRate(rate);
+            }
             detector.process(pcm, rate, time);
+          }
         },
         () => {
           if (generation !== micGeneration.current) return;
-          engine.pause();
-          setRunning(false);
+          pause();
           void disableMicrophone();
           setError("A captura do microfone foi interrompida.");
         },
@@ -198,14 +272,14 @@ export function usePractice(rhythm: Rhythm) {
         setMicBusy(false);
       }
     }
-  }, [detector, disableMicrophone, engine]);
+  }, [detector, disableMicrophone, engine, pause]);
   const tap = useCallback(
     (kind: Kind) => {
       if (settings.current.source !== "touch" || micOpening.current) return;
       record(kind, engine.getTime(), "touch");
       setLastKind(kind);
       void sounds
-        .play(kind)
+        .play(kind, settings.current.sampleChoices[kind])
         .catch((e) =>
           setError(
             e instanceof Error ? e.message : "Não foi possível tocar o sample.",
@@ -264,17 +338,27 @@ export function usePractice(rhythm: Rhythm) {
     setReady(false);
     setRunning(false);
     setHits([]);
+    setTakeIdentity({
+      id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+      createdAt: new Date().toISOString(),
+    });
+    setCalibrating(null);
     setRejected(0);
     setConfidence(null);
     setLastKind(null);
     engine
       .prepare({
         pattern,
-        steps: rhythm.sequence.length,
+        steps: sequence.length,
         bpm,
         subdivision,
         guide: guide && source !== "mic",
         click,
+        clickMode,
+        groups,
+        accents,
+        samples: sampleChoices,
+        dynamicGain: DYNAMIC_GAIN[dynamic],
       })
       .then(() => {
         if (!cancelled) setReady(true);
@@ -287,23 +371,28 @@ export function usePractice(rhythm: Rhythm) {
       engine.dispose();
     };
   }, [
+    rhythm,
     engine,
     detector,
     pattern,
-    rhythm.sequence.length,
+    sequence.length,
     bpm,
     subdivision,
     guide,
     click,
     source,
+    latency,
     resetToken,
+    clickMode,
+    groups,
+    accents,
+    sampleChoices,
+    dynamic,
   ]);
   useEffect(() => {
-    sounds.prepare();
     const subscription = AppState.addEventListener("change", (state) => {
       if (state !== "active") {
-        engine.pause();
-        setRunning(false);
+        pause();
         void disableMicrophone();
       }
     });
@@ -314,9 +403,33 @@ export function usePractice(rhythm: Rhythm) {
       engine.dispose();
       void disableMicrophone();
     };
-  }, [sounds, engine, disableMicrophone]);
+  }, [sounds, engine, disableMicrophone, pause]);
   useEffect(() => {
-    if (Platform.OS !== "web") return;
+    sounds.prepare(sampleChoices);
+    return () => sounds.dispose();
+  }, [sounds, sampleChoices]);
+  useEffect(() => {
+    engine.setVolume(volume);
+    sounds.setVolume(volume);
+  }, [engine, sounds, volume]);
+  const audition = useCallback(
+    async (kind: Kind, variantId?: string) => {
+      if (settings.current.source === "mic" || micOpening.current) return;
+      pause();
+      try {
+        await sounds.play(
+          kind,
+          variantId ?? settings.current.sampleChoices[kind],
+        );
+        setLastKind(kind);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Pré-escuta indisponível.");
+      }
+    },
+    [pause, sounds],
+  );
+  useEffect(() => {
+    if (Platform.OS !== "web" || !keyboardEnabled) return;
     const handle = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
       if (
@@ -355,8 +468,33 @@ export function usePractice(rhythm: Rhythm) {
     };
     window.addEventListener("keydown", handle);
     return () => window.removeEventListener("keydown", handle);
-  }, [tap, toggle]);
+  }, [tap, toggle, keyboardEnabled]);
   return {
+    takeIdentity,
+    captureRate,
+    sequence,
+    groups,
+    accents,
+    range,
+    isolation,
+    setIsolation,
+    clickMode,
+    setClickMode,
+    dynamic,
+    setDynamic,
+    volume,
+    setVolume,
+    sampleChoices,
+    setSampleChoice: (kind: Kind, id: string) =>
+      setSampleChoices((current) => ({ ...current, [kind]: id })),
+    setRange: (start: number, end: number) =>
+      setRegion({
+        id: rhythm.id,
+        ...clampRange(start, end, rhythm.sequence.length),
+      }),
+    audition,
+    pause,
+    readTime: engine.getTime,
     bpm,
     setBpm,
     subdivision,
@@ -385,7 +523,7 @@ export function usePractice(rhythm: Rhythm) {
     confidence,
     calibrating,
     setCalibrating: (kind: Kind | null) => {
-      engine.pause();
+      pause();
       inputSince.current = kind ? performance.now() / 1000 : Infinity;
       detector.reset();
       setRunning(false);

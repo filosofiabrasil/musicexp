@@ -27,6 +27,11 @@ export function RhythmLibrary({
   const [query, setQuery] = useState(""),
     [group, setGroup] = useState("todos"),
     [padbt, setPadbt] = useState(false);
+  const [lengthFilter, setLengthFilter] = useState<
+      "all" | "short" | "medium" | "long"
+    >("all"),
+    [withRests, setWithRests] = useState(false),
+    [sourcesOpen, setSourcesOpen] = useState<string | null>(null);
   const groups = useMemo(
     () =>
       Array.from(new Map(RHYTHMS.map((r) => [r.groupId, r.group])).entries()),
@@ -39,6 +44,13 @@ export function RhythmLibrary({
   const filtered = RHYTHMS.filter(
     (r) =>
       (!padbt || r.padbt) &&
+      (!withRests || r.sequence.includes(".")) &&
+      (lengthFilter === "all" ||
+        (lengthFilter === "short"
+          ? r.sequence.length <= 8
+          : lengthFilter === "medium"
+            ? r.sequence.length > 8 && r.sequence.length <= 16
+            : r.sequence.length > 16)) &&
       (group === "todos" || r.groupId === group) &&
       `${r.name} ${r.description}`
         .normalize("NFD")
@@ -58,7 +70,7 @@ export function RhythmLibrary({
           <View style={styles.heading}>
             <View style={{ flex: 1, gap: 8 }}>
               <Label orange>BIBLIOTECA / 148 RITMOS</Label>
-              <Text style={styles.title}>Encontre seu ritmo.</Text>
+              <Text style={styles.title}>Biblioteca de referências.</Text>
             </View>
             <Button onPress={onClose} label="Fechar biblioteca">
               ✕
@@ -103,7 +115,42 @@ export function RhythmLibrary({
               </Button>
             ))}
           </ScrollView>
-          <Label>{filtered.length} RESULTADOS · CICLOS DE 6 A 32 PASSOS</Label>
+          <View style={{ flexDirection: "row", gap: 7, flexWrap: "wrap" }}>
+            {(
+              [
+                ["all", "Qualquer extensão"],
+                ["short", "Até 8"],
+                ["medium", "9–16"],
+                ["long", "24–32"],
+              ] as const
+            ).map(([value, label]) => (
+              <Button
+                key={value}
+                active={lengthFilter === value}
+                onPress={() => setLengthFilter(value)}
+              >
+                {label}
+              </Button>
+            ))}
+            <Button
+              active={withRests}
+              onPress={() => setWithRests((value) => !value)}
+            >
+              Com pausas
+            </Button>
+            <Button
+              onPress={() => {
+                setQuery("");
+                setGroup("todos");
+                setPadbt(false);
+                setLengthFilter("all");
+                setWithRests(false);
+              }}
+            >
+              Limpar filtros
+            </Button>
+          </View>
+          <Label>{filtered.length} RESULTADOS · REFERÊNCIAS PRESERVADAS</Label>
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 20 }}
@@ -115,43 +162,67 @@ export function RhythmLibrary({
               </Text>
             )}
             {filtered.map((r) => (
-              <Pressable
+              <View
                 key={r.id}
-                accessibilityRole="button"
-                accessibilityLabel={`Escolher ${r.name}`}
-                onPress={() => {
-                  onSelect(r);
-                  onClose();
-                }}
-                style={({ pressed }) => [
+                style={[
                   styles.row,
-                  {
-                    backgroundColor:
-                      selected === r.id
-                        ? "#21150D"
-                        : pressed
-                          ? T.panel
-                          : T.black,
-                  },
+                  { backgroundColor: selected === r.id ? "#21150D" : T.black },
                 ]}
               >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    gap: 10,
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={`Escolher ${r.name}`}
+                  onPress={() => {
+                    onSelect(r);
+                    onClose();
                   }}
+                  style={{ gap: 9 }}
                 >
-                  <Text style={styles.name}>{r.name}</Text>
-                  <Label orange>{r.sequence.length} PASSOS</Label>
-                </View>
-                <Text style={styles.sequence}>{r.sequence}</Text>
-                <Text style={styles.description}>{r.description}</Text>
-                <Text style={styles.source}>
-                  {r.group} · {r.subdivision} passos/tempo · {r.sources.length}{" "}
-                  {r.sources.length === 1 ? "fonte" : "fontes"}
-                </Text>
-              </Pressable>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      gap: 10,
+                    }}
+                  >
+                    <Text style={styles.name}>{r.name}</Text>
+                    <Label orange>{r.sequence.length} UNIDADES</Label>
+                  </View>
+                  <Text style={styles.sequence}>{r.sequence}</Text>
+                  <Text style={styles.description}>{r.description}</Text>
+                  <Text style={styles.source}>
+                    {r.group} · {r.subdivision} unidades/semínima ·{" "}
+                    {r.confidence === "multi"
+                      ? "múltiplas referências"
+                      : r.confidence === "derived"
+                        ? "padrão derivado"
+                        : "uma referência"}
+                  </Text>
+                </Pressable>
+                <Button
+                  label={`Ver fontes de ${r.name}`}
+                  onPress={() =>
+                    setSourcesOpen(sourcesOpen === r.id ? null : r.id)
+                  }
+                >
+                  {sourcesOpen === r.id
+                    ? "− Fechar fontes"
+                    : `+ ${r.sources.length} referências e origem da grade`}
+                </Button>
+                {sourcesOpen === r.id && (
+                  <View style={{ gap: 8 }}>
+                    <Text style={styles.description}>
+                      Grade: {r.subdivisionSource}. O número de referências não
+                      equivale a revisão editorial ou validação desta execução.
+                    </Text>
+                    {r.sources.map((source, index) => (
+                      <Text key={index} style={styles.source}>
+                        {index + 1}. {source}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+              </View>
             ))}
           </ScrollView>
         </View>
@@ -170,7 +241,7 @@ const styles = StyleSheet.create({
   },
   heading: { flexDirection: "row", alignItems: "center", gap: 12 },
   title: {
-    fontFamily: fonts.title,
+    fontFamily: fonts.serif,
     fontSize: 32,
     color: T.ivory,
     letterSpacing: -0.8,
