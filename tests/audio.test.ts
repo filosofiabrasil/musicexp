@@ -11,6 +11,18 @@ import { decodePcm16, fromBase64, toBase64, wavBytes } from "../src/audio/pcm";
 import { CODES, STROKES } from "../src/pandeiro-ui-base/types";
 import bank from "../src/data/templates.json";
 import kit from "../src/data/kit.json";
+import { mixCycle } from "../src/audio/mixCycle";
+import { toPattern, barDuration } from "../src/pandeiro-ui-base/types";
+import rhythms from "../src/data/rhythms.json";
+
+test("os 148 ritmos têm exatamente os frames da grade, sem tempo adicional", () => {
+  for (const rhythm of rhythms) {
+    const config = { pattern: toPattern(rhythm.sequence), steps: rhythm.sequence.length, bpm: 100, subdivision: rhythm.subdivision, guide: true, click: false };
+    const pcm = mixCycle(config);
+    assert.equal(pcm.length, Math.round(barDuration(100, config.steps, config.subdivision) * kit.rate), rhythm.name);
+    assert.ok(pcm.some(v => Math.abs(v) > .001), rhythm.name);
+  }
+});
 
 test("PCM/base64 e WAV preservam formato, sinal e duração", () => {
   const input = new Uint8Array([0, 1, 2, 253, 254, 255, 17]);

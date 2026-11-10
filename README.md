@@ -70,7 +70,9 @@ Regerar o catálogo: `npm run import:rhythms`. Regerar kit e referências: `npm 
 ```text
 App.tsx                        telas, biblioteca e controles
 src/pandeiro-ui-base/           HitBars, TimingScatter, RhythmRing, tipos e useClock
-src/audio/AudioEngine.ts        reprodução, sampler e mixagem de um ciclo em PCM
+src/audio/AudioEngine.ts        reprodução nativa com expo-audio
+src/audio/AudioEngine.web.ts    reprodução contínua na web com Web Audio
+src/audio/mixCycle.ts           mixagem de um ciclo em PCM
 src/audio/timing.ts             grade, posição no ciclo e métricas
 src/audio/dsp.ts                ataques, características e classificação
 src/audio/microphone.web.ts     captura via AudioWorklet
@@ -80,7 +82,7 @@ tests/                         testes de áudio, tempo, biblioteca e interaçõe
 docs/VALIDACAO.md               verificações realizadas e limites
 ```
 
-O motor gera um WAV por ciclo e o reproduz em loop com `expo-audio`. As posições dos samples são agendadas nos próprios frames. `useClock` lê `AudioPlayer.currentTime`; o RAF apenas atualiza a tela. O índice de ciclos mantém o tempo contínuo nas voltas. Os pads são pré-carregados e registram o primeiro contato; o navegador usa atraso de press-in igual a zero.
+As posições dos samples são agendadas nos próprios frames. Na web, o motor usa `AudioBufferSourceNode` com repetição contínua e relógio `AudioContext.currentTime`, evitando a pausa que o player HTML introduzia entre voltas. No Android/iOS, o motor gera um WAV por ciclo e usa `expo-audio` com `AudioPlayer.currentTime`. O RAF apenas atualiza a tela. Os pads são pré-carregados e registram o primeiro contato; o navegador usa atraso de press-in igual a zero.
 
 Um reconhecedor externo pode alimentar o mesmo contrato:
 

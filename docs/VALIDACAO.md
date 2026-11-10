@@ -4,8 +4,8 @@
 
 - `npm install`: concluído; `package-lock.json` incluído. Os módulos Expo Asset, Constants e Core foram fixados nas versões do SDK 54 para evitar resolução automática de peers de outro SDK.
 - `npm run typecheck`: aprovado, TypeScript estrito.
-- `npm test`: 10 testes aprovados. Cobrem os dois catálogos, subdivisões, ciclos irregulares, precisão na virada, pontuação sem duplicação, métricas, formato PCM/WAV, ataque atravessando buffers, silêncio, classificação dos nove samples do player e rejeição de empates.
-- Chromium/Playwright: 5 testes aprovados. Reprodução por mais de um ciclo, pausa/retomada, teclado, pads, manutenção dos golpes entre as três telas, filtro PADBT, ciclos de 7/24/32 passos, alteração de BPM, largura de 390 px, permissão negada e captura de microfone.
+- `npm test`: 11 testes aprovados. Cobrem os dois catálogos, subdivisões, ciclos irregulares, precisão na virada, pontuação sem duplicação, métricas, formato PCM/WAV, ataque atravessando buffers, silêncio, classificação dos nove samples do player e rejeição de empates.
+- Chromium/Playwright: 6 testes aprovados. Reprodução por mais de um ciclo, pausa/retomada, teclado, pads, manutenção dos golpes entre as três telas, filtro PADBT, ciclos de 7/24/32 passos, alteração de BPM, largura de 390 px, permissão negada e captura de microfone.
 - O teste de captura injeta um WAV dos samples no **dispositivo virtual de áudio do Chromium**. O AudioWorklet, o detector e o classificador do app processam o sinal. Não há injeção de eventos de golpe.
 - Inspeção visual das três telas e do layout de celular; sem rolagem horizontal. Capturas finais sem erros de console ou JavaScript.
 - `npx expo install --check`: versões compatíveis com o SDK.
@@ -24,3 +24,11 @@
 ## Conteúdo da entrega
 
 O ZIP contém o projeto completo, fontes de dados preservadas, sons originais/derivados, testes, lockfile e uma versão web exportada para conferência local. Não inclui `node_modules`, caches, gravações de sessão, vídeos antigos, projetos Remotion ou builds assinados.
+
+## Correção 1.0.1: intervalo entre voltas na web
+
+Foi reproduzido um ciclo nominal de 2,4 segundos com intervalos medidos de 2,5094, 2,5163 e 2,5332 segundos entre voltas usando o player HTML. Os samples do kit iniciam o ataque a cerca de 1 ms; não havia uma batida vazia adicionada ao padrão.
+
+A reprodução web passou a usar um AudioBufferSourceNode em loop com o relógio do AudioContext. O teste de regressão renderiza três voltas do buffer efetivamente usado pelo app em OfflineAudioContext e compara todos os frames com a repetição exata do ciclo. Outro teste verifica a duração em frames de todos os 148 ritmos.
+
+Essa correção é específica do motor web; a reprodução nativa ainda exige validação em aparelho.
