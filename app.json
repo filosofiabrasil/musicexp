@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "PANDEIRO.APP — Laboratório",
+    "slug": "pandeiro-apps-experimentais",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#090909",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.pandeiro.laboratorio",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Reconhecer os golpes do seu pandeiro durante o treino."
+      }
+    },
+    "android": {
+      "package": "app.pandeiro.laboratorio",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "PANDEIRO.APP — Laboratório"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Reconhecer os golpes do seu pandeiro durante o treino."
+        }
+      ],
+      [
+        "@siteed/audio-studio",
+        {
+          "enableBackgroundAudio": false,
+          "enableNotifications": false,
+          "enablePhoneStateHandling": false,
+          "enableDeviceDetection": false,
+          "iosConfig": {
+            "microphoneUsageDescription": "Reconhecer os golpes do seu pandeiro durante o treino."
+          }
+        }
+      ]
+    ]
+  }
+}

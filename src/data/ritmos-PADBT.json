@@ -1,0 +1,613 @@
+{
+ "golpes": {
+  "P": "polegar",
+  "A": "abafado",
+  "D": "dedos",
+  "B": "punho",
+  "T": "tapa",
+  ".": "pausa"
+ },
+ "total": 75,
+ "ritmos": [
+  {
+   "id": "s1",
+   "grupo": "Samba",
+   "nome": "Samba base",
+   "golpes": "ADBDPDBD",
+   "sub": 4,
+   "descricao": "Um polegar por tempo, abafado no 1º e solto no 2º, seguido de dedos, punho e dedos. Padrão básico de Bolão."
+  },
+  {
+   "id": "s2",
+   "grupo": "Samba",
+   "nome": "Samba com tapa",
+   "golpes": "ADBTPDBD",
+   "sub": 4,
+   "descricao": "Levada A: tapa na 4ª nota do 1º tempo e polegar nas cabeças, abafado no 1º e solto no 2º."
+  },
+  {
+   "id": "s3",
+   "grupo": "Samba",
+   "nome": "Samba com tapa e polegar",
+   "golpes": "ADBTPDBP",
+   "sub": 4,
+   "descricao": "Levada B: acrescenta o polegar na 4ª nota do 2º tempo (em Sampaio e Bub ele sai dos dedos). Também é o toque de pagode."
+  },
+  {
+   "id": "s4",
+   "grupo": "Samba",
+   "nome": "Samba, polegar duplo",
+   "golpes": "PPDBPPDB",
+   "sub": 4,
+   "descricao": "Dois polegares seguidos, depois dedos e punho."
+  },
+  {
+   "id": "pa",
+   "grupo": "Samba",
+   "nome": "Partido alto",
+   "golpes": "PTPPPTP",
+   "sub": 4,
+   "descricao": "Ciclo de 7 golpes: polegar, tapa, três polegares, tapa, polegar, em semicolcheias. O tapa seco e forte marca o estilo."
+  },
+  {
+   "id": "s5",
+   "grupo": "Samba",
+   "nome": "Samba, tapa no fim",
+   "golpes": "PDBDPDBT",
+   "sub": 4,
+   "descricao": "Como a levada A, com o tapa no fim do compasso."
+  },
+  {
+   "id": "s6",
+   "grupo": "Samba",
+   "nome": "Samba, batida com tapa",
+   "golpes": "PPDBTPDB",
+   "sub": 4,
+   "descricao": "Dois polegares no início e tapa na cabeça do 2º tempo."
+  },
+  {
+   "id": "s7",
+   "grupo": "Samba",
+   "nome": "Vanerão",
+   "golpes": "PDBPPDBT",
+   "sub": 4,
+   "descricao": "Dois polegares seguidos no meio do compasso e tapa no fim: o ritmo da dança gaúcha."
+  },
+  {
+   "id": "s8",
+   "grupo": "Samba",
+   "nome": "Dedos e punho alternados",
+   "golpes": "DBDBDBDB",
+   "sub": 4,
+   "descricao": "Dedos e punho sem polegar: treino do pêndulo da mão."
+  },
+  {
+   "id": "s9",
+   "grupo": "Samba",
+   "nome": "Samba, tapa em cada tempo",
+   "golpes": "PDBTPDBT",
+   "sub": 4,
+   "descricao": "Um tapa no fim de cada tempo."
+  },
+  {
+   "id": "sm",
+   "grupo": "Samba",
+   "nome": "Marcação do surdo",
+   "golpes": "A...P...",
+   "sub": 4,
+   "descricao": "O pandeiro como surdo: abafado no 1º tempo (surdo de segunda) e solto no 2º. Preencha com dedos e punho."
+  },
+  {
+   "id": "pa9",
+   "grupo": "Samba",
+   "nome": "Partido alto, ciclo de 9",
+   "golpes": "TTPPPTTPP",
+   "sub": 4,
+   "descricao": "Ciclo de 9 golpes: dois tapas, três polegares, dois tapas, dois polegares."
+  },
+  {
+   "id": "pa10",
+   "grupo": "Samba",
+   "nome": "Partido alto, ciclo de 10",
+   "golpes": "PPPPPTPTPT",
+   "sub": 4,
+   "descricao": "Ciclo de 10 golpes: cinco polegares seguidos de tapa e polegar alternados."
+  },
+  {
+   "id": "gu1",
+   "grupo": "Samba",
+   "nome": "Levada básica de choro",
+   "golpes": "PDBDPDBD",
+   "sub": 4,
+   "descricao": "Polegar solto em cada tempo, com punho e dedos entre eles. É a levada de partida do choro e do samba, antes do abafado."
+  },
+  {
+   "id": "lw78",
+   "grupo": "Samba",
+   "nome": "Samba de latada",
+   "golpes": "TBDTPDTPTBDTPPTP",
+   "sub": 4,
+   "descricao": "Tapa abre e fecha os tempos 1 e 3; nos tempos 2 e 4 o polegar alterna com tapa e com outro polegar."
+  },
+  {
+   "id": "lw79",
+   "grupo": "Samba",
+   "nome": "Samba de roda em 2/4",
+   "golpes": "PDBTBBTP",
+   "sub": 4,
+   "descricao": "Polegar, dedos, punho e tapa no 1º tempo; dois punhos, tapa e polegar no 2º."
+  },
+  {
+   "id": "lw62",
+   "grupo": "Samba",
+   "nome": "Pagode, dois compassos",
+   "golpes": "ADBTPDBPADBTPPDP",
+   "sub": 4,
+   "descricao": "O 1º compasso é o do samba com tapa e polegar; o 2º troca o fim por polegar, polegar, dedos, polegar."
+  },
+  {
+   "id": "lw60",
+   "grupo": "Samba",
+   "nome": "Marchinha de carnaval",
+   "golpes": "ADBDPDADBDBDPDBD",
+   "sub": 4,
+   "descricao": "Dedos e punho em semicolcheias, com polegares nos tempos 1, 2 e 4; o 3º tempo não tem polegar."
+  },
+  {
+   "id": "lw59",
+   "grupo": "Samba",
+   "nome": "Marcha rancho",
+   "golpes": "A..DP.D.A.D.PDBD",
+   "sub": 4,
+   "descricao": "Colcheia pontuada e semicolcheia, depois colcheias, fechando em semicolcheias: polegar, dedos, punho, dedos."
+  },
+  {
+   "id": "lw67",
+   "grupo": "Samba",
+   "nome": "Polca",
+   "golpes": "A.D.P.D.A.DBP.D.",
+   "sub": 4,
+   "descricao": "Colcheias de polegar e dedos, abafado nos tempos 1 e 3; no 3º tempo, dedos e punho em semicolcheias."
+  },
+  {
+   "id": "lw86",
+   "grupo": "Samba",
+   "nome": "Schottische (scotsch)",
+   "golpes": "A.D.P.P.P.D.P.D.",
+   "sub": 4,
+   "descricao": "Colcheias: abafado e dedos, dois polegares, e polegar e dedos nos dois últimos tempos."
+  },
+  {
+   "id": "lw63",
+   "grupo": "Samba",
+   "nome": "Partido alto em colcheias 1",
+   "golpes": "PP.TP.T.P.T.PP.P",
+   "sub": 4,
+   "descricao": "Dois compassos: polegar, polegar e tapa; polegar e tapa em colcheias; fecha com três polegares."
+  },
+  {
+   "id": "lw64",
+   "grupo": "Samba",
+   "nome": "Partido alto em colcheias 2",
+   "golpes": ".T..P.P.P.T..P.P",
+   "sub": 4,
+   "descricao": "Abre com pausa e tapa pontuado, segue com polegares e tapa em colcheias e fecha com pausa e polegares."
+  },
+  {
+   "id": "lw65",
+   "grupo": "Samba",
+   "nome": "Partido alto de Bira Presidente",
+   "golpes": "T.TP.PPP.T.TP.P.",
+   "sub": 4,
+   "descricao": "Tapas e polegares em colcheias e semicolcheias, com tapa no 3º tempo; termina em pausa."
+  },
+  {
+   "id": "lw66",
+   "grupo": "Samba",
+   "nome": "Partido alto, levada base",
+   "golpes": "PP.TP.T.P.T.PDBD",
+   "sub": 4,
+   "descricao": "Dois polegares e tapa, polegar e tapa em colcheias duas vezes, fechando com polegar, dedos, punho e dedos."
+  },
+  {
+   "id": "bai",
+   "grupo": "Baião, xote e outros",
+   "nome": "Baião básico",
+   "golpes": "PDBPDBDD",
+   "sub": 4,
+   "descricao": "Dois grupos de polegar, dedos e punho, fechando com dois dedos."
+  },
+  {
+   "id": "ox",
+   "grupo": "Baião, xote e outros",
+   "nome": "Xote básico",
+   "golpes": "PDBDPDPD",
+   "sub": 4,
+   "descricao": "Polegar nas cabeças dos tempos e outro na 3ª nota do 2º tempo."
+  },
+  {
+   "id": "va",
+   "grupo": "Baião, xote e outros",
+   "nome": "Valsa, polegar em cada tempo",
+   "golpes": "PDPDPD",
+   "sub": 4,
+   "descricao": "3/4 em colcheias: polegar em cada tempo e dedos entre eles."
+  },
+  {
+   "id": "va2",
+   "grupo": "Baião, xote e outros",
+   "nome": "Valsa, dedos e punho",
+   "golpes": "PDBDBD",
+   "sub": 4,
+   "descricao": "3/4 em colcheias: polegar na cabeça do compasso, depois dedos e punho alternados."
+  },
+  {
+   "id": "va3",
+   "grupo": "Baião, xote e outros",
+   "nome": "Valsa, polegar abafado",
+   "golpes": "PDBADB",
+   "sub": 4,
+   "descricao": "3/4 em colcheias: variação da valsa B com polegar abafado no 4º golpe."
+  },
+  {
+   "id": "bai2",
+   "grupo": "Baião, xote e outros",
+   "nome": "Baião com punho final",
+   "golpes": "PDBPDBDB",
+   "sub": 4,
+   "descricao": "Como o baião A, fechando com dedos e punho em vez de dois dedos."
+  },
+  {
+   "id": "fs",
+   "grupo": "Baião, xote e outros",
+   "nome": "Forró e seresta",
+   "golpes": "TPPTPP",
+   "sub": 4,
+   "descricao": "Ciclo de 6 golpes: tapa e dois polegares, duas vezes."
+  },
+  {
+   "id": "fr1",
+   "grupo": "Baião, xote e outros",
+   "nome": "Frevo",
+   "golpes": "P.DBD.BDB.DBD.BD",
+   "sub": 4,
+   "descricao": "Frevo em 16 notas: polegar na abertura e grupos de dedos e punho separados por pausas."
+  },
+  {
+   "id": "fr2",
+   "grupo": "Baião, xote e outros",
+   "nome": "Frevo abafado",
+   "golpes": "A.DBD.BDB.DBD.BD",
+   "sub": 4,
+   "descricao": "O mesmo frevo, abrindo com o polegar abafado."
+  },
+  {
+   "id": "lw05",
+   "grupo": "Baião, xote e outros",
+   "nome": "Arrasta-pé",
+   "golpes": "T.BDP.P.",
+   "sub": 4,
+   "descricao": "Tapa em colcheia, punho e dedos; depois dois polegares em colcheias."
+  },
+  {
+   "id": "lw11",
+   "grupo": "Baião, xote e outros",
+   "nome": "Calango, baiãozinho e congada",
+   "golpes": "PDBTBDPD",
+   "sub": 4,
+   "descricao": "Polegar, dedos, punho e tapa, e depois punho, dedos, polegar e dedos. Também serve ao forró sambado."
+  },
+  {
+   "id": "lw01",
+   "grupo": "Baião, xote e outros",
+   "nome": "Afoxé",
+   "golpes": "D.BDPPDB.DPP",
+   "sub": 4,
+   "descricao": "Ciclo de 12 passos em 3/4: dedos e punho em grupos de quatro, separados por dois polegares seguidos."
+  },
+  {
+   "id": "lw22",
+   "grupo": "Baião, xote e outros",
+   "nome": "Carimbó",
+   "golpes": "PDBTPDPDPTBTPDPD",
+   "sub": 4,
+   "descricao": "Polegares e dedos nos tempos 2 e 4, com tapas e punho nos tempos 1 e 3."
+  },
+  {
+   "id": "lw26",
+   "grupo": "Baião, xote e outros",
+   "nome": "Coco",
+   "golpes": "PDBTBDBD",
+   "sub": 4,
+   "descricao": "Polegar, dedos, punho e tapa no 1º tempo; punho e dedos alternados no 2º."
+  },
+  {
+   "id": "lw40",
+   "grupo": "Baião, xote e outros",
+   "nome": "Frevo de um compasso",
+   "golpes": "A.DBP.DB",
+   "sub": 4,
+   "descricao": "Polegar em colcheia, dedos e punho em semicolcheias: abafado no 1º tempo e solto no 2º."
+  },
+  {
+   "id": "lw41",
+   "grupo": "Baião, xote e outros",
+   "nome": "Frevo com tapa inicial",
+   "golpes": "T.BDP.T.BDBDP.DB",
+   "sub": 4,
+   "descricao": "Dois compassos: tapa, punho e dedos com polegar e tapa em colcheias; o 2º passa a punho e dedos em série."
+  },
+  {
+   "id": "lw61",
+   "grupo": "Baião, xote e outros",
+   "nome": "Xote abafado",
+   "golpes": "ADBDPDPD",
+   "sub": 4,
+   "descricao": "Como o xote, com o polegar abafado na abertura. Também aparece como maxixe."
+  },
+  {
+   "id": "lt1",
+   "grupo": "Linhas de tempo",
+   "nome": "Telecoteco",
+   "golpes": "T.T.TT.T.T.T.TT.",
+   "sub": 4,
+   "descricao": "Linha de tempo do samba urbano: 9 toques em 16 pulsos, repartidos em 7 + 9. Aqui em tapas."
+  },
+  {
+   "id": "lt2",
+   "grupo": "Linhas de tempo",
+   "nome": "Partido alto, 7 toques",
+   "golpes": "T.T.T..T.T.T.T..",
+   "sub": 4,
+   "descricao": "Versão reduzida do ciclo, a das palmas do partido alto."
+  },
+  {
+   "id": "lt3",
+   "grupo": "Linhas de tempo",
+   "nome": "Palmas de partido alto 1",
+   "golpes": ".T.T..T.T.T.T..T",
+   "sub": 4,
+   "descricao": "Linha de palmas ouvida em vários partidos-altos."
+  },
+  {
+   "id": "lt4",
+   "grupo": "Linhas de tempo",
+   "nome": "Palmas de partido alto 2",
+   "golpes": ".T.T..T.T.T..T.T",
+   "sub": 4,
+   "descricao": "Variação do ciclo reduzido."
+  },
+  {
+   "id": "lt5",
+   "grupo": "Linhas de tempo",
+   "nome": "Palmas de partido alto 3",
+   "golpes": ".T..T.T.T.T..T.T",
+   "sub": 4,
+   "descricao": "Variação do ciclo reduzido, ouvida também em cuíca e pandeiro."
+  },
+  {
+   "id": "lt6",
+   "grupo": "Linhas de tempo",
+   "nome": "Linha do samba de roda",
+   "golpes": "T..T.T.T.T.T..T.",
+   "sub": 4,
+   "descricao": "Linha de tempo do samba de roda."
+  },
+  {
+   "id": "lt7",
+   "grupo": "Linhas de tempo",
+   "nome": "Linha do samba de roda 2",
+   "golpes": "T.T.T.T..T.T..T.",
+   "sub": 4,
+   "descricao": "Outra linha de tempo do samba de roda."
+  },
+  {
+   "id": "lt8",
+   "grupo": "Linhas de tempo",
+   "nome": "Versão de transição",
+   "golpes": "T.T..T.T.T.T.T..",
+   "sub": 4,
+   "descricao": "Linha de tempo 5 + 11 do samba dos anos 1930, tocada em tapas."
+  },
+  {
+   "id": "lt9",
+   "grupo": "Linhas de tempo",
+   "nome": "Pandeiro de corte",
+   "golpes": "TT.TT.T.T.T.TT.T",
+   "sub": 4,
+   "descricao": "Linha de dez toques ouvida no pandeiro de corte do partido alto."
+  },
+  {
+   "id": "lt10",
+   "grupo": "Linhas de tempo",
+   "nome": "Palmas de partido alto 4",
+   "golpes": "TT.T..T.T.T.T..T",
+   "sub": 4,
+   "descricao": "Resultante de palmas de partido alto, com dois toques seguidos na abertura."
+  },
+  {
+   "id": "trs",
+   "grupo": "Linhas de tempo",
+   "nome": "Tresillo 3+3+2",
+   "golpes": "T..T..T.",
+   "sub": 4,
+   "descricao": "Linha de tempo de 8 pulsos do samba antigo; a levada de João da Baiana tem os tapas em posições parecidas."
+  },
+  {
+   "id": "lt11",
+   "grupo": "Linhas de tempo",
+   "nome": "Sete toques (Kubik)",
+   "golpes": "T.T.T.T..T.T.T..",
+   "sub": 4,
+   "descricao": "Versão reduzida descrita por Kubik, parecida com as palmas do partido alto."
+  },
+  {
+   "id": "lt12",
+   "grupo": "Linhas de tempo",
+   "nome": "Samba 9+7",
+   "golpes": "T.T.T.TT.T.T.TT.",
+   "sub": 4,
+   "descricao": "Linha de nove toques com a divisão 9 + 7, descrita por Kubik e Mukuna."
+  },
+  {
+   "id": "lt13",
+   "grupo": "Linhas de tempo",
+   "nome": "Fórmula típica (Bolão)",
+   "golpes": ".T.T.TT.T.T.T.TT",
+   "sub": 4,
+   "descricao": "Ciclo de nove toques deslocado, descrito por Oscar Bolão como fórmula típica."
+  },
+  {
+   "id": "lt14",
+   "grupo": "Linhas de tempo",
+   "nome": "Cuíca em Lá Vai Viola",
+   "golpes": ".T.TT.T.T.T.TT.T",
+   "sub": 4,
+   "descricao": "Linha ouvida na cuíca do partido alto de Candeia."
+  },
+  {
+   "id": "lt15",
+   "grupo": "Linhas de tempo",
+   "nome": "Cuíca, variação",
+   "golpes": ".T.TT.T.T.T..T.T",
+   "sub": 4,
+   "descricao": "Variação da linha da cuíca, com um toque deslocado no fim."
+  },
+  {
+   "id": "lt16",
+   "grupo": "Linhas de tempo",
+   "nome": "Tamborim em Passarinho",
+   "golpes": ".T.T.TT.T.T.TT.T",
+   "sub": 4,
+   "descricao": "Linha do tamborim ouvida no partido alto."
+  },
+  {
+   "id": "lt17",
+   "grupo": "Linhas de tempo",
+   "nome": "Cavaquinho em Casa de Bamba",
+   "golpes": "T.TT.T.T.T.T.TT.",
+   "sub": 4,
+   "descricao": "Linha tocada no cavaquinho, com as mesmas distâncias da versão de transição."
+  },
+  {
+   "id": "lt18",
+   "grupo": "Linhas de tempo",
+   "nome": "Surdos, marcação dos quatro tempos",
+   "golpes": "P...P...P...P...",
+   "sub": 4,
+   "descricao": "Os surdos marcam os quatro tempos entre os quais corre o ciclo de 16 pulsos."
+  },
+  {
+   "id": "bb",
+   "grupo": "Groove",
+   "nome": "Backbeat",
+   "golpes": "PDDDTDDDPDDDTDDD",
+   "sub": 4,
+   "descricao": "O pandeiro como bateria (Suzano): polegar no bumbo (tempos 1 e 3), tapa na caixa (2 e 4) e dedos no aro como chimbal."
+  },
+  {
+   "id": "bb4",
+   "grupo": "Groove",
+   "nome": "Backbeat em colcheias",
+   "golpes": "P.D.T.D.P.D.T.D.",
+   "sub": 4,
+   "descricao": "O chimbal dos dedos em colcheias, deixando o groove mais aberto."
+  },
+  {
+   "id": "qd",
+   "grupo": "Groove",
+   "nome": "Quadrilha, só polegares",
+   "golpes": "....P.P.....P.P.",
+   "sub": 4,
+   "descricao": "Camada grave do pandeiro em Leão do Norte (Suzano), na linha da quadrilha. Preencha com dedos e punho."
+  },
+  {
+   "id": "lw18",
+   "grupo": "Dobrados e compostos",
+   "nome": "Bolero",
+   "golpes": "A.DBD.B.P.D.P.D.",
+   "sub": 4,
+   "descricao": "Em fusas: abafado, dedos, punho, dedos e punho no 1º tempo; polegares e dedos em semicolcheias no 2º."
+  },
+  {
+   "id": "lw52",
+   "grupo": "Dobrados e compostos",
+   "nome": "Jungle",
+   "golpes": "P.DBT.P.DBT.P.D.",
+   "sub": 4,
+   "descricao": "Em fusas: polegar, dedos, punho, tapa e polegar no 1º tempo; dedos, punho, tapa, polegar e dedos no 2º."
+  },
+  {
+   "id": "lw96",
+   "grupo": "Dobrados e compostos",
+   "nome": "Xaxado em fusas",
+   "golpes": "P.T.BDP.T.BDP.T.",
+   "sub": 4,
+   "descricao": "Em fusas: polegar, tapa, punho, dedos e polegar no 1º tempo; tapa, punho, dedos, polegar e tapa no 2º."
+  },
+  {
+   "id": "lw94",
+   "grupo": "Dobrados e compostos",
+   "nome": "Valsa em semicolcheias",
+   "golpes": "ADBDBDPDBDBD",
+   "sub": 4,
+   "descricao": "6/8 em semicolcheias: abafado no 1º grupo e solto no 2º, entre dedos e punho."
+  },
+  {
+   "id": "lw93",
+   "grupo": "Dobrados e compostos",
+   "nome": "Valsa de dois compassos",
+   "golpes": "A.D.D.P.D.D.",
+   "sub": 4,
+   "descricao": "3/4 em colcheias, dois compassos: polegar abafado e depois solto, com dedos nos outros dois tempos."
+  },
+  {
+   "id": "e1",
+   "grupo": "Exercícios",
+   "nome": "Só polegar",
+   "golpes": "P.P.P.P.",
+   "sub": 4,
+   "descricao": "Só polegar, relaxado."
+  },
+  {
+   "id": "e2",
+   "grupo": "Exercícios",
+   "nome": "Polegar e punho",
+   "golpes": "P.B.P.B.",
+   "sub": 4,
+   "descricao": "Polegar e base da mão alternando."
+  },
+  {
+   "id": "e3",
+   "grupo": "Exercícios",
+   "nome": "Punho e dedos",
+   "golpes": "B.D.B.D.",
+   "sub": 4,
+   "descricao": "Punho e dedos, alternando os polos da mão."
+  },
+  {
+   "id": "e4",
+   "grupo": "Exercícios",
+   "nome": "Polegar e tapa",
+   "golpes": "P.T.P.T.",
+   "sub": 4,
+   "descricao": "Polegar e tapa no centro."
+  },
+  {
+   "id": "e5",
+   "grupo": "Exercícios",
+   "nome": "Solto e abafado",
+   "golpes": "P.A.P.A.",
+   "sub": 4,
+   "descricao": "Mesmo golpe, com e sem o dedo médio de apoio abafando."
+  },
+  {
+   "id": "e13",
+   "grupo": "Exercícios",
+   "nome": "Toque duplo",
+   "golpes": "DDBBDDBB",
+   "sub": 4,
+   "descricao": "Papa-mama no pandeiro: dois toques com os dedos e dois com o punho."
+  }
+ ]
+}

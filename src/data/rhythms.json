@@ -1,0 +1,2242 @@
+[
+  {
+    "id": "s1",
+    "name": "Samba base",
+    "sequence": "ADBDPDBD",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Um polegar por tempo, abafado no 1º e solto no 2º, seguido de dedos, punho e dedos. Padrão básico de Bolão.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Oscar Bolão, Batuque é um privilégio (2010), citado por Brandão e Barsalini (ANPPOM 2022)",
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)",
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro",
+      "Juarez Barcellos, publicações recentes (samba básico)",
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "s2",
+    "name": "Samba com tapa",
+    "sequence": "ADBTPDBD",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Levada A: tapa na 4ª nota do 1º tempo e polegar nas cabeças, abafado no 1º e solto no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Projeto Guri, Na cadência do samba (suplemento musical)",
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)",
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "s3",
+    "name": "Samba com tapa e polegar",
+    "sequence": "ADBTPDBP",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Levada B: acrescenta o polegar na 4ª nota do 2º tempo (em Sampaio e Bub ele sai dos dedos). Também é o toque de pagode.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Projeto Guri, Na cadência do samba (suplemento musical)",
+      "Oscar Bolão, Batuque é um privilégio (2010), citado por Brandão e Barsalini (ANPPOM 2022)",
+      "Lista Pandeiro Toques (pdfcoffee.com)"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "s4",
+    "name": "Samba, polegar duplo",
+    "sequence": "PPDBPPDB",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Dois polegares seguidos, depois dedos e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro",
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "pa",
+    "name": "Partido alto",
+    "sequence": "PTPPPTP",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Ciclo de 7 golpes: polegar, tapa, três polegares, tapa, polegar, em semicolcheias. O tapa seco e forte marca o estilo.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)",
+      "Blog paiv'art, Toques de Pandeiro",
+      "Lista Pandeiro Toques (pdfcoffee.com)"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "s5",
+    "name": "Samba, tapa no fim",
+    "sequence": "PDBDPDBT",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Como a levada A, com o tapa no fim do compasso.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro",
+      "Lista Pandeiro Toques (pdfcoffee.com)"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "s6",
+    "name": "Samba, batida com tapa",
+    "sequence": "PPDBTPDB",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Dois polegares no início e tapa na cabeça do 2º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro",
+      "Lista Pandeiro Toques (pdfcoffee.com)"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "s7",
+    "name": "Vanerão",
+    "sequence": "PDBPPDBT",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Dois polegares seguidos no meio do compasso e tapa no fim: o ritmo da dança gaúcha.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro",
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "s8",
+    "name": "Dedos e punho alternados",
+    "sequence": "DBDBDBDB",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Dedos e punho sem polegar: treino do pêndulo da mão.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "s9",
+    "name": "Samba, tapa em cada tempo",
+    "sequence": "PDBTPDBT",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Um tapa no fim de cada tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "o2",
+    "name": "Samba com grave de dedos",
+    "sequence": "ADBQPDBD",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Como o samba base, com grave de dedos na 4ª nota do 1º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "sm",
+    "name": "Marcação do surdo",
+    "sequence": "A...P...",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "O pandeiro como surdo: abafado no 1º tempo (surdo de segunda) e solto no 2º. Preencha com dedos e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)",
+      "Projeto Guri, Na cadência do samba (suplemento musical)"
+    ],
+    "confidence": "derived",
+    "padbt": true
+  },
+  {
+    "id": "pa9",
+    "name": "Partido alto, ciclo de 9",
+    "sequence": "TTPPPTTPP",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Ciclo de 9 golpes: dois tapas, três polegares, dois tapas, dois polegares.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "pa10",
+    "name": "Partido alto, ciclo de 10",
+    "sequence": "PPPPPTPTPT",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Ciclo de 10 golpes: cinco polegares seguidos de tapa e polegar alternados.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "gu1",
+    "name": "Levada básica de choro",
+    "sequence": "PDBDPDBD",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Polegar solto em cada tempo, com punho e dedos entre eles. É a levada de partida do choro e do samba, antes do abafado.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Projeto Guri / Amigos do Guri. Material do educador de pandeiro, unidades 1 e 5. Levada básica de choro e samba: tu kx tx kx tu kx tx kx",
+      "Arildo Colares dos Santos, Aprendiz de samba (dissertação, ECA-USP, 2018), Exercício 6 e seção 2.2.2.3"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw24",
+    "name": "Choro sambado",
+    "sequence": "ADADPQPQBTBTBQPQ",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Abafados e dedos no 1º tempo, polegares e graves de dedos no 2º, punho e tapa no 3º. Choro com ginga de samba.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw77",
+    "name": "Samba em quatro tempos",
+    "sequence": "PDBTPDBQPDBTPQBQ",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Polegar, dedos e punho em cada tempo, com tapa no fim dos tempos 1 e 3 e grave de dedos no fim dos tempos 2 e 4.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw78",
+    "name": "Samba de latada",
+    "sequence": "TBDTPDTPTBDTPPTP",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Tapa abre e fecha os tempos 1 e 3; nos tempos 2 e 4 o polegar alterna com tapa e com outro polegar.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw79",
+    "name": "Samba de roda em 2/4",
+    "sequence": "PDBTBBTP",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Polegar, dedos, punho e tapa no 1º tempo; dois punhos, tapa e polegar no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw62",
+    "name": "Pagode, dois compassos",
+    "sequence": "ADBTPDBPADBTPPDP",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "O 1º compasso é o do samba com tapa e polegar; o 2º troca o fim por polegar, polegar, dedos, polegar.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw60",
+    "name": "Marchinha de carnaval",
+    "sequence": "ADBDPDADBDBDPDBD",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Dedos e punho em semicolcheias, com polegares nos tempos 1, 2 e 4; o 3º tempo não tem polegar.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw59",
+    "name": "Marcha rancho",
+    "sequence": "A..DP.D.A.D.PDBD",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Colcheia pontuada e semicolcheia, depois colcheias, fechando em semicolcheias: polegar, dedos, punho, dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw67",
+    "name": "Polca",
+    "sequence": "A.D.P.D.A.DBP.D.",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Colcheias de polegar e dedos, abafado nos tempos 1 e 3; no 3º tempo, dedos e punho em semicolcheias.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw86",
+    "name": "Schottische (scotsch)",
+    "sequence": "A.D.P.P.P.D.P.D.",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Colcheias: abafado e dedos, dois polegares, e polegar e dedos nos dois últimos tempos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw63",
+    "name": "Partido alto em colcheias 1",
+    "sequence": "PP.TP.T.P.T.PP.P",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Dois compassos: polegar, polegar e tapa; polegar e tapa em colcheias; fecha com três polegares.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw64",
+    "name": "Partido alto em colcheias 2",
+    "sequence": ".T..P.P.P.T..P.P",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Abre com pausa e tapa pontuado, segue com polegares e tapa em colcheias e fecha com pausa e polegares.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw65",
+    "name": "Partido alto de Bira Presidente",
+    "sequence": "T.TP.PPP.T.TP.P.",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Tapas e polegares em colcheias e semicolcheias, com tapa no 3º tempo; termina em pausa.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw66",
+    "name": "Partido alto, levada base",
+    "sequence": "PP.TP.T.P.T.PDBD",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Dois polegares e tapa, polegar e tapa em colcheias duas vezes, fechando com polegar, dedos, punho e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw20",
+    "name": "Cabula",
+    "sequence": "PTBTPDXQPDXDBQBQ",
+    "group": "Samba",
+    "groupId": "samba",
+    "description": "Polegares, tapas e tapas de polegar entre dedos e punho, fechando em punho e grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "bai",
+    "name": "Baião básico",
+    "sequence": "PDBPDBDD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Dois grupos de polegar, dedos e punho, fechando com dois dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "ob",
+    "name": "Baião com grave de dedos",
+    "sequence": "PDBQBDBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar, grave de dedos na 4ª nota e platinelas em semicolcheias.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "ox",
+    "name": "Xote básico",
+    "sequence": "PDBDPDPD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar nas cabeças dos tempos e outro na 3ª nota do 2º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)",
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "om",
+    "name": "Maxixe",
+    "sequence": "PDBQBDPD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Grave de dedos na 4ª nota e polegar na 3ª nota do 2º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "va",
+    "name": "Valsa, polegar em cada tempo",
+    "sequence": "PDPDPD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "3/4 em colcheias: polegar em cada tempo e dedos entre eles.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Apostila do Curso de Pandeiro, Thiago José Resplande Lima"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "va2",
+    "name": "Valsa, dedos e punho",
+    "sequence": "PDBDBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "3/4 em colcheias: polegar na cabeça do compasso, depois dedos e punho alternados.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "va3",
+    "name": "Valsa, polegar abafado",
+    "sequence": "PDBADB",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "3/4 em colcheias: variação da valsa B com polegar abafado no 4º golpe.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "bai2",
+    "name": "Baião com punho final",
+    "sequence": "PDBPDBDB",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Como o baião A, fechando com dedos e punho em vez de dois dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog Percussão sem segredos (Givanildo), toques de pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "fs",
+    "name": "Forró e seresta",
+    "sequence": "TPPTPP",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Ciclo de 6 golpes: tapa e dois polegares, duas vezes.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Blog paiv'art, Toques de Pandeiro"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "fr1",
+    "name": "Frevo",
+    "sequence": "P.DBD.BDB.DBD.BD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Frevo em 16 notas: polegar na abertura e grupos de dedos e punho separados por pausas.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "fr2",
+    "name": "Frevo abafado",
+    "sequence": "A.DBD.BDB.DBD.BD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "O mesmo frevo, abrindo com o polegar abafado.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Apostila Oficina de Samba e Choro (Canto pra Viver)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw05",
+    "name": "Arrasta-pé",
+    "sequence": "T.BDP.P.",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Tapa em colcheia, punho e dedos; depois dois polegares em colcheias.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw06",
+    "name": "Arrocha",
+    "sequence": "PDBTPDXD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar, dedos, punho e tapa; depois polegar, dedos, tapa de polegar e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw07",
+    "name": "Baião abafado",
+    "sequence": "ADBQBDBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Como o baião B, abrindo com o polegar abafado.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw11",
+    "name": "Calango, baiãozinho e congada",
+    "sequence": "PDBTBDPD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar, dedos, punho e tapa, e depois punho, dedos, polegar e dedos. Também serve ao forró sambado.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw04",
+    "name": "Agueré de Oxóssi",
+    "sequence": "XDBQPDPDPTBQXDBQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Tapa de polegar abre o 1º e o 4º tempo; o 2º alterna polegar e dedos e o 3º leva tapa.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw01",
+    "name": "Afoxé",
+    "sequence": "D.BDPPDB.DPP",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Ciclo de 12 passos em 3/4: dedos e punho em grupos de quatro, separados por dois polegares seguidos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw21",
+    "name": "Capoeira",
+    "sequence": "PDBQP.T.",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar, dedos, punho e grave de dedos, seguidos de polegar e tapa em colcheias.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw22",
+    "name": "Carimbó",
+    "sequence": "PDBTPDPDPTBTPDPD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegares e dedos nos tempos 2 e 4, com tapas e punho nos tempos 1 e 3.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw26",
+    "name": "Coco",
+    "sequence": "PDBTBDBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar, dedos, punho e tapa no 1º tempo; punho e dedos alternados no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw27",
+    "name": "Coco, levada cheia",
+    "sequence": "QBDPDBTBDPDPDBTB",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Grave de dedos e polegar abrem o ciclo; dedos e punho com tapa no 2º e no 4º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw29",
+    "name": "Congo, tapas de polegar",
+    "sequence": "PDBTXDXQPDXDXTBQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegares, tapas de polegar e grave de dedos entre dedos e punho, com tapa no fim do 1º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw30",
+    "name": "Congo, tapa no 2º e 4º",
+    "sequence": "QBDPDBTBDPDBTBDP",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Grave de dedos abre o ciclo; o tapa surge no 2º e no 4º tempo entre punho, dedos e polegares.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw31",
+    "name": "Curimba",
+    "sequence": "PDBTPDBQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar, dedos e punho nos dois tempos, fechando o 1º com tapa e o 2º com grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw32",
+    "name": "Curimba em quatro tempos",
+    "sequence": "PDBTPDXQPDBTBQPQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Quatro tempos de polegar, dedos e punho, com tapa no 1º e no 3º e tapa de polegar no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw35",
+    "name": "Embolada",
+    "sequence": "ADBTBQBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Abafado, dedos, punho e tapa; depois punho, grave de dedos, punho e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw36",
+    "name": "Forró em 2/4",
+    "sequence": "PDBQXDBQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar e tapa de polegar abrem os dois tempos, seguidos de dedos, punho e grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw38",
+    "name": "Forró sambado",
+    "sequence": "PDBQADBQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Dedos, punho e grave de dedos nos dois tempos; o polegar abre solto no 1º e abafado no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw40",
+    "name": "Frevo de um compasso",
+    "sequence": "A.DBP.DB",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar em colcheia, dedos e punho em semicolcheias: abafado no 1º tempo e solto no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw41",
+    "name": "Frevo com tapa inicial",
+    "sequence": "T.BDP.T.BDBDP.DB",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Dois compassos: tapa, punho e dedos com polegar e tapa em colcheias; o 2º passa a punho e dedos em série.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw42",
+    "name": "Frevo em semicolcheias",
+    "sequence": "ADBTPDXDATBDPDBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Dois compassos de semicolcheias: abafado, dedos, punho e tapa alternando com polegares e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw49",
+    "name": "Ijexá",
+    "sequence": "XDBDXDPD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Tapa de polegar abre os dois tempos; o 1º segue com dedos, punho e dedos, o 2º com dedos, polegar e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw53",
+    "name": "Maculelê",
+    "sequence": "PDBTBDXDPDPDXDBQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Quatro tempos com polegares, tapas de polegar e um tapa no 1º tempo; fecha com grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw56",
+    "name": "Maracatu, baque virado, arrasto",
+    "sequence": "PDBDBQBDBQBDBQBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar abre o ciclo; nos três tempos seguintes o grave de dedos marca a 2ª nota entre punho e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw57",
+    "name": "Maracatu, baque virado, malê",
+    "sequence": "PDBDXDPDBQBDBQBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar e tapa de polegar nos dois primeiros tempos; depois grave de dedos entre punho e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw58",
+    "name": "Maracatu, baque virado, marcação",
+    "sequence": "PDBDPQBDPQBDPQBD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar abre cada tempo e o grave de dedos marca a 2ª nota dos tempos 2, 3 e 4.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw88",
+    "name": "Tambor lé",
+    "sequence": "PTXTPDXQPTXTPQXQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar abre cada tempo, com tapas, tapas de polegar e graves de dedos alternados.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw89",
+    "name": "Tambor rum",
+    "sequence": "PDBTPDBQPDPTPDBQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar e dedos abrem os quatro tempos; o fim dos tempos alterna tapa e grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw90",
+    "name": "Tambor rumpi",
+    "sequence": "PTBTPDXQPDBTPDXQ",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar abre cada tempo; tapas e tapas de polegar alternam com dedos, punho e grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw95",
+    "name": "Xaxado",
+    "sequence": "PTBQXDPT",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Polegar, tapa, punho e grave de dedos; depois tapa de polegar, dedos, polegar e tapa.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw02",
+    "name": "Afro latino, tumbão",
+    "sequence": "DBTBDBQPDBTPQBQP",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Dedos e punho abrem cada tempo, com tapas nos tempos 1 e 3 e polegares no fim. Também chamado tumbão.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw03",
+    "name": "Afro latino, variação",
+    "sequence": "DBTBDBQPDBTPDBQB",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Como o afro latino 1, com o 4º tempo em dedos, punho, grave de dedos e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw99",
+    "name": "Zabumba coqueada, tapa na 3ª",
+    "sequence": "QBDPDBTPQPDPDBTB",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Grave de dedos abre os tempos 1 e 3, com tapa na 3ª nota dos tempos 2 e 4.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw100",
+    "name": "Zabumba coqueada, tapa abre",
+    "sequence": "QBDPTBDPQPDPTBDP",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Grave de dedos abre os tempos 1 e 3 e tapa abre os tempos 2 e 4; polegares fecham os tempos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw61",
+    "name": "Xote abafado",
+    "sequence": "ADBDPDPD",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Como o xote, com o polegar abafado na abertura. Também aparece como maxixe.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw14",
+    "name": "Bumba meu boi, baixada 1",
+    "sequence": "P.DBQ.P.DBD.",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Em tercinas (seis passos por tempo): polegar, dedos, punho e grave de dedos; depois polegar, dedos, punho e dedos.",
+    "subdivision": 6,
+    "subdivisionSource": "ritmos.js",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw15",
+    "name": "Bumba meu boi, baixada 2",
+    "sequence": "P.DBQ.X.DBD.",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Em tercinas: o 1º tempo como na baixada 1; o 2º abre com tapa de polegar em vez de polegar.",
+    "subdivision": 6,
+    "subdivisionSource": "ritmos.js",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw16",
+    "name": "Bumba meu boi, baixada 3",
+    "sequence": "P.DBQ.B.TBT.",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Em tercinas: o 1º tempo como na baixada 1; o 2º alterna punho e tapa.",
+    "subdivision": 6,
+    "subdivisionSource": "ritmos.js",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw17",
+    "name": "Bumba meu boi, baixada 4",
+    "sequence": "P.TBQ.P.TBT.",
+    "group": "Baião, xote e outros",
+    "groupId": "nordeste",
+    "description": "Em tercinas: polegar, tapa, punho e grave de dedos; depois polegar, tapa, punho e tapa.",
+    "subdivision": 6,
+    "subdivisionSource": "ritmos.js",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lt1",
+    "name": "Telecoteco",
+    "sequence": "T.T.TT.T.T.T.TT.",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha de tempo do samba urbano: 9 toques em 16 pulsos, repartidos em 7 + 9. Aqui em tapas.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt2",
+    "name": "Partido alto, 7 toques",
+    "sequence": "T.T.T..T.T.T.T..",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Versão reduzida do ciclo, a das palmas do partido alto.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt3",
+    "name": "Palmas de partido alto 1",
+    "sequence": ".T.T..T.T.T.T..T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha de palmas ouvida em vários partidos-altos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt4",
+    "name": "Palmas de partido alto 2",
+    "sequence": ".T.T..T.T.T..T.T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Variação do ciclo reduzido.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt5",
+    "name": "Palmas de partido alto 3",
+    "sequence": ".T..T.T.T.T..T.T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Variação do ciclo reduzido, ouvida também em cuíca e pandeiro.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt6",
+    "name": "Linha do samba de roda",
+    "sequence": "T..T.T.T.T.T..T.",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha de tempo do samba de roda.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt7",
+    "name": "Linha do samba de roda 2",
+    "sequence": "T.T.T.T..T.T..T.",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Outra linha de tempo do samba de roda.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt8",
+    "name": "Versão de transição",
+    "sequence": "T.T..T.T.T.T.T..",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha de tempo 5 + 11 do samba dos anos 1930, tocada em tapas.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt9",
+    "name": "Pandeiro de corte",
+    "sequence": "TT.TT.T.T.T.TT.T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha de dez toques ouvida no pandeiro de corte do partido alto.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt10",
+    "name": "Palmas de partido alto 4",
+    "sequence": "TT.T..T.T.T.T..T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Resultante de palmas de partido alto, com dois toques seguidos na abertura.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "trs",
+    "name": "Tresillo 3+3+2",
+    "sequence": "T..T..T.",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha de tempo de 8 pulsos do samba antigo; a levada de João da Baiana tem os tapas em posições parecidas.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff",
+      "Eduardo Vidili, Pandeiro brasileiro (dissertação, UDESC)"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "lt11",
+    "name": "Sete toques (Kubik)",
+    "sequence": "T.T.T.T..T.T.T..",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Versão reduzida descrita por Kubik, parecida com as palmas do partido alto.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt12",
+    "name": "Samba 9+7",
+    "sequence": "T.T.T.TT.T.T.TT.",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha de nove toques com a divisão 9 + 7, descrita por Kubik e Mukuna.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt13",
+    "name": "Fórmula típica (Bolão)",
+    "sequence": ".T.T.TT.T.T.T.TT",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Ciclo de nove toques deslocado, descrito por Oscar Bolão como fórmula típica.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt14",
+    "name": "Cuíca em Lá Vai Viola",
+    "sequence": ".T.TT.T.T.T.TT.T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha ouvida na cuíca do partido alto de Candeia.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt15",
+    "name": "Cuíca, variação",
+    "sequence": ".T.TT.T.T.T..T.T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Variação da linha da cuíca, com um toque deslocado no fim.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt16",
+    "name": "Tamborim em Passarinho",
+    "sequence": ".T.T.TT.T.T.TT.T",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha do tamborim ouvida no partido alto.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt17",
+    "name": "Cavaquinho em Casa de Bamba",
+    "sequence": "T.TT.T.T.T.T.TT.",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Linha tocada no cavaquinho, com as mesmas distâncias da versão de transição.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lt18",
+    "name": "Surdos, marcação dos quatro tempos",
+    "sequence": "P...P...P...P...",
+    "group": "Linhas de tempo",
+    "groupId": "linhas-de-tempo",
+    "description": "Os surdos marcam os quatro tempos entre os quais corre o ciclo de 16 pulsos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Igor de Bruyn Ferraz, Música Popular em Revista 10 (2025), reunindo Pinto, Kubik, Mukuna, Sandroni e Graeff"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "bb",
+    "name": "Backbeat",
+    "sequence": "PDDDTDDDPDDDTDDD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "O pandeiro como bateria (Suzano): polegar no bumbo (tempos 1 e 3), tapa na caixa (2 e 4) e dedos no aro como chimbal.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)",
+      "Eduardo Vidili, Pandeiro brasileiro (dissertação, UDESC)"
+    ],
+    "confidence": "derived",
+    "padbt": true
+  },
+  {
+    "id": "bb2",
+    "name": "Backbeat com tapa de polegar",
+    "sequence": "PDDDXDDDPDDDXDDD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "O mesmo groove com o tapa feito pelo polegar, como fazem Suzano e Bernardo Aguiar.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "derived",
+    "padbt": false
+  },
+  {
+    "id": "bb3",
+    "name": "Backbeat com tapa de dedos",
+    "sequence": "PDDDMDDDPDDDMDDD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "O tapa feito pelas pontas dos dedos, como fazem Bali, Túlio Araújo e Krakowski.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "derived",
+    "padbt": false
+  },
+  {
+    "id": "bb4",
+    "name": "Backbeat em colcheias",
+    "sequence": "P.D.T.D.P.D.T.D.",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "O chimbal dos dedos em colcheias, deixando o groove mais aberto.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "derived",
+    "padbt": true
+  },
+  {
+    "id": "qd",
+    "name": "Quadrilha, só polegares",
+    "sequence": "....P.P.....P.P.",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Camada grave do pandeiro em Leão do Norte (Suzano), na linha da quadrilha. Preencha com dedos e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw87",
+    "name": "Swingue",
+    "sequence": "ADADPQPQATBTPQPQ",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Abafados e dedos, polegares e graves de dedos, com punho e tapa no 3º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw43",
+    "name": "Funk",
+    "sequence": "PDBDXDBQBDPDXDBD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Polegar e tapa de polegar marcam os tempos, com dedos e punho entre eles; grave de dedos no 2º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw44",
+    "name": "Funk carioca",
+    "sequence": "QBDPTBQBDPQBTPQB",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Grave de dedos e tapas alternam com polegares, punho e dedos em quatro tempos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw33",
+    "name": "Drum and bass, polegar no 3º",
+    "sequence": "PDBDXDBDBDPDXDBD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Polegar abre o 1º tempo, tapa de polegar abre o 2º e o 4º e outro polegar cai no meio do 3º. Também chamado pop 2.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw34",
+    "name": "Drum and bass, tapa no 2º",
+    "sequence": "PDBDXDBTBDPDXDPD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Como o drum and bass 1, com tapa no fim do 2º tempo e polegar no meio do 4º.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw47",
+    "name": "Hip-hop",
+    "sequence": "PDPDXDBDBDPDXDBD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Dois polegares no 1º tempo e tapa de polegar abrindo o 2º e o 4º, com dedos e punho entre eles.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw50",
+    "name": "Jazz",
+    "sequence": "Q..BD..BT..BD..P",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Colcheia pontuada e semicolcheia em cada tempo: grave de dedos, dedos, tapa e dedos, seguidos de punho e polegar.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw54",
+    "name": "Mambo",
+    "sequence": "BDXTXDPDBDXDXDBQ",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Punho e tapa de polegar abrem os tempos, com tapa e grave de dedos no fim.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw68",
+    "name": "Pop, polegares nos tempos 1 e 3",
+    "sequence": "QBDPTBQBDBDPTBDB",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Grave de dedos e tapa alternam com punho e dedos; polegares no fim dos tempos 1 e 3.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw73",
+    "name": "Rock básico",
+    "sequence": "QBDBTBQPDBDBTBDB",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Grave de dedos abre o 1º tempo e tapa abre o 2º e o 4º; punho e dedos preenchem o resto.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw74",
+    "name": "Rockfunkado",
+    "sequence": "QBDPTBQBDPDPTBTB",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Grave de dedos e tapa alternam com polegares em semicolcheias; tapa duplo no 4º tempo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw75",
+    "name": "Rumba",
+    "sequence": "TBDPRBQXRBTPTBQB",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Rulo abre os tempos 2 e 3; tapas, graves de dedos e tapa de polegar preenchem o ciclo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw76",
+    "name": "Salsa",
+    "sequence": "TBDPDBQXDBTPTBQB",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Tapa abre o 1º e o 4º tempo; grave de dedos, tapa de polegar, tapa e polegar preenchem o ciclo.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw80",
+    "name": "Samba funk",
+    "sequence": "PDBDXQBQBDBDXDPD",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Polegar abre o ciclo e tapa de polegar abre o 2º e o 4º tempo; o 3º só tem dedos e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw81",
+    "name": "Samba funkeado",
+    "sequence": "QBDPTBQBDBQBTPDP",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Grave de dedos e tapa alternam com punho, dedos e polegares; o 3º tempo traz grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw83",
+    "name": "Samba rock",
+    "sequence": "QBDPTBDPDPDBTBDP",
+    "group": "Groove",
+    "groupId": "groove",
+    "description": "Grave de dedos abre o ciclo e tapa abre o 2º e o 4º tempo, com polegares e punho entre dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw09",
+    "name": "Baião em fusas, tapa no 2º",
+    "sequence": "PDB.D.PDB.D.X.D.",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Em fusas, cada passo é uma fusa: polegar, dedos e punho com polegar no fim do 1º tempo; tapa de polegar no 2º.",
+    "subdivision": 8,
+    "subdivisionSource": "descrição: fusas",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw10",
+    "name": "Baião em fusas, tapa no meio",
+    "sequence": "PDBDBDPDBDBDXDBD",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Em fusas, oito passos por tempo: polegar no início e no fim do 1º tempo, tapa de polegar no meio do 2º.",
+    "subdivision": 8,
+    "subdivisionSource": "descrição: fusas",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw18",
+    "name": "Bolero",
+    "sequence": "A.DBD.B.P.D.P.D.",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Em fusas: abafado, dedos, punho, dedos e punho no 1º tempo; polegares e dedos em semicolcheias no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw52",
+    "name": "Jungle",
+    "sequence": "P.DBT.P.DBT.P.D.",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Em fusas: polegar, dedos, punho, tapa e polegar no 1º tempo; dedos, punho, tapa, polegar e dedos no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw96",
+    "name": "Xaxado em fusas",
+    "sequence": "P.T.BDP.T.BDP.T.",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Em fusas: polegar, tapa, punho, dedos e polegar no 1º tempo; tapa, punho, dedos, polegar e tapa no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw13",
+    "name": "Barravento",
+    "sequence": "PDXTBQPTBTBQ",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "6/8 em semicolcheias: dois grupos de seis passos, com polegares, tapa de polegar e tapas.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw51",
+    "name": "Jongo",
+    "sequence": "TBTBTBQPDPDP",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "6/8 em semicolcheias: tapas e punhos alternados no 1º grupo; grave de dedos e polegares com dedos no 2º.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw71",
+    "name": "Reggae 6/8",
+    "sequence": "P..D.BT..B.Q",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "6/8: polegar pontuado, dedos e punho; tapa pontuado, punho e grave de dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw94",
+    "name": "Valsa em semicolcheias",
+    "sequence": "ADBDBDPDBDBD",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "6/8 em semicolcheias: abafado no 1º grupo e solto no 2º, entre dedos e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw93",
+    "name": "Valsa de dois compassos",
+    "sequence": "A.D.D.P.D.D.",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "3/4 em colcheias, dois compassos: polegar abafado e depois solto, com dedos nos outros dois tempos.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "lw12",
+    "name": "Blues 12/8",
+    "sequence": "PDBTBQPDBTBD",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "12/8 em colcheias: grupos de três, com polegares nos grupos 1 e 3 e tapas nos grupos 2 e 4.",
+    "subdivision": 3,
+    "subdivisionSource": "descrição: 12/8",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw98",
+    "name": "Xote em sextinas",
+    "sequence": "ADBTBDPDBQBD",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Sextinas, seis passos por tempo: abafado no 1º tempo e solto no 2º, entre dedos, punho, tapa e grave de dedos.",
+    "subdivision": 6,
+    "subdivisionSource": "ritmos.js",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw45",
+    "name": "Funk em sextinas 1",
+    "sequence": "PDBDBDXDBDBQBDBQBDXDBDBD",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Sextinas em 4/4, seis passos por tempo: dedos e punho em série com polegares, tapas de polegar e graves de dedos.",
+    "subdivision": 6,
+    "subdivisionSource": "ritmos.js",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw19",
+    "name": "Buleria",
+    "sequence": "QBDPDBTBDBTBQBDPDBTBQBTB",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "12/8 em 24 passos: quatro grupos de seis, com grave de dedos, polegar, tapas, punho e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw37",
+    "name": "Forró em fusas",
+    "sequence": "PDBDBDPDXDBDBDPDPDPDBDPDXDBDBDPD",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Em fusas, 32 passos: polegar ou tapa de polegar abre cada tempo, com polegares entre dedos e punho.",
+    "subdivision": 8,
+    "subdivisionSource": "descrição: fusas",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw46",
+    "name": "Funk em fusas 2",
+    "sequence": "PDBDBDBDXDBDBDPDBDBDPDBDXDBDBDBD",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "Em fusas, 32 passos em 4/4: polegar ou tapa de polegar abre cada tempo, entre dedos, punho e alguns polegares.",
+    "subdivision": 8,
+    "subdivisionSource": "descrição: fusas",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "lw72",
+    "name": "Reggae 6/8, levada 2",
+    "sequence": "Q.BT.PQ.BT.B",
+    "group": "Dobrados e compostos",
+    "groupId": "dobrados",
+    "description": "6/8, dois grupos de seis passos: grave de dedos, punho e tapa em colcheias e semicolcheias, fechando com polegar e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Wladison Leastro, E-Book com 100 ritmos para pandeiro de couro (2023), partituras de uma linha"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "e1",
+    "name": "Só polegar",
+    "sequence": "P.P.P.P.",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Só polegar, relaxado.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Douglas Tadeu, Tribuna do Músico (roteiros de exercícios)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "e2",
+    "name": "Polegar e punho",
+    "sequence": "P.B.P.B.",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Polegar e base da mão alternando.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Douglas Tadeu, Tribuna do Músico (roteiros de exercícios)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "e3",
+    "name": "Punho e dedos",
+    "sequence": "B.D.B.D.",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Punho e dedos, alternando os polos da mão.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Douglas Tadeu, Tribuna do Músico (roteiros de exercícios)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "e4",
+    "name": "Polegar e tapa",
+    "sequence": "P.T.P.T.",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Polegar e tapa no centro.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Douglas Tadeu, Tribuna do Músico (roteiros de exercícios)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  },
+  {
+    "id": "e5",
+    "name": "Solto e abafado",
+    "sequence": "P.A.P.A.",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Mesmo golpe, com e sem o dedo médio de apoio abafando.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Douglas Tadeu, Tribuna do Músico (roteiros de exercícios)",
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "multi",
+    "padbt": true
+  },
+  {
+    "id": "e6",
+    "name": "Polegar e dedos",
+    "sequence": "P.Q.P.Q.",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Grave do polegar contra grave dos dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "derived",
+    "padbt": false
+  },
+  {
+    "id": "e7",
+    "name": "Rulo",
+    "sequence": "R...R...",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Fricção contínua dos dedos na pele, pressão leve.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "derived",
+    "padbt": false
+  },
+  {
+    "id": "e8",
+    "name": "Médio e punho",
+    "sequence": "MBDBMBDB",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Médio de dedos, punho e dedos.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Suzano Express, Marcos Suzano (transcrição de Jeferson Fontana)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "e9",
+    "name": "Polegar no meio",
+    "sequence": "XDBDXDBD",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Tapa de polegar, dedos e punho.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Suzano Express, Marcos Suzano (transcrição de Jeferson Fontana)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "e10",
+    "name": "Polegar e médio",
+    "sequence": "XMXMXMXM",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Tapa de polegar e médio de dedos alternados.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Suzano Express, Marcos Suzano (transcrição de Jeferson Fontana)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "e11",
+    "name": "Tapa e polegar",
+    "sequence": "TXTXTXTX",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Tapa e tapa de polegar alternados.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Suzano Express, Marcos Suzano (transcrição de Jeferson Fontana)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "e12",
+    "name": "Quatro regiões",
+    "sequence": "QPTBQPTB",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Grave de dedos, polegar, tapa e punho: quatro regiões da pele.",
+    "subdivision": 4,
+    "subdivisionSource": "padrão de semicolcheias",
+    "sources": [
+      "Apostila Suzano Express, Marcos Suzano (transcrição de Jeferson Fontana)"
+    ],
+    "confidence": "single",
+    "padbt": false
+  },
+  {
+    "id": "e13",
+    "name": "Toque duplo",
+    "sequence": "DDBBDDBB",
+    "group": "Exercícios",
+    "groupId": "exercicios",
+    "description": "Papa-mama no pandeiro: dois toques com os dedos e dois com o punho.",
+    "subdivision": 4,
+    "subdivisionSource": "ritmos-PADBT.json",
+    "sources": [
+      "Brandão e Barsalini, ANPPOM 2022 e revista Orfeu 2024 (Uma bateria de bolso)"
+    ],
+    "confidence": "single",
+    "padbt": true
+  }
+]
