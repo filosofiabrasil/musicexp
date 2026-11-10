@@ -1,6 +1,7 @@
 import React from "react";
 import Svg, { Circle, G, Line, Rect, Text as SvgText } from "react-native-svg";
 import { DetectedHit, Pattern, STROKES, THEME, kindCode } from "./types";
+import { bestStepHit } from "../audio/timing";
 
 export function HitBars({
   pattern,
@@ -31,6 +32,14 @@ export function HitBars({
     bw = col * 0.62,
     base = height - 36,
     maxHeight = height - 68;
+  const cycleHits = React.useMemo(
+    () =>
+      hits.filter(
+        (h) =>
+          h.nominal >= barStart - 1e-9 && h.nominal < barStart + barDur - 1e-9,
+      ),
+    [hits, barStart, barDur],
+  );
   return (
     <Svg
       width={width}
@@ -52,12 +61,10 @@ export function HitBars({
         const kind = pattern[i],
           x = i * col + (col - bw) / 2,
           nominal = barStart + (i * barDur) / steps;
-        const atStep = hits.filter(
+        const atStep = cycleHits.filter(
           (h) => h.t <= now && Math.abs(h.nominal - nominal) < 0.001,
         );
-        const hit = atStep.find(
-          (h) => Math.abs(h.t - nominal) * 1000 <= toleranceMs,
-        );
+        const hit = bestStepHit(atStep, nominal, kind, now, toleranceMs);
         const active = !!hit && now - hit.t < 0.14;
         const expectedHeight = kind
           ? maxHeight * STROKES[kindCode(kind)].height

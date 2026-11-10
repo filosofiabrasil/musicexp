@@ -19,6 +19,7 @@ export function usePractice(rhythm: Rhythm) {
     [subdivision, setSubdivision] = useState(rhythm.subdivision);
   const [running, setRunning] = useState(false),
     [ready, setReady] = useState(false);
+  const [starting, setStarting] = useState(false);
   const [guide, setGuide] = useState(true),
     [click, setClick] = useState(true),
     [tolerance, setTolerance] = useState(15);
@@ -37,6 +38,12 @@ export function usePractice(rhythm: Rhythm) {
     sounds = useMemo(() => new PadSounds(), []);
   const microphone = useRef<Microphone | null>(null),
     micGeneration = useRef(0);
+  const micOpening = useRef(false),
+    closingMicrophone = useRef<Promise<void>>(Promise.resolve());
+  const openingMicrophone = useRef<Promise<void>>(Promise.resolve());
+  const playbackRevision = useRef(0),
+    startingRef = useRef(false),
+    inputSince = useRef(Infinity);
   const settings = useRef({
     bpm,
     subdivision,
@@ -63,7 +70,13 @@ export function usePractice(rhythm: Rhythm) {
 
   const record = useCallback(
     (kind: Kind, t: number, origin: "touch" | "mic", certainty?: number) => {
-      if (!engine.running || t < 0) return;
+      if (
+        !engine.running ||
+        !Number.isFinite(t) ||
+        t < 0 ||
+        origin !== settings.current.source
+      )
+        return;
       const s = settings.current;
       const hit: DetectedHit = {
         t,
@@ -79,6 +92,8 @@ export function usePractice(rhythm: Rhythm) {
   );
   const onOnset = useRef<(onset: Onset) => void>(() => {});
   onOnset.current = (onset) => {
+    if (settings.current.source !== "mic" || onset.time < inputSince.current)
+      return;
     const { calibrating: target, profiles: personal } = settings.current;
     if (target) {
       setProfiles((previous) => ({
@@ -88,6 +103,7 @@ export function usePractice(rhythm: Rhythm) {
       setLastKind(target);
       return;
     }
+    if (!engine.running) return;
     // Perfis pessoais substituem as referências apenas nos golpes calibrados.
     const result = classify(onset.features, {
       ...templates,
@@ -108,25 +124,43 @@ export function usePractice(rhythm: Rhythm) {
   );
   const disableMicrophone = useCallback(async () => {
     micGeneration.current++;
+    micOpening.current = false;
+    inputSince.current = Infinity;
     const active = microphone.current;
     microphone.current = null;
     setSource("touch");
     setMicBusy(false);
     setCalibrating(null);
     detector.reset();
-    if (active) await active.stop().catch(() => {});
+    closingMicrophone.current = closingMicrophone.current.then(async () => {
+      if (active) await active.stop().catch(() => {});
+    });
+    await closingMicrophone.current;
   }, [detector]);
   const enableMicrophone = useCallback(async () => {
-    if (microphone.current || micBusy) return;
+    if (microphone.current || micOpening.current) return;
+    micOpening.current = true;
+    const previousOpening = openingMicrophone.current;
+    let finishOpening!: () => void;
+    openingMicrophone.current = new Promise<void>((resolve) => {
+      finishOpening = resolve;
+    });
     const generation = ++micGeneration.current;
     engine.pause();
     setRunning(false);
     setMicBusy(true);
     setError("");
     try {
+      await previousOpening;
+      await closingMicrophone.current;
+      if (generation !== micGeneration.current) return;
       const active = await startMicrophone(
-        (pcm, rate, time) => detector.process(pcm, rate, time),
+        (pcm, rate, time) => {
+          if (generation === micGeneration.current && microphone.current)
+            detector.process(pcm, rate, time);
+        },
         () => {
+          if (generation !== micGeneration.current) return;
           engine.pause();
           setRunning(false);
           void disableMicrophone();
@@ -138,11 +172,13 @@ export function usePractice(rhythm: Rhythm) {
         return;
       }
       microphone.current = active;
+      inputSince.current = performance.now() / 1000;
       detector.reset();
       setGuide(false);
       setClick(false);
       setSource("mic");
     } catch (e) {
+      if (generation !== micGeneration.current) return;
       const name = e instanceof Error ? e.name : "";
       setError(
         name === "NotAllowedError"
@@ -156,40 +192,81 @@ export function usePractice(rhythm: Rhythm) {
                 : "Não foi possível abrir o microfone.",
       );
     } finally {
-      if (generation === micGeneration.current) setMicBusy(false);
+      finishOpening();
+      if (generation === micGeneration.current) {
+        micOpening.current = false;
+        setMicBusy(false);
+      }
     }
-  }, [detector, disableMicrophone, engine, micBusy]);
+  }, [detector, disableMicrophone, engine]);
   const tap = useCallback(
     (kind: Kind) => {
-      if (settings.current.source !== "touch") return;
+      if (settings.current.source !== "touch" || micOpening.current) return;
       record(kind, engine.getTime(), "touch");
       setLastKind(kind);
-      sounds.play(kind);
+      void sounds
+        .play(kind)
+        .catch((e) =>
+          setError(
+            e instanceof Error ? e.message : "Não foi possível tocar o sample.",
+          ),
+        );
     },
     [engine, record, sounds],
   );
   const toggle = useCallback(async () => {
+    if (
+      !engine.ready ||
+      settings.current.calibrating ||
+      micOpening.current ||
+      startingRef.current
+    )
+      return;
     if (engine.running) {
       engine.pause();
+      inputSince.current = Infinity;
+      detector.reset();
       setRunning(false);
       return;
     }
+    const revision = playbackRevision.current;
+    startingRef.current = true;
+    setStarting(true);
     try {
-      await engine.start();
-      setRunning(true);
+      const started = await engine.start();
+      if (revision !== playbackRevision.current) return;
+      if (started) {
+        inputSince.current = performance.now() / 1000;
+        detector.reset();
+      }
+      setRunning(started && engine.running);
       setError("");
     } catch (e) {
+      if (revision !== playbackRevision.current) return;
       setError(e instanceof Error ? e.message : "Erro ao reproduzir áudio.");
+    } finally {
+      if (revision === playbackRevision.current) {
+        startingRef.current = false;
+        setStarting(false);
+      }
     }
-  }, [engine]);
+  }, [engine, detector]);
   useEffect(() => {
     setSubdivision(rhythm.subdivision);
   }, [rhythm.id, rhythm.subdivision]);
   useEffect(() => {
     let cancelled = false;
+    playbackRevision.current++;
+    startingRef.current = false;
+    inputSince.current = Infinity;
+    detector.reset();
+    setStarting(false);
     setReady(false);
     setRunning(false);
     setHits([]);
+    setRejected(0);
+    setConfidence(null);
+    setLastKind(null);
     engine
       .prepare({
         pattern,
@@ -211,6 +288,7 @@ export function usePractice(rhythm: Rhythm) {
     };
   }, [
     engine,
+    detector,
     pattern,
     rhythm.sequence.length,
     bpm,
@@ -230,6 +308,7 @@ export function usePractice(rhythm: Rhythm) {
       }
     });
     return () => {
+      playbackRevision.current++;
       subscription.remove();
       sounds.dispose();
       engine.dispose();
@@ -266,8 +345,9 @@ export function usePractice(rhythm: Rhythm) {
       }
       if (
         event.code === "Space" &&
-        target?.getAttribute("role") !== "button" &&
-        target?.tagName !== "BUTTON"
+        !target?.closest(
+          'button, input, textarea, select, [role="button"], [role="tab"], [role="switch"], [role="checkbox"], [role="slider"]',
+        )
       ) {
         event.preventDefault();
         void toggle();
@@ -282,6 +362,7 @@ export function usePractice(rhythm: Rhythm) {
     subdivision,
     setSubdivision,
     running,
+    starting,
     ready,
     guide,
     setGuide,
@@ -305,6 +386,8 @@ export function usePractice(rhythm: Rhythm) {
     calibrating,
     setCalibrating: (kind: Kind | null) => {
       engine.pause();
+      inputSince.current = kind ? performance.now() / 1000 : Infinity;
+      detector.reset();
       setRunning(false);
       setCalibrating(kind);
     },

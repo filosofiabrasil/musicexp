@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import appPackage from "./package.json";
 import {
   Platform,
   Pressable,
@@ -88,6 +89,7 @@ function PracticeScreen() {
     ? Math.min(690, width - 480)
     : Math.max(200, Math.min(650, width - 76));
   const ringSize = Math.min(wide ? 445 : 390, chartWidth);
+  const scoredSteps = Math.floor(clock.t / clock.stepDur + 1e-9);
   const metrics = useMemo(
     () =>
       sessionMetrics(
@@ -97,7 +99,7 @@ function PracticeScreen() {
         bpm,
         subdivision,
         practice.tolerance,
-        clock.t,
+        scoredSteps * clock.stepDur,
       ),
     [
       hits,
@@ -106,7 +108,8 @@ function PracticeScreen() {
       bpm,
       subdivision,
       practice.tolerance,
-      clock.t,
+      scoredSteps,
+      clock.stepDur,
     ],
   );
   const visibleCodes = extended
@@ -562,7 +565,7 @@ function PracticeScreen() {
                     key={code}
                     accessibilityRole="button"
                     accessibilityLabel={`Tocar ${STROKES[code].name}`}
-                    disabled={practice.source === "mic"}
+                    disabled={practice.source === "mic" || practice.micBusy}
                     {...(Platform.OS === "web" ? { delayPressIn: 0 } : {})}
                     onPressIn={() => practice.tap(STROKES[code].kind)}
                     style={({ pressed }) => [
@@ -619,7 +622,7 @@ function PracticeScreen() {
         </View>
         <View style={styles.footer}>
           <Label>TREINE ATÉ VIRAR REFLEXO.</Label>
-          <Label>PANDEIRO.APP / LAB</Label>
+          <Label>PANDEIRO.APP / LAB · v{appPackage.version}</Label>
         </View>
       </ScrollView>
       <RhythmLibrary
@@ -691,18 +694,25 @@ function Transport({
   const play = (
     <Button
       primary
-      disabled={!practice.ready || !!practice.calibrating}
+      disabled={
+        !practice.ready ||
+        practice.starting ||
+        practice.micBusy ||
+        !!practice.calibrating
+      }
       style={compact ? { flex: 1 } : undefined}
       onPress={() => void practice.toggle()}
       label={practice.running ? "Pausar treino" : "Iniciar treino"}
     >
-      {!practice.ready
-        ? "ÁUDIO…"
-        : practice.running
-          ? "Ⅱ PAUSAR"
-          : compact
-            ? "▶ INICIAR"
-            : "▶ INICIAR TREINO"}
+      {practice.starting
+        ? "INICIANDO…"
+        : !practice.ready
+          ? "ÁUDIO…"
+          : practice.running
+            ? "Ⅱ PAUSAR"
+            : compact
+              ? "▶ INICIAR"
+              : "▶ INICIAR TREINO"}
     </Button>
   );
   return (

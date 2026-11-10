@@ -1,4 +1,29 @@
-import { DetectedHit, Pattern, stepDuration } from "../pandeiro-ui-base/types";
+import {
+  DetectedHit,
+  Kind,
+  Pattern,
+  stepDuration,
+} from "../pandeiro-ui-base/types";
+
+// A margem de um nanossegundo só neutraliza o erro de representação binária.
+export const withinTolerance = (deviationMs: number, toleranceMs: number) =>
+  Math.abs(deviationMs) <= toleranceMs + 0.000001;
+
+export function bestStepHit(
+  hits: DetectedHit[],
+  nominal: number,
+  expected: Kind | undefined,
+  now: number,
+  toleranceMs: number,
+) {
+  const candidates = hits.filter(
+    (h) =>
+      h.t <= now &&
+      Math.abs(h.nominal - nominal) < 0.001 &&
+      withinTolerance((h.t - nominal) * 1000, toleranceMs),
+  );
+  return candidates.find((h) => h.kind === expected) ?? candidates[0];
+}
 
 export function nearestNominal(t: number, bpm: number, subdivision: number) {
   const duration = stepDuration(bpm, subdivision);
@@ -49,7 +74,7 @@ export function sessionMetrics(
       slot >= 0 &&
       slot < completeSteps &&
       pattern[slot % steps] === h.kind &&
-      Math.abs(h.t - h.nominal) * 1000 <= tolerance
+      withinTolerance((h.t - h.nominal) * 1000, tolerance)
     )
       correct.add(slot);
   }

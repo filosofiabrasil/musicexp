@@ -6,6 +6,8 @@ Projeto React Native / Expo SDK 54 com três telas independentes e uma sessão c
 2. **Barras no tempo:** altura por timbre; contorno prata esperado, preenchimento branco tocado dentro da tolerância, laranja no ataque. Um × indica timbre diferente; ponto abaixo marca ataque fora da tolerância.
 3. **Precisão:** erro `1000 × (t − nominal)` em ms; pontos sobem e ficam laranja dentro da tolerância, inicialmente ±15 ms.
 
+A versão do pacote aparece no rodapé. A revisão 1.0.2 corrige inicializações concorrentes, cancelamento de microfone e inconsistências de tolerância; veja `CHANGELOG.md`.
+
 Não há eventos de aluno simulados. Os golpes vêm dos pads, teclado ou captura de microfone.
 
 ## Executar

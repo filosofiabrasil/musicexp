@@ -4,8 +4,8 @@
 
 - `npm install`: concluído; `package-lock.json` incluído. Os módulos Expo Asset, Constants e Core foram fixados nas versões do SDK 54 para evitar resolução automática de peers de outro SDK.
 - `npm run typecheck`: aprovado, TypeScript estrito.
-- `npm test`: 11 testes aprovados. Cobrem os dois catálogos, subdivisões, ciclos irregulares, precisão na virada, pontuação sem duplicação, métricas, formato PCM/WAV, ataque atravessando buffers, silêncio, classificação dos nove samples do player e rejeição de empates.
-- Chromium/Playwright: 6 testes aprovados. Reprodução por mais de um ciclo, pausa/retomada, teclado, pads, manutenção dos golpes entre as três telas, filtro PADBT, ciclos de 7/24/32 passos, alteração de BPM, largura de 390 px, permissão negada e captura de microfone.
+- `npm test`: 16 testes aprovados. Cobrem os dois catálogos, subdivisões, ciclos irregulares, precisão na virada, pontuação sem duplicação, métricas, formato PCM/WAV, ataque atravessando buffers, silêncio, classificação dos nove samples do player e rejeição de empates.
+- Chromium/Playwright: 12 testes aprovados. Reprodução por mais de um ciclo, pausa/retomada, teclado, pads, manutenção dos golpes entre as três telas, filtro PADBT, ciclos de 7/24/32 passos, alteração de BPM, largura de 390 px, permissão negada e captura de microfone.
 - O teste de captura injeta um WAV dos samples no **dispositivo virtual de áudio do Chromium**. O AudioWorklet, o detector e o classificador do app processam o sinal. Não há injeção de eventos de golpe.
 - Inspeção visual das três telas e do layout de celular; sem rolagem horizontal. Capturas finais sem erros de console ou JavaScript.
 - `npx expo install --check`: versões compatíveis com o SDK.
@@ -32,3 +32,11 @@ Foi reproduzido um ciclo nominal de 2,4 segundos com intervalos medidos de 2,509
 A reprodução web passou a usar um AudioBufferSourceNode em loop com o relógio do AudioContext. O teste de regressão renderiza três voltas do buffer efetivamente usado pelo app em OfflineAudioContext e compara todos os frames com a repetição exata do ciclo. Outro teste verifica a duração em frames de todos os 148 ritmos.
 
 Essa correção é específica do motor web; a reprodução nativa ainda exige validação em aparelho.
+
+## Revisão 1.0.2
+
+Antes das correções foram reproduzidas falhas em quatro testes de navegador: duas fontes simultâneas ao iniciar, áudio iniciando depois de alterar o BPM, erro tardio de permissão cancelada e atalho de início durante calibração. Um teste de lógica reproduziu a rejeição incorreta de golpes em exatamente ±15 ms.
+
+A suíte passou após as correções, com testes adicionais para serialização dos pedidos de microfone, foco do teclado, seleção de golpes nas barras, normalização entre taxas de captura e cancelamento de listeners/timeouts. O ensaio de captura continua usando o microfone virtual do Chromium; ele não mede taxa de acerto de reconhecimento acústico em hardware.
+
+O ajuste do ciclo de vida nativo foi verificado por tipos, testes da espera de carregamento e exportação Android/iOS. Não foi feito teste em celular físico nem compilação de APK/IPA nesta revisão.

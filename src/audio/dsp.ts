@@ -31,7 +31,8 @@ export function extractFeatures(
     if (pcm[i] >= 0 !== pcm[i - 1] >= 0) crossings++;
   return [
     ...power.map((p) => Math.log10(p / total + 0.0001) / 4),
-    crossings / Math.max(1, length),
+    // As referências usam 16 kHz; browsers capturam normalmente em 44,1/48 kHz.
+    (crossings / Math.max(1, length)) * (sampleRate / 16000),
   ];
 }
 export function classify(features: number[], bank: TemplateBank) {

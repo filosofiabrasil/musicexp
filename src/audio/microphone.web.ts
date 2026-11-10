@@ -37,29 +37,39 @@ export async function startMicrophone(
     const silent = context.createGain();
     silent.gain.value = 0;
     const epoch = performance.now() / 1000 - context.currentTime;
+    let stopped = false;
+    const ended = () => {
+      if (!stopped) onEnded();
+    };
     worklet.port.onmessage = ({
       data,
-    }: MessageEvent<{ samples: Float32Array; time: number }>) =>
-      onPcm(data.samples, context!.sampleRate, epoch + data.time);
+    }: MessageEvent<{ samples: Float32Array; time: number }>) => {
+      if (!stopped) onPcm(data.samples, context!.sampleRate, epoch + data.time);
+    };
     source.connect(worklet);
     worklet.connect(silent);
     silent.connect(context.destination);
     stream
       .getTracks()
-      .forEach((track) => track.addEventListener("ended", onEnded));
+      .forEach((track) => track.addEventListener("ended", ended));
     return {
       stop: async () => {
+        if (stopped) return;
+        stopped = true;
         worklet.port.onmessage = null;
         source.disconnect();
         worklet.disconnect();
-        stream.getTracks().forEach((track) => track.stop());
-        await context!.close();
+        stream.getTracks().forEach((track) => {
+          track.removeEventListener("ended", ended);
+          track.stop();
+        });
+        if (context!.state !== "closed") await context!.close();
       },
     };
   } catch (error) {
     stream.getTracks().forEach((track) => track.stop());
     if (url) URL.revokeObjectURL(url);
-    await context?.close();
+    if (context && context.state !== "closed") await context.close();
     throw error;
   }
 }

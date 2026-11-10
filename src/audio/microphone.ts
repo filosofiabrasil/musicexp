@@ -24,19 +24,22 @@ export async function startMicrophone(
       "Acesso ao microfone negado. Libere a permissão nas configurações.",
     );
   const emitter = new LegacyEventEmitter(module as never);
+  let stopped = false;
   let epoch = performance.now() / 1000,
     count = 0,
     rate = 16000;
   const subscription = emitter.addListener<{
     pcmFloat32?: Float32Array | number[];
   }>("AudioData", (event) => {
-    if (!event.pcmFloat32) return;
+    if (stopped || !event.pcmFloat32) return;
     const samples = new Float32Array(event.pcmFloat32);
     // Ancoragem no início da captura; compensação manual cobre atraso fixo do dispositivo.
     onPcm(samples, rate, epoch + count / rate);
     count += samples.length;
   });
-  const interruption = emitter.addListener("onRecordingInterrupted", onEnded);
+  const interruption = emitter.addListener("onRecordingInterrupted", () => {
+    if (!stopped) onEnded();
+  });
   try {
     epoch = performance.now() / 1000;
     const result = await module.startRecording({
@@ -55,6 +58,8 @@ export async function startMicrophone(
     rate = result.sampleRate || 16000;
     return {
       stop: async () => {
+        if (stopped) return;
+        stopped = true;
         subscription.remove();
         interruption.remove();
         await module.stopRecording();

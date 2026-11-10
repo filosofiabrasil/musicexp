@@ -14,13 +14,87 @@ import kit from "../src/data/kit.json";
 import { mixCycle } from "../src/audio/mixCycle";
 import { toPattern, barDuration } from "../src/pandeiro-ui-base/types";
 import rhythms from "../src/data/rhythms.json";
+import { waitForAudioLoad } from "../src/audio/waitForAudioLoad";
+
+test("o timbre normaliza cruzamentos de zero entre 16, 44,1 e 48 kHz", () => {
+  const features = [16000, 44100, 48000].map((rate) =>
+    extractFeatures(
+      Float32Array.from({ length: Math.round(rate * 0.04) }, (_, i) =>
+        Math.sin((2 * Math.PI * 1000 * i) / rate),
+      ),
+      rate,
+    ),
+  );
+  for (const feature of features)
+    assert.ok(Math.abs(feature[11] - features[0][11]) < 0.004);
+});
+
+test("cancelar o carregamento libera o listener e ignora eventos tardios", async () => {
+  let callback: ((status: { isLoaded: boolean }) => void) | undefined,
+    removed = 0;
+  const load = waitForAudioLoad({
+    isLoaded: false,
+    addListener: (_event, handler) => {
+      callback = handler;
+      return {
+        remove: () => {
+          removed++;
+        },
+      };
+    },
+  });
+  load.cancel();
+  assert.equal(await load.promise, false);
+  callback?.({ isLoaded: true });
+  load.cancel();
+  assert.equal(removed, 1);
+});
+
+test("carregamento concluído e timeout também removem o listener", async () => {
+  let callback: ((status: { isLoaded: boolean }) => void) | undefined,
+    removed = 0;
+  const player = {
+    isLoaded: false,
+    addListener: (
+      _event: "playbackStatusUpdate",
+      handler: (status: { isLoaded: boolean }) => void,
+    ) => {
+      callback = handler;
+      return {
+        remove: () => {
+          removed++;
+        },
+      };
+    },
+  };
+  const loaded = waitForAudioLoad(player);
+  callback?.({ isLoaded: true });
+  assert.equal(await loaded.promise, true);
+  const timeout = waitForAudioLoad(player, 1);
+  await assert.rejects(timeout.promise, /carregar o áudio/);
+  assert.equal(removed, 2);
+});
 
 test("os 148 ritmos têm exatamente os frames da grade, sem tempo adicional", () => {
   for (const rhythm of rhythms) {
-    const config = { pattern: toPattern(rhythm.sequence), steps: rhythm.sequence.length, bpm: 100, subdivision: rhythm.subdivision, guide: true, click: false };
+    const config = {
+      pattern: toPattern(rhythm.sequence),
+      steps: rhythm.sequence.length,
+      bpm: 100,
+      subdivision: rhythm.subdivision,
+      guide: true,
+      click: false,
+    };
     const pcm = mixCycle(config);
-    assert.equal(pcm.length, Math.round(barDuration(100, config.steps, config.subdivision) * kit.rate), rhythm.name);
-    assert.ok(pcm.some(v => Math.abs(v) > .001), rhythm.name);
+    assert.equal(
+      pcm.length,
+      Math.round(barDuration(100, config.steps, config.subdivision) * kit.rate),
+      rhythm.name,
+    );
+    assert.ok(
+      pcm.some((v) => Math.abs(v) > 0.001),
+      rhythm.name,
+    );
   }
 });
 

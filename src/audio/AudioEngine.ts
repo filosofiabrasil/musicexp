@@ -4,6 +4,7 @@ import kit from "../data/kit.json";
 import { wavBytes } from "./pcm";
 import { wavSource } from "./wavSource";
 import { mixCycle, PlaybackConfig } from "./mixCycle";
+import { waitForAudioLoad } from "./waitForAudioLoad";
 export { mixCycle, PlaybackConfig } from "./mixCycle";
 
 /** Um WAV por ciclo: o agendamento está nos frames de áudio, sem setInterval. */
@@ -15,6 +16,8 @@ export class AudioEngine {
   private duration = 1;
   private actualDuration = 1;
   private generation = 0;
+  private startRevision = 0;
+  private cancelLoad: (() => void) | null = null;
   running = false;
   ready = false;
   async prepare(config: PlaybackConfig) {
@@ -42,38 +45,30 @@ export class AudioEngine {
     this.duration = barDuration(config.bpm, config.steps, config.subdivision);
     this.actualDuration = pcm.length / kit.rate;
     player.loop = true;
-    await new Promise<void>((resolve, reject) => {
-      if (player.isLoaded) {
-        resolve();
-        return;
-      }
-      const timer = setTimeout(() => {
-        subscription.remove();
-        reject(
-          new Error("Não foi possível carregar o áudio. Tente reiniciar."),
-        );
-      }, 12000);
-      const subscription = player.addListener(
-        "playbackStatusUpdate",
-        (status) => {
-          if (status.isLoaded) {
-            clearTimeout(timer);
-            subscription.remove();
-            resolve();
-          }
-        },
-      );
-    });
-    if (generation === this.generation) this.ready = true;
+    const load = waitForAudioLoad(player);
+    this.cancelLoad = load.cancel;
+    try {
+      const loaded = await load.promise;
+      if (loaded && generation === this.generation) this.ready = true;
+    } finally {
+      if (this.cancelLoad === load.cancel) this.cancelLoad = null;
+    }
   }
   async start() {
+    if (this.running) return true;
     if (!this.player || !this.ready)
       throw new Error("O áudio ainda está sendo preparado.");
-    const result = this.player.play() as unknown;
+    const generation = this.startRevision,
+      player = this.player;
+    const result = player.play() as unknown;
     if (result instanceof Promise) await result;
+    if (generation !== this.startRevision || player !== this.player)
+      return false;
     this.running = true;
+    return true;
   }
   pause() {
+    this.startRevision++;
     this.getTime();
     this.player?.pause();
     this.running = false;
@@ -86,6 +81,9 @@ export class AudioEngine {
     return (this.cycles + position / this.actualDuration) * this.duration;
   };
   private releasePlayer() {
+    this.startRevision++;
+    this.cancelLoad?.();
+    this.cancelLoad = null;
     this.running = false;
     this.player?.pause();
     this.player?.remove();
@@ -114,7 +112,9 @@ const soundFiles: Record<Kind, number> = {
 export class PadSounds {
   private players = new Map<Kind, AudioPlayer[]>();
   private index = new Map<Kind, number>();
+  private generation = 0;
   prepare() {
+    this.dispose();
     Object.entries(soundFiles).forEach(([kind, asset]) => {
       this.players.set(kind as Kind, [
         createAudioPlayer(asset),
@@ -122,15 +122,22 @@ export class PadSounds {
       ]);
     });
   }
-  play(kind: Kind) {
+  async play(kind: Kind) {
     const pool = this.players.get(kind);
     if (!pool) return;
     const index = (this.index.get(kind) || 0) % pool.length;
     this.index.set(kind, index + 1);
     const player = pool[index];
-    void player.seekTo(0).then(() => player.play());
+    const generation = this.generation;
+    try {
+      await player.seekTo(0);
+      if (generation === this.generation) player.play();
+    } catch (error) {
+      if (generation === this.generation) throw error;
+    }
   }
   dispose() {
+    this.generation++;
     this.players.forEach((pool) => pool.forEach((player) => player.remove()));
     this.players.clear();
   }

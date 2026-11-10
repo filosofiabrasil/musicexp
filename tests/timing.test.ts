@@ -4,6 +4,8 @@ import {
   nearestNominal,
   clockPosition,
   sessionMetrics,
+  bestStepHit,
+  withinTolerance,
 } from "../src/audio/timing";
 import {
   barDuration,
@@ -64,4 +66,29 @@ test("o erro médio mantém o sinal e o absoluto tem a unidade correta", () => {
   assert.ok(Math.abs(m.mae - 15) < 0.001);
   assert.ok(Math.abs(m.mean - 5) < 0.001);
   assert.ok(Math.abs(m.std - 15) < 0.001);
+});
+
+test("o limite inclusivo de 15 ms não perde acertos por arredondamento binário", () => {
+  for (const t of [0.485, 0.515]) {
+    const metrics = sessionMetrics(
+      [{ t, nominal: 0.5, kind: "grave" }],
+      toPattern("P"),
+      1,
+      120,
+      4,
+      15,
+      1,
+    );
+    assert.equal(metrics.correct, 1, String(t));
+  }
+  assert.equal(withinTolerance(15.0001, 15), false);
+});
+
+test("as barras mostram o golpe correto quando outro timbre veio antes na mesma posição", () => {
+  const hits: DetectedHit[] = [
+    { t: 0.5, nominal: 0.5, kind: "tapa" },
+    { t: 0.51, nominal: 0.5, kind: "grave" },
+  ];
+  assert.equal(bestStepHit(hits, 0.5, "grave", 0.52, 15)?.kind, "grave");
+  assert.equal(bestStepHit(hits, 0.5, "grave", 0.505, 15)?.kind, "tapa");
 });

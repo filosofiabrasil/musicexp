@@ -2,6 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import Svg, { Circle, Line, Rect, Text as SvgText } from "react-native-svg";
 import { DetectedHit, STROKES, THEME, kindCode } from "./types";
+import { withinTolerance } from "../audio/timing";
 
 export function TimingScatter({
   hits,
@@ -29,7 +30,7 @@ export function TimingScatter({
     .filter((h) => h.t <= now && now - h.t < windowSec);
   const last = hits[hits.length - 1],
     err = last ? (last.t - last.nominal) * 1000 : null;
-  const good = err !== null && Math.abs(err) <= toleranceMs;
+  const good = err !== null && withinTolerance(err, toleranceMs);
   return (
     <View
       style={{ width }}
@@ -116,7 +117,9 @@ export function TimingScatter({
               cy={height - 42 - (age / windowSec) * (height - 50)}
               r={4 + STROKES[kindCode(h.kind)].height * 4}
               fill={
-                Math.abs(deviation) <= toleranceMs ? THEME.orange : THEME.ivory
+                withinTolerance(deviation, toleranceMs)
+                  ? THEME.orange
+                  : THEME.ivory
               }
               opacity={Math.max(0.15, 1 - age / windowSec)}
             />
