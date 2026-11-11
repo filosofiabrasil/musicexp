@@ -45,15 +45,9 @@ export const THEME = {
   line: "#30302D",
   muted: "#A7A69F",
   kind: {
-    grave: "#F2F0E9",
-    abafado: "#F2F0E9",
-    tapa: "#F2F0E9",
-    tapaPolegar: "#F2F0E9",
-    graveDedos: "#F2F0E9",
-    medio: "#D7D7D2",
-    rulo: "#F2F0E9",
-    punho: "#2FBF6A",
-    dedos: "#FFC23D",
+    grave: "#F07268", abafado: "#C788DE", graveDedos: "#F6A65B",
+    punho: "#57CF91", medio: "#46C9C6", rulo: "#96BCEB",
+    dedos: "#F5D365", tapa: "#67B7F5", tapaPolegar: "#E78AB5",
   } as Record<Kind, string>,
 };
 export const STROKES: Record<

@@ -91,7 +91,8 @@ export function HitBars({
                 width={bw}
                 height={expectedHeight}
                 rx={2}
-                fill="none"
+                fill={THEME.kind[kind]}
+                fillOpacity={0.3}
                 stroke={THEME.silver}
                 strokeWidth={1}
                 opacity={0.65}
@@ -112,7 +113,9 @@ export function HitBars({
                 width={Math.max(1, bw - 4)}
                 height={actualHeight}
                 rx={1}
-                fill={active ? THEME.orange : THEME.ivory}
+                fill={THEME.kind[hit.kind]}
+                stroke={active ? THEME.orange : THEME.ivory}
+                strokeWidth={active ? 2 : 1}
               />
             )}
             {atStep.length > 0 && !hit && (

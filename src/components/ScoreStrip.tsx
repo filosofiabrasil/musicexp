@@ -402,13 +402,11 @@ export function ScoreStrip({
                           height={25}
                           fill={
                             cell === code
-                              ? i === current
-                                ? T.orange
-                                : T.ivory
+                              ? T.kind[STROKES[code].kind]
                               : "none"
                           }
-                          opacity={cell === code ? 0.16 : 1}
-                          stroke={cell === code ? T.ivory : T.line}
+                          opacity={cell === code ? 0.45 : 1}
+                          stroke={cell === code ? (i === current ? T.orange : T.kind[STROKES[code].kind]) : T.line}
                         />
                         {cell === code && (
                           <SText
