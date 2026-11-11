@@ -65,12 +65,12 @@ export function ScoreStrip({
   const groupLabel = groups.join("+");
   const compound = validMeter && ["6/8", "9/8", "12/8"].includes(validMeter);
   const staffTop = 78,
-    staffSpace = 8,
-    staffBottom = staffTop + staffSpace * 4,
-    staffCenter = staffTop + staffSpace * 2;
+    staffSpace = 16,
+    staffBottom = staffTop + staffSpace * 2,
+    staffCenter = staffTop + staffSpace;
   const noteY = (i: number) =>
     staffBottom -
-    STROKES[rhythm.sequence[i] as StrokeCode].staffStep * (staffSpace / 2);
+    STROKES[rhythm.sequence[i] as StrokeCode].staffStep * staffSpace;
   const beamY = new Map<number, number>();
   runs
     .filter((run) => run.length > 1)
@@ -130,7 +130,7 @@ export function ScoreStrip({
       >
         <Label>
           {view === "rhythm"
-            ? "RITMO · PAUTA DE PERCUSSÃO EM CINCO LINHAS"
+            ? "RITMO · PAUTA DE PERCUSSÃO EM TRÊS LINHAS"
             : "ARTICULAÇÕES · LEGENDA DO CATÁLOGO"}
         </Label>
         <Label orange>
@@ -162,13 +162,13 @@ export function ScoreStrip({
             height={height}
             accessibilityLabel={
               view === "rhythm"
-                ? `Leitura rítmica de ${steps} unidades, ${steps / subdivision} semínimas${validMeter ? `, compasso ${validMeter}` : ""}, pauta de percussão em cinco linhas`
+                ? `Leitura rítmica de ${steps} unidades, ${steps / subdivision} semínimas${validMeter ? `, compasso ${validMeter}` : ""}, pauta de percussão em três linhas`
                 : `Mapa das articulações de ${steps} unidades`
             }
           >
             {view === "rhythm" ? (
               <>
-                {Array.from({ length: 5 }, (_, line) => {
+                {Array.from({ length: 3 }, (_, line) => {
                   const y = staffTop + line * staffSpace;
                   return (
                     <Line
@@ -320,12 +320,11 @@ export function ScoreStrip({
                         />
                       ) : (
                         <>
-                          <MusicGlyph
-                            name="noteheadBlack"
-                            x={x(i) - 4.7}
-                            y={headY}
-                            color={ink}
-                          />
+                          {code === "T" || code === "X" ? (
+                            <Path d={`M ${x(i)-4} ${headY-4} L ${x(i)+4} ${headY+4} M ${x(i)+4} ${headY-4} L ${x(i)-4} ${headY+4}`} stroke={ink} strokeWidth={2} />
+                          ) : (
+                            <MusicGlyph name="noteheadBlack" x={x(i)-4.7} y={headY} color={ink} />
+                          )}
                           <Line
                             x1={x(i) + 4.5}
                             x2={x(i) + 4.5}
@@ -468,7 +467,7 @@ export function ScoreStrip({
       </ScrollView>
       <Text style={caption}>
         {view === "rhythm"
-          ? `Acima: ${validMeter === "7/8" ? `grupos de ${groupLabel} unidades` : compound ? "pulsos de semínima pontuada" : validMeter ? "tempos de semínima" : "semínimas do ciclo"}${validMeter ? "; C1, C2… identificam os compassos" : ""}. Abaixo: subdivisões contadas a partir de 1 em cada ${validMeter === "7/8" ? "grupo" : compound ? "pulso composto" : "semínima"}. Da linha inferior à superior: P grave · A abafado · Q grave de dedos · B punho · M médio · R rulo · X tapa de polegar · T tapa · D dedos. As cinco linhas são posições de articulação, não alturas afinadas. Figuras = duração; letras = golpes; 01… = índices de edição. Pausas não cortam a ressonância.`
+          ? `Acima: ${validMeter === "7/8" ? `grupos de ${groupLabel} unidades` : compound ? "pulsos de semínima pontuada" : validMeter ? "tempos de semínima" : "semínimas do ciclo"}${validMeter ? "; C1, C2… identificam os compassos" : ""}. Abaixo: subdivisões contadas a partir de 1 em cada ${validMeter === "7/8" ? "grupo" : compound ? "pulso composto" : "semínima"}. Linha inferior: P grave, A abafado e Q grave de dedos. Linha central: B punho, M médio e R rulo. Linha superior: D dedos, T tapa e X tapa de polegar. As três linhas são posições de articulação, não alturas afinadas. Figuras = duração; letras = golpes; 01… = índices de edição. Pausas não cortam a ressonância.`
           : "Este mapa mostra qual articulação ocupa cada unidade. As linhas são categorias; a leitura das durações está na aba Leitura rítmica."}
       </Text>
       {value.tuplet && steps % subdivision !== 0 && view === "rhythm" && (

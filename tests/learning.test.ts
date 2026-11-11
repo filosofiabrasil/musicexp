@@ -99,10 +99,10 @@ test("símbolos de duração são contornos Bravura reais e não dependem de fon
     assert.ok(!glyph.path.includes("NaN"));
   }
 });
-test("nove articulações têm posições distintas nas nove alturas da pauta", () => {
+test("articulações ocupam três linhas de percussão", () => {
   assert.deepEqual(
     CODES.map((code) => STROKES[code].staffStep).sort((a, b) => a - b),
-    [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    [0, 0, 0, 1, 1, 1, 2, 2, 2],
   );
 });
 test("programas explicitam entrada, limite e as três fases de memória", () => {

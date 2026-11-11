@@ -91,4 +91,4 @@ export const TECHNIQUES: Record<
   },
 };
 export const NOTATION_NOTE =
-  "A leitura rítmica usa cinco linhas de percussão: cada articulação do catálogo ocupa uma posição fixa, da região grave à aguda. Figuras mostram duração e as letras nomeiam os golpes. Essas posições não são alturas afinadas. O mapa de articulações é uma grade separada. A grafia é uma convenção do app; não reproduz nem certifica os sistemas de Anunciação ou Stasi.";
+  "A leitura rítmica usa três linhas de percussão: graves embaixo, punho no centro e dedos e tapas acima. Figuras mostram duração e as letras nomeiam os golpes. Essas posições não são alturas afinadas. O mapa de articulações é uma grade separada. A grafia é uma convenção do app; não reproduz nem certifica os sistemas de Anunciação ou Stasi.";

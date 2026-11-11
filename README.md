@@ -27,7 +27,7 @@ O [guia de estudo](docs/GUIA_DE_ESTUDO.md) desenvolve esse protocolo e os limite
 
 ## Leitura e contagem
 
-A leitura usa **uma pauta de percussão com cinco linhas**, figuras de duração, pausas, clave, compassos e quiálteras. Cada articulação tem uma posição fixa: P, A, Q, B, M, R, X, T e D ocupam posições próprias, da região grave à aguda. Uma legenda explicita esse mapa. Essas posições identificam golpes; não representam alturas afinadas. O **Mapa de articulações** continua disponível como grade separada.
+A leitura usa **uma pauta de percussão com três linhas**, figuras de duração, pausas, clave, compassos e quiálteras. Graves e abafados ficam embaixo, punho no centro e dedos e tapas acima. As letras distinguem as articulações que compartilham a mesma linha. Uma legenda explicita esse mapa. Essas posições identificam golpes; não representam alturas afinadas. O **Mapa de articulações** continua disponível como grade separada.
 
 O exemplo `ADBDPDBD`, com quatro unidades por semínima, contém **oito semicolcheias = duas semínimas**. Ao escolher 2/4, a tela mostra um compasso com dois tempos; cada tempo conta suas quatro subdivisões:
 
@@ -44,7 +44,7 @@ Em 2/4, 3/4 e 4/4, os tempos reiniciam em cada compasso. Em 6/8, 9/8 e 12/8, a c
 
 As travessas quebram em pausas, compassos e fronteiras de quiálteras. Quiálteras incompletas são identificadas. A escrita representa os eventos da grade: cada letra inicia um ataque e cada ponto representa ausência de um novo ataque. As pausas desenhadas não executam abafamento nem cortam a ressonância do áudio. O modelo não edita livremente durações sustentadas, ligaduras, polifonia ou repertório MusicXML.
 
-![Exemplo corrigido: oito semicolcheias em 2/4](docs/images/escrita.png)
+A pauta apresenta três linhas para as articulações e usa X para os tapas.
 
 ## Andamento e referências
 
@@ -142,11 +142,11 @@ Regerar catálogos: `npm run import:rhythms`. Regerar análise e reprodução: `
 
 ## Fontes e licenças
 
-Catálogos originais: `src/data/ritmos.source.js` e `src/data/ritmos-PADBT.json`, preservados dos anexos. Referência sobre notação: GIANESELLA, Eduardo F. _O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro_. Música Hodie, v. 12, n. 2 (2012), p. 188–200, publicado em 2013. [Página editorial](https://revistas.ufg.br/musica/article/view/23359) e [artigo](https://revistas.ufg.br/musica/article/download/23359/13753/0). O artigo discute sistemas de Anunciação e Stasi e exemplifica o samba como oito semicolcheias em 2/4. A pauta de cinco linhas deste app usa posições próprias para as articulações; não reproduz aqueles sistemas ou partituras.
+Catálogos originais: `src/data/ritmos.source.js` e `src/data/ritmos-PADBT.json`, preservados dos anexos. Referência sobre notação: GIANESELLA, Eduardo F. _O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro_. Música Hodie, v. 12, n. 2 (2012), p. 188–200, publicado em 2013. [Página editorial](https://revistas.ufg.br/musica/article/view/23359) e [artigo](https://revistas.ufg.br/musica/article/download/23359/13753/0). O artigo discute sistemas de Anunciação e Stasi e exemplifica o samba como oito semicolcheias em 2/4. A pauta de três linhas deste app usa posições próprias para as articulações; não reproduz aqueles sistemas ou partituras.
 
 Os contornos Bravura e as fontes de interface têm licenças em `licenses/`; veja [materiais e dependências](THIRD_PARTY_NOTICES.md). As referências bibliográficas dos ritmos foram preservadas, sem conferência integral de cada obra citada. Não são distribuídos PDFs de métodos ou partituras protegidas.
 
-Capturas: [prática](docs/images/pratica.png), [escrita corrigida](docs/images/escrita.png), [estudos](docs/images/estudos.png), [escuta](docs/images/escuta.png), [caderno](docs/images/caderno.png), [comparação](docs/images/comparacao.png) e [celular](docs/images/celular.png).
+Capturas: [prática](docs/images/pratica.png), [estudos](docs/images/estudos.png), [escuta](docs/images/escuta.png), [caderno](docs/images/caderno.png), [comparação](docs/images/comparacao.png) e [celular](docs/images/celular.png).
 
 ### Percurso guiado
 

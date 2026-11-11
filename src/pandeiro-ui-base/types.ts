@@ -63,7 +63,7 @@ export const STROKES: Record<
     name: string;
     height: number;
     key: string;
-    /** Posição editorial de percussão, em meios espaços a partir da linha inferior. */
+    /** Posição editorial de percussão, de 0 a 2 a partir da linha inferior. */
     staffStep: number;
   }
 > = {
@@ -79,56 +79,56 @@ export const STROKES: Record<
     name: "Dedos",
     height: 0.36,
     key: "s",
-    staffStep: 8,
+    staffStep: 2,
   },
   T: {
     kind: "tapa",
     name: "Tapa",
     height: 0.78,
     key: "d",
-    staffStep: 7,
+    staffStep: 2,
   },
   B: {
     kind: "punho",
     name: "Punho",
     height: 0.53,
     key: "f",
-    staffStep: 3,
+    staffStep: 1,
   },
   A: {
     kind: "abafado",
     name: "Abafado",
     height: 0.87,
     key: "g",
-    staffStep: 1,
+    staffStep: 0,
   },
   X: {
     kind: "tapaPolegar",
     name: "Tapa de polegar",
     height: 0.73,
     key: "h",
-    staffStep: 6,
+    staffStep: 2,
   },
   Q: {
     kind: "graveDedos",
     name: "Grave de dedos",
     height: 0.94,
     key: "j",
-    staffStep: 2,
+    staffStep: 0,
   },
   M: {
     kind: "medio",
     name: "Médio",
     height: 0.62,
     key: "k",
-    staffStep: 4,
+    staffStep: 1,
   },
   R: {
     kind: "rulo",
     name: "Rulo",
     height: 0.67,
     key: "l",
-    staffStep: 5,
+    staffStep: 1,
   },
 };
 export const CODES = Object.keys(STROKES) as StrokeCode[];

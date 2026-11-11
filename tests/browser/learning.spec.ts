@@ -33,7 +33,7 @@ test("exemplo da imagem mostra oito semicolcheias, duas semínimas e leitura 2/4
     .click();
   await page.getByRole("button", { name: "Métrica 2/4", exact: true }).click();
   const score = page.getByLabel(
-    "Leitura rítmica de 8 unidades, 2 semínimas, compasso 2/4, pauta de percussão em cinco linhas",
+    "Leitura rítmica de 8 unidades, 2 semínimas, compasso 2/4, pauta de percussão em três linhas",
   );
   await expect(score).toBeVisible();
   const labels = await score.locator("text").allTextContents();
@@ -62,7 +62,7 @@ test("6/8 tem dois pulsos compostos e contagem de três colcheias por pulso", as
     .click();
   const labels = await page
     .getByLabel(
-      "Leitura rítmica de 6 unidades, 3 semínimas, compasso 6/8, pauta de percussão em cinco linhas",
+      "Leitura rítmica de 6 unidades, 3 semínimas, compasso 6/8, pauta de percussão em três linhas",
     )
     .locator("text")
     .allTextContents();
@@ -81,12 +81,12 @@ test("6/8 tem dois pulsos compostos e contagem de três colcheias por pulso", as
     page.getByRole("button", { name: "Clique Grupos", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
 });
-test("a partitura põe cada articulação em sua posição fixa na pauta de cinco linhas", async ({
+test("a partitura põe cada articulação em sua posição fixa na pauta de três linhas", async ({
   page,
 }) => {
   await page.goto("/");
   const score = page.getByLabel(
-    "Leitura rítmica de 16 unidades, 4 semínimas, compasso 4/4, pauta de percussão em cinco linhas",
+    "Leitura rítmica de 16 unidades, 4 semínimas, compasso 4/4, pauta de percussão em três linhas",
   );
   const staffYs = await score.locator("line").evaluateAll((elements) =>
     Array.from(
@@ -104,9 +104,9 @@ test("a partitura põe cada articulação em sua posição fixa na pauta de cinc
       ),
     ).sort((a, b) => a - b),
   );
-  expect(staffYs).toEqual([78, 86, 94, 102, 110]);
+  expect(staffYs).toEqual([78, 94, 110]);
   await expect(
-    page.getByText(/As cinco linhas são posições de articulação/),
+    page.getByText(/As três linhas são posições de articulação/),
   ).toBeVisible();
 });
 test("preparação não registra golpes e tomada finita encerra no áudio sem voltar ao início", async ({
