@@ -50,7 +50,8 @@ export function ScoreStrip({
   const validMeter =
     meter && meterFits(meter, steps, subdivision) ? meter : undefined;
   const groups = readingGroups(rhythm, subdivision, validMeter);
-  const present = CODES.filter((c) => rhythm.sequence.includes(c));
+  const mapOrder = CODES.map((c) => c === "D" ? "B" : c === "B" ? "D" : c);
+  const present = mapOrder.filter((c) => rhythm.sequence.includes(c));
   const margin = view === "map" ? 160 : validMeter ? 95 : 55;
   const full = Math.max(width, margin + steps * 40 + 14);
   const spacing = (full - margin - 14) / steps;
