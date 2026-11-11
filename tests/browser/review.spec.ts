@@ -115,8 +115,10 @@ test("o atalho Espaço respeita o bloqueio durante a calibração", async ({
 }) => {
   await context.grantPermissions(["microphone"]);
   await page.goto("/");
+  await page.getByRole("switch", { name: "Metrônomo" }).uncheck();
   await page.getByRole("button", { name: "Microfone", exact: true }).click();
   await expect(page.getByText(/Microfone ligado/)).toBeVisible();
+  await expect(page.getByRole("switch", { name: "Metrônomo" })).toBeChecked();
   await page
     .getByRole("button", { name: "Calibrar Grave · polegar", exact: true })
     .click();

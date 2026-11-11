@@ -261,7 +261,7 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
       inputSince.current = performance.now() / 1000;
       detector.reset();
       setGuide(false);
-      setClick(false);
+      setClick(true);
       setSource("mic");
     } catch (e) {
       if (generation !== micGeneration.current) return;

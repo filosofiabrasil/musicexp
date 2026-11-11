@@ -208,6 +208,9 @@ export function PracticeControls({
         value={practice.click}
         onChange={practice.setClick}
       />
+      {practice.source === "mic" && (
+        <Text style={hint}>O metrônomo é ligado ao ativar o microfone. Use fones para que o clique não seja reconhecido como um golpe; ajuste o volume e a referência abaixo.</Text>
+      )}
       <View style={{ gap: 9 }}>
         <Label>REFERÊNCIA DO CLIQUE</Label>
         <View style={row}>
@@ -348,9 +351,7 @@ export function PracticeControls({
                 .
               </Text>
               <Text style={hint}>
-                Escolha uma letra, toque três ataques isolados e toque na letra
-                novamente para concluir. Até oito exemplos por articulação ficam
-                nesta sessão.
+                Com a tomada pausada, escolha uma letra e toque pelo menos três ataques isolados no seu pandeiro. Toque na mesma letra para concluir e repita para os outros golpes. Até oito exemplos por articulação ficam nesta sessão; a calibração é perdida ao fechar o app.
               </Text>
               <View style={[row, { flexWrap: "wrap" }]}>
                 {CODES.map((code) => {
