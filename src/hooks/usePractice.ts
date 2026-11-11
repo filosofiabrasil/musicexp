@@ -11,7 +11,6 @@ import {
   DYNAMIC_GAIN,
   SampleChoices,
   clampRange,
-  defaultGroups,
   sliceGroups,
 } from "../music/score";
 import templates from "../data/templates.json";
@@ -22,8 +21,15 @@ import {
   toPattern,
 } from "../pandeiro-ui-base/types";
 import { useClock } from "../pandeiro-ui-base/useClock";
+import { meterFits, readingGroups } from "../music/notation";
+import { StudyProgram, programPlan } from "../music/program";
 
 export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
+  const [program, setProgram] = useState<StudyProgram>("free");
+  const [meterChoice, setMeterChoice] = useState<{
+    id: string;
+    value: string | null;
+  } | null>(null);
   const [takeIdentity, setTakeIdentity] = useState(() => ({
     id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
     createdAt: new Date().toISOString(),
@@ -92,12 +98,17 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
       ? clampRange(region.start, region.end, rhythm.sequence.length)
       : { start: 0, end: rhythm.sequence.length };
   const sequence = rhythm.sequence.slice(range.start, range.end);
+  const declaredMeter =
+    meterChoice?.id === rhythm.id ? meterChoice.value : rhythm.meter;
+  const meter =
+    declaredMeter &&
+    meterFits(declaredMeter, rhythm.sequence.length, subdivision)
+      ? declaredMeter
+      : null;
   const groups = useMemo(
     () =>
       sliceGroups(
-        subdivision === rhythm.subdivision && rhythm.groups
-          ? rhythm.groups
-          : defaultGroups(rhythm.sequence.length, subdivision),
+        readingGroups(rhythm, subdivision, meter ?? undefined),
         range.start,
         range.end,
       ),
@@ -105,6 +116,7 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
       rhythm.groups,
       rhythm.sequence.length,
       rhythm.subdivision,
+      meter,
       subdivision,
       range.start,
       range.end,
@@ -327,6 +339,7 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
   }, [engine, detector]);
   useEffect(() => {
     setSubdivision(rhythm.subdivision);
+    setClickMode(rhythm.meter?.endsWith("/8") ? "groups" : "pulse");
   }, [rhythm.id, rhythm.subdivision]);
   useEffect(() => {
     let cancelled = false;
@@ -359,6 +372,7 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
         accents,
         samples: sampleChoices,
         dynamicGain: DYNAMIC_GAIN[dynamic],
+        program,
       })
       .then(() => {
         if (!cancelled) setReady(true);
@@ -388,7 +402,19 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
     accents,
     sampleChoices,
     dynamic,
+    meter,
+    program,
   ]);
+  useEffect(() => {
+    engine.onFinish = () => {
+      inputSince.current = Infinity;
+      detector.reset();
+      setRunning(false);
+    };
+    return () => {
+      engine.onFinish = undefined;
+    };
+  }, [engine, detector]);
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {
       if (state !== "active") {
@@ -414,16 +440,19 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
   }, [engine, sounds, volume]);
   const audition = useCallback(
     async (kind: Kind, variantId?: string) => {
-      if (settings.current.source === "mic" || micOpening.current) return;
+      if (settings.current.source === "mic" || micOpening.current) return false;
       pause();
+      sounds.silence();
       try {
-        await sounds.play(
+        const played = await sounds.play(
           kind,
           variantId ?? settings.current.sampleChoices[kind],
         );
-        setLastKind(kind);
+        if (played) setLastKind(kind);
+        return played;
       } catch (e) {
         setError(e instanceof Error ? e.message : "Pré-escuta indisponível.");
+        return false;
       }
     },
     [pause, sounds],
@@ -470,6 +499,18 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
     return () => window.removeEventListener("keydown", handle);
   }, [tap, toggle, keyboardEnabled]);
   return {
+    concealed:
+      program === "memory" &&
+      running &&
+      clock.t >= 2 * clock.bar &&
+      !engine.finished,
+    program,
+    setProgram,
+    meter,
+    setMeter: (value: string | null) =>
+      setMeterChoice({ id: rhythm.id, value }),
+    completed: engine.finished,
+    countIn: programPlan(program).countIn,
     takeIdentity,
     captureRate,
     sequence,
@@ -494,7 +535,7 @@ export function usePractice(rhythm: Rhythm, keyboardEnabled = true) {
       }),
     audition,
     pause,
-    readTime: engine.getTime,
+    readTime: () => Math.max(0, engine.getTime()),
     bpm,
     setBpm,
     subdivision,

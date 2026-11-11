@@ -13,6 +13,7 @@ import {
   NOTATION_NOTE,
 } from "../music/techniques";
 import { Button, Label, Separator, fonts } from "./ui";
+import { ListeningLab } from "./ListeningLab";
 export function SoundAtlas({
   practice,
 }: {
@@ -139,6 +140,7 @@ export function SoundAtlas({
           </Text>
         </View>
       </View>
+      <ListeningLab practice={practice} />
       <View
         style={{
           gap: 12,

@@ -1,5 +1,16 @@
 # Alterações
 
+## 1.2.0 — Ler, investigar, comparar
+
+- Substituída a escrita categórica em três linhas por leitura rítmica em linha única e mapa de articulações separado. Figuras, pausas, bandeirolas e clave usam contornos Bravura/SMuFL com licença incluída.
+- Corrigida a apresentação da contagem: tempos reiniciam por compasso, 6/8 conta dois pulsos compostos, subdivisões são numeradas dentro do pulso/grupo e índices de edição permanecem separados. O exemplo de oito semicolcheias pode ser estudado explicitamente em 2/4.
+- Escolha de métrica limitada aos compassos completos representáveis na grade. Travessas separam pausas, compassos e fronteiras de quiálteras; trechos incompletos são identificados.
+- Percurso de prática com intenção escrita, exploração livre, tomada de quatro ciclos e memória de pulso. Programas finitos têm quatro semínimas de preparação, referência programada e término agendado no próprio áudio; a preparação não pontua.
+- Editor com acentos, rotação, reaproveitamento da escrita da prática e biblioteca pessoal persistente de até 30 escritas. Salvar novamente a mesma definição não duplica; variações distintas são preservadas. Incluídos exportação, desfazer e recuperação de dados ilegíveis.
+- Laboratório de escuta com quatro pares de articulações, referências identificadas, exemplo oculto sorteado entre gravações reais e uma resposta por pergunta. A pré-escuta interrompe a anterior para evitar sobreposição.
+- Comparação de duas tomadas no caderno, explicitando diferenças de protocolo antes de interpretar números. Objetivo, métrica, programa, ciclo e posição original entram nos dados exportados.
+- A tela inicial abre um estudo original em 4/4; os 148 ritmos e as 43 gravações permanecem disponíveis.
+
 ## 1.1.0 — Laboratório de estudos
 
 - Interface reorganizada em Prática, Estudos e escrita, Articulações e sons e Caderno, com tipografia de leitura, navegação por teclado e layout a partir de 320 px.

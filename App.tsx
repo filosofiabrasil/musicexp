@@ -40,6 +40,9 @@ import {
 } from "./src/components/ExerciseLibrary";
 import { StudyJournal } from "./src/components/StudyJournal";
 import { PracticeControls, Transport } from "./src/components/PracticeControls";
+import { PracticeRoute } from "./src/components/PracticeRoute";
+import { useProjects } from "./src/hooks/useProjects";
+import { ETUDES } from "./src/music/etudes";
 import { Button, Label, Separator, fonts } from "./src/components/ui";
 
 const MODES = [
@@ -83,16 +86,18 @@ export default function App() {
   );
 }
 function Laboratory() {
-  const [rhythm, setRhythm] = useState(RHYTHMS.find((r) => r.id === "lw77")!);
+  const [rhythm, setRhythm] = useState(ETUDES[1]);
   const [section, setSection] = useState<Section>("practice"),
     [modeIndex, setModeIndex] = useState(0),
     [library, setLibrary] = useState(false),
     [selectedUnit, setSelectedUnit] = useState(0);
   const [draft, setDraft] = useState<EditorDraft>(INITIAL_DRAFT),
+    [goal, setGoal] = useState(""),
     [notes, setNotes] = useState(""),
     [savedMessage, setSavedMessage] = useState("");
   const practice = usePractice(rhythm, section === "practice" && !library),
-    journal = useJournal();
+    journal = useJournal(),
+    projects = useProjects();
   const { width } = useWindowDimensions(),
     wide = width >= 1000;
   const contentWidth = Math.max(
@@ -189,6 +194,9 @@ function Laboratory() {
         guide: practice.guide,
         click: practice.click,
         latencyMs: practice.latency,
+        meter: practice.meter,
+        program: practice.program,
+        goal: goal.trim(),
       },
       pattern,
       hits,
@@ -225,7 +233,7 @@ function Laboratory() {
   };
   const currentKind = pattern[clock.step],
     pulse =
-      practice.running && currentKind
+      practice.running && clock.t >= 0 && currentKind
         ? Math.exp(
             -(clock.t - clock.barStart - clock.step * clock.stepDur) * 22,
           )
@@ -372,16 +380,22 @@ function Laboratory() {
                   <View style={styles.between}>
                     <Label>ESCRITA E POSIÇÃO NO CICLO</Label>
                     <Label orange>
-                      {rhythm.meter && !reinterpreted
-                        ? `COMPASSO ${rhythm.meter}`
+                      {practice.meter && !reinterpreted
+                        ? `COMPASSO ${practice.meter}`
                         : "CICLO DE ESTUDO"}
                     </Label>
                   </View>
                   <ScoreStrip
                     rhythm={rhythm}
+                    meter={practice.meter}
+                    onMeter={practice.setMeter}
                     subdivision={subdivision}
                     width={contentWidth}
-                    current={practice.running ? range.start + clock.step : null}
+                    current={
+                      practice.running && clock.t >= 0 && !practice.concealed
+                        ? range.start + clock.step
+                        : null
+                    }
                     selected={focused}
                     range={range}
                     isolation={practice.isolation}
@@ -395,7 +409,7 @@ function Laboratory() {
                         ? "PAUSA"
                         : STROKES[focusedCode].name.toUpperCase()}
                     </Label>
-                    <Label>POS. ♩ {scorePosition(focused, subdivision)}</Label>
+                    <Label>{scorePosition(focused, subdivision)}</Label>
                   </View>
                   <View style={[styles.inline, { flexWrap: "wrap" }]}>
                     <Button
@@ -441,10 +455,19 @@ function Laboratory() {
                   <Text style={styles.caption}>
                     Recorte {range.start + 1}–{range.end} de{" "}
                     {rhythm.sequence.length} · {SUBDIVISION_NAMES[subdivision]}{" "}
-                    · {quarterSpan} semínimas/ciclo
+                    · {quarterSpan}{" "}
+                    {sequence.length / subdivision === 1
+                      ? "semínima"
+                      : "semínimas"}
+                    /ciclo
                     {reinterpreted ? " · recorte ou grade reinterpretada" : ""}.
                   </Text>
                 </View>
+                <PracticeRoute
+                  practice={practice}
+                  goal={goal}
+                  setGoal={setGoal}
+                />
                 <View style={styles.card}>
                   <View style={styles.modeTabs}>
                     {MODES.map((tab, index) => (
@@ -482,7 +505,15 @@ function Laboratory() {
                       {mode.number} / {mode.name.toUpperCase()}
                     </Label>
                     <Label orange>
-                      {practice.running ? "● EM CURSO" : "○ EM PAUSA"}
+                      {practice.concealed
+                        ? "● SEM APOIO VISUAL"
+                        : practice.completed
+                          ? "✓ CONCLUÍDA"
+                          : practice.running
+                            ? clock.t < 0
+                              ? "● PREPARAÇÃO"
+                              : "● EM CURSO"
+                            : "○ EM PAUSA"}
                     </Label>
                   </View>
                   <View
@@ -493,7 +524,20 @@ function Laboratory() {
                       justifyContent: "center",
                     }}
                   >
-                    {mode.id === "ring" && (
+                    {practice.concealed && (
+                      <Text
+                        style={{
+                          ...styles.body,
+                          maxWidth: 300,
+                          textAlign: "center",
+                          color: T.ivory,
+                        }}
+                      >
+                        A referência sumiu. Continue até o fim da tomada; os
+                        resultados aparecem depois.
+                      </Text>
+                    )}
+                    {!practice.concealed && mode.id === "ring" && (
                       <RhythmRing
                         pattern={pattern}
                         phase={clock.phase}
@@ -502,7 +546,7 @@ function Laboratory() {
                         subdivision={subdivision}
                         size={ringSize}
                         pulse={pulse}
-                        running={practice.running}
+                        running={practice.running && clock.t >= 0}
                       >
                         <View style={styles.ringCenter}>
                           <Pandeiro size={76} />
@@ -529,7 +573,7 @@ function Laboratory() {
                         </View>
                       </RhythmRing>
                     )}
-                    {mode.id === "bars" && (
+                    {!practice.concealed && mode.id === "bars" && (
                       <HitBars
                         pattern={pattern}
                         hits={hits}
@@ -544,7 +588,7 @@ function Laboratory() {
                         height={270}
                       />
                     )}
-                    {mode.id === "scatter" && (
+                    {!practice.concealed && mode.id === "scatter" && (
                       <TimingScatter
                         hits={hits}
                         now={clock.t}
@@ -600,74 +644,90 @@ function Laboratory() {
                     </Text>
                   )}
                 </View>
-                <View style={styles.stats}>
-                  <Metric
-                    name="ACERTOS NA GRADE"
-                    value={
-                      metrics.expected
-                        ? `${metrics.correct}/${metrics.expected}`
-                        : "—"
-                    }
-                    detail={
-                      metrics.expected
-                        ? `${metrics.accuracy}% das posições concluídas`
-                        : "Comece a tocar"
-                    }
-                  />
-                  <Metric
-                    name="ERRO MÉDIO ABS."
-                    value={metrics.count ? metrics.mae.toFixed(1) : "—"}
-                    detail={
-                      metrics.count
-                        ? `ms · σ ${metrics.std.toFixed(1)} ms`
-                        : "Nenhum golpe registrado"
-                    }
-                  />
-                  <Metric
-                    name="GOLPES TOCADOS"
-                    value={String(hits.length).padStart(2, "0")}
-                    detail={
-                      metrics.count
-                        ? `viés ${metrics.mean >= 0 ? "+" : ""}${metrics.mean.toFixed(1)} ms`
-                        : "Aguardando entrada"
-                    }
-                  />
-                </View>
-                <View style={styles.card}>
-                  <Label>LEITURA DO RESULTADO</Label>
-                  <Text style={styles.body}>
-                    Unidades sem golpe: {diagnosis.missing} · articulação
-                    divergente: {diagnosis.wrongKind} · fora da janela:{" "}
-                    {diagnosis.late} · em pausas: {diagnosis.unexpected} ·
-                    repetições: {diagnosis.duplicates}.
-                  </Text>
-                  <Text style={styles.caption}>
-                    As categorias podem se sobrepor. Acertos exigem articulação
-                    e tempo; métricas temporais incluem todos os golpes
-                    registrados. A associação usa a unidade mais próxima: mede
-                    ajuste local à grade e não reconhece deslocamentos de frase,
-                    qualidade do timbre ou intensidade.
-                  </Text>
-                  <View style={[styles.inline, { flexWrap: "wrap" }]}>
-                    <Button
-                      primary
-                      disabled={!hits.length || !journal.loaded}
-                      onPress={() => void saveTake()}
-                    >
-                      Registrar tomada
-                    </Button>
-                    <Button onPress={() => navigate("journal")}>
-                      Observações e exportação →
-                    </Button>
+                <View
+                  aria-hidden={practice.concealed}
+                  accessibilityElementsHidden={practice.concealed}
+                  importantForAccessibility={
+                    practice.concealed ? "no-hide-descendants" : "auto"
+                  }
+                  pointerEvents={practice.concealed ? "none" : "auto"}
+                  style={{ gap: 18, opacity: practice.concealed ? 0 : 1 }}
+                >
+                  <View style={styles.stats}>
+                    <Metric
+                      name="ACERTOS NA GRADE"
+                      value={
+                        metrics.expected
+                          ? `${metrics.correct}/${metrics.expected}`
+                          : "—"
+                      }
+                      detail={
+                        metrics.expected
+                          ? `${metrics.accuracy}% das posições concluídas`
+                          : "Comece a tocar"
+                      }
+                    />
+                    <Metric
+                      name="ERRO MÉDIO ABS."
+                      value={metrics.count ? metrics.mae.toFixed(1) : "—"}
+                      detail={
+                        metrics.count
+                          ? `ms · σ ${metrics.std.toFixed(1)} ms`
+                          : "Nenhum golpe registrado"
+                      }
+                    />
+                    <Metric
+                      name="GOLPES TOCADOS"
+                      value={String(hits.length).padStart(2, "0")}
+                      detail={
+                        metrics.count
+                          ? `viés ${metrics.mean >= 0 ? "+" : ""}${metrics.mean.toFixed(1)} ms`
+                          : "Aguardando entrada"
+                      }
+                    />
                   </View>
-                  {!!savedMessage && (
-                    <Text
-                      accessibilityLiveRegion="polite"
-                      style={{ ...styles.caption, color: T.orange }}
-                    >
-                      {savedMessage}
+                  <View style={styles.card}>
+                    <Label>LEITURA DO RESULTADO</Label>
+                    <Text style={styles.body}>
+                      Unidades sem golpe: {diagnosis.missing} · articulação
+                      divergente: {diagnosis.wrongKind} · fora da janela:{" "}
+                      {diagnosis.late} · em pausas: {diagnosis.unexpected} ·
+                      repetições: {diagnosis.duplicates}.
                     </Text>
-                  )}
+                    <Text style={styles.caption}>
+                      As categorias podem se sobrepor. Acertos exigem
+                      articulação e tempo; métricas temporais incluem todos os
+                      golpes registrados. A associação usa a unidade mais
+                      próxima: mede ajuste local à grade e não reconhece
+                      deslocamentos de frase, qualidade do timbre ou
+                      intensidade.
+                    </Text>
+                    <View style={[styles.inline, { flexWrap: "wrap" }]}>
+                      <Button
+                        primary
+                        disabled={
+                          !hits.length || !journal.loaded || practice.concealed
+                        }
+                        onPress={() => void saveTake()}
+                      >
+                        Registrar tomada
+                      </Button>
+                      <Button
+                        disabled={practice.concealed}
+                        onPress={() => navigate("journal")}
+                      >
+                        Observações e exportação →
+                      </Button>
+                    </View>
+                    {!!savedMessage && (
+                      <Text
+                        accessibilityLiveRegion="polite"
+                        style={{ ...styles.caption, color: T.orange }}
+                      >
+                        {savedMessage}
+                      </Text>
+                    )}
+                  </View>
                 </View>
                 <Pads practice={practice} />
               </View>
@@ -685,6 +745,8 @@ function Laboratory() {
             onChoose={chooseRhythm}
             draft={draft}
             setDraft={setDraft}
+            projects={projects}
+            current={rhythm}
           />
         )}
         {section === "sounds" && <SoundAtlas practice={practice} />}

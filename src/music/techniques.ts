@@ -101,4 +101,4 @@ export const TECHNIQUES: Record<
   },
 };
 export const NOTATION_NOTE =
-  "Convenção didática própria em três linhas: graves, condução e ataques secos. A posição vertical indica articulação, não altura em Hz. As letras identificam os nove sons. Não é reprodução dos sistemas de Anunciação ou Stasi.";
+  "A leitura rítmica usa uma linha de percussão com figuras de duração e letras para as articulações. O mapa de articulações é uma grade separada, sem alturas afinadas. As letras são convenções do catálogo; a grafia não reproduz os sistemas de Anunciação ou Stasi.";

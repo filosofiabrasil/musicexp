@@ -49,16 +49,20 @@ export function Transport({
           practice.micBusy ||
           !!practice.calibrating
         }
-        onPress={() => void practice.toggle()}
+        onPress={() =>
+          practice.completed ? practice.reset() : void practice.toggle()
+        }
         label={practice.running ? "Pausar treino" : "Iniciar treino"}
       >
-        {practice.starting
-          ? "INICIANDO…"
-          : !practice.ready
-            ? "PREPARANDO…"
-            : practice.running
-              ? "Ⅱ PAUSAR TOMADA"
-              : "▶ INICIAR TOMADA"}
+        {practice.completed
+          ? "↺ NOVA TOMADA"
+          : practice.starting
+            ? "INICIANDO…"
+            : !practice.ready
+              ? "PREPARANDO…"
+              : practice.running
+                ? "Ⅱ PAUSAR TOMADA"
+                : "▶ INICIAR TOMADA"}
       </Button>
       <View
         style={{
@@ -69,11 +73,17 @@ export function Transport({
         }}
       >
         <Label>
-          {practice.running
-            ? `CICLO ${practice.clock.barIndex + 1} · PASSO ${practice.clock.step + 1}`
-            : practice.hits.length
-              ? "TREINO PAUSADO"
-              : "PRONTO PARA COMEÇAR"}
+          {practice.concealed
+            ? "SUSTENTE O PULSO"
+            : practice.completed
+              ? "TOMADA CONCLUÍDA"
+              : practice.running && practice.clock.t < 0
+                ? `PREPARAÇÃO · ${Math.max(1, Math.ceil((-practice.clock.t * practice.bpm) / 60))}`
+                : practice.running
+                  ? `CICLO ${practice.clock.barIndex + 1} · PASSO ${practice.clock.step + 1}`
+                  : practice.hits.length
+                    ? "TREINO PAUSADO"
+                    : "PRONTO PARA COMEÇAR"}
         </Label>
         <Pressable
           accessibilityRole="button"
@@ -84,6 +94,15 @@ export function Transport({
           <Text style={link}>Reiniciar ↺</Text>
         </Pressable>
       </View>
+      {practice.meter && ["6/8", "9/8", "12/8"].includes(practice.meter) && (
+        <Text style={hint}>
+          Pulso de semínima pontuada ={" "}
+          {((practice.bpm * 2) / 3).toLocaleString("pt-BR", {
+            maximumFractionDigits: 1,
+          })}{" "}
+          por minuto. O campo acima usa semínimas.
+        </Text>
+      )}
       {!compact && (
         <Text style={hint}>
           O ciclo tem {practice.sequence.length} unidades,{" "}
@@ -194,7 +213,7 @@ export function PracticeControls({
         <View style={row}>
           {(
             [
-              ["pulse", "Pulso"],
+              ["pulse", "Semínima"],
               ["subdivision", "Subd."],
               ["groups", "Grupos"],
             ] as const

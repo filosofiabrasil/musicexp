@@ -6,6 +6,7 @@ import {
   groupStarts,
 } from "../music/score";
 import { PLAYBACK_RATE, soundPcm } from "./sampleLibrary";
+import { StudyProgram, programPlan } from "../music/program";
 
 export type PlaybackConfig = {
   pattern: Pattern;
@@ -19,6 +20,7 @@ export type PlaybackConfig = {
   accents?: number[];
   dynamicGain?: number;
   samples?: SampleChoices;
+  program?: StudyProgram;
 };
 const gain: Record<Kind, number> = {
   grave: 0.9,
@@ -67,7 +69,7 @@ export function clickPositions(
         : i % config.subdivision === 0),
   );
 }
-function render(config: PlaybackConfig, span: number) {
+function render(config: PlaybackConfig, span: number, wrap = true) {
   const frames = Math.round(
     stepDuration(config.bpm, config.subdivision) * span * PLAYBACK_RATE,
   );
@@ -75,29 +77,38 @@ function render(config: PlaybackConfig, span: number) {
   const dynamics = Math.max(0, Math.min(1, config.dynamicGain ?? 0.7));
   const clicks = new Set(clickPositions(config, span));
   const mode = config.clickMode ?? "pulse";
+  const plan = programPlan(config.program ?? "free");
   for (let i = 0; i < span; i++) {
     const slot = i % config.steps,
       kind = config.pattern[slot],
       offset = Math.round((i / span) * frames);
-    if (config.guide && kind) {
+    if (
+      config.guide &&
+      kind &&
+      Math.floor(i / config.steps) < plan.guideCycles
+    ) {
       const emphasis = config.accents?.includes(slot) ? 1.25 : 1;
       soundPcm(kind, config.samples?.[kind]).forEach((value, j) => {
-        output[(offset + j) % frames] +=
-          value * gain[kind] * dynamics * 0.75 * emphasis;
+        const at = wrap ? (offset + j) % frames : offset + j;
+        if (at < frames)
+          output[at] += value * gain[kind] * dynamics * 0.75 * emphasis;
       });
     }
-    if (clicks.has(i)) {
+    if (clicks.has(i) && Math.floor(i / config.steps) < plan.clickCycles) {
       const accented =
         mode === "groups"
           ? slot === 0
           : mode === "subdivision" && i % config.subdivision === 0;
-      for (let j = 0; j < PLAYBACK_RATE * 0.025; j++)
-        output[(offset + j) % frames] +=
-          0.18 *
-          Math.sin(
-            (2 * Math.PI * (accented ? 2200 : 1500) * j) / PLAYBACK_RATE,
-          ) *
-          Math.exp(-j / (PLAYBACK_RATE * 0.006));
+      for (let j = 0; j < PLAYBACK_RATE * 0.025; j++) {
+        const at = wrap ? (offset + j) % frames : offset + j;
+        if (at < frames)
+          output[at] +=
+            0.18 *
+            Math.sin(
+              (2 * Math.PI * (accented ? 2200 : 1500) * j) / PLAYBACK_RATE,
+            ) *
+            Math.exp(-j / (PLAYBACK_RATE * 0.006));
+      }
     }
   }
   return output.map((value) => Math.tanh(value));
@@ -109,10 +120,35 @@ export function mixCycle(config: PlaybackConfig) {
 }
 /** O buffer pode conter vários ciclos para manter o metrônomo regular. */
 export function mixPlayback(config: PlaybackConfig) {
-  const span = playbackSteps(config);
+  const regularSpan = playbackSteps(config);
+  const plan = programPlan(config.program ?? "free");
+  const span = plan.cycles ? config.steps * plan.cycles : regularSpan;
+  const introDuration = (plan.countIn * 60) / config.bpm;
+  const body = render(config, span, !plan.cycles);
+  const introFrames = Math.round(introDuration * PLAYBACK_RATE);
+  const pcm = new Float32Array(introFrames + body.length);
+  pcm.set(body, introFrames);
+  for (let pulse = 0; pulse < plan.countIn; pulse++) {
+    const offset = Math.round(((pulse * 60) / config.bpm) * PLAYBACK_RATE);
+    for (let j = 0; j < PLAYBACK_RATE * 0.025 && offset + j < introFrames; j++)
+      pcm[offset + j] = Math.tanh(
+        0.18 *
+          Math.sin(
+            (2 * Math.PI * (pulse === 0 ? 2200 : 1500) * j) / PLAYBACK_RATE,
+          ) *
+          Math.exp(-j / (PLAYBACK_RATE * 0.006)),
+      );
+  }
+  if (plan.cycles)
+    for (let j = 0; j < Math.min(529, pcm.length); j++)
+      pcm[pcm.length - 1 - j] *= j / 529;
+  const bodyDuration = stepDuration(config.bpm, config.subdivision) * span;
   return {
-    pcm: render(config, span),
-    logicalDuration: stepDuration(config.bpm, config.subdivision) * span,
+    pcm,
+    logicalDuration: introDuration + bodyDuration,
     repetitions: span / config.steps,
+    introDuration,
+    loop: !plan.cycles,
+    targetDuration: plan.cycles ? bodyDuration : null,
   };
 }

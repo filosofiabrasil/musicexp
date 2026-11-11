@@ -1,10 +1,10 @@
-# PANDEIRO.APP — Estudos de percussão
+# PANDEIRO.APP — Ler, investigar, comparar
 
-Laboratório de estudo do pandeiro em React Native / Expo SDK 54. A versão **1.1.0** organiza leitura rítmica, articulações, amostras reais e documentação de tomadas. O foco é precisão de escrita, escuta comparativa e análise temporal, com ferramentas úteis à formação em percussão de concerto.
+Laboratório de estudo do pandeiro em React Native / Expo SDK 54. A versão **1.2.0** conecta leitura, escuta e prática: formule uma pergunta, prepare uma escrita, execute uma tomada de duração conhecida e compare as condições e os resultados.
 
-Os 148 ritmos tradicionais mantêm os seus contextos e referências. Os oito estudos técnicos são propostas originais do projeto; não são transcrições de obras eruditas ou de métodos. A aplicação não substitui revisão por professor e não certifica técnica instrumental.
+A tela inicial abre um estudo original em 4/4. A biblioteca conserva os 148 ritmos e suas referências; o atlas organiza 43 gravações em nove famílias. Os oito estudos técnicos são propostas originais do projeto, sem atribuição a compositores ou métodos externos.
 
-## Experimentar sem instalar dependências
+## Abrir o pacote pronto
 
 Instale Node.js LTS, extraia o ZIP e abra um terminal na pasta que contém `package.json`:
 
@@ -12,111 +12,109 @@ Instale Node.js LTS, extraia o ZIP e abra um terminal na pasta que contém `pack
 npm run preview
 ```
 
-Acesse **http://localhost:8080**. Deixe o terminal aberto; Ctrl+C encerra. Para atualizar de uma versão antiga, encerre o servidor, extraia em outra pasta, inicie novamente e recarregue com Ctrl+F5. O rodapé mostra a versão.
+Acesse **http://localhost:8080**. A preview incluída funciona sem instalar dependências. Deixe o terminal aberto; Ctrl+C encerra. Para atualizar, encerre o servidor anterior, extraia em outra pasta e recarregue com Ctrl+F5. Confira **v1.2.0** no rodapé.
 
-## Áreas do laboratório
+## Um primeiro estudo
 
-- **Prática:** escrita em três linhas, inspeção de unidades, recorte para repetição, roda, barras e gráfico de erro. Permite isolar uma articulação, ajustar a referência sonora e registrar um resumo da execução.
-- **Estudos e escrita:** oito exercícios de silêncio, alternância, acentos, tercinas, sextinas, 6/8 e 2+2+3. Editor de 1 a 32 unidades, com validação de letras e agrupamento aditivo. O rascunho é preservado ao navegar entre áreas durante a sessão.
-- **Articulações e sons:** nove famílias e 43 gravações isoladas. Pré-escuta, escolha de amostra por articulação, descrição do contato, questões de escuta e limites de identificação.
-- **Caderno:** até 50 resumos locais com observações. Exporta a tomada atual em JSON/CSV, atualiza o mesmo registro sem duplicá-lo, permite desfazer remoção e oferece recuperação dos dados brutos quando o armazenamento contém conteúdo ilegível.
+1. Na Prática, leia a alternância P–D–B–D. Ouça posições individuais e confira o significado das letras no atlas.
+2. Escreva uma pergunta, por exemplo: “O intervalo entre D e B permanece regular quando o clique some?”.
+3. Escolha **Tomada de 4 ciclos**, um andamento confortável e a entrada por pads/teclado ou microfone. Inicie; quatro semínimas de preparação antecedem a execução.
+4. Ao terminar, registre o resumo no caderno. Escreva o que percebeu por escuta antes de interpretar apenas os números.
+5. Reinicie e repita mantendo os parâmetros. Selecione as duas tomadas no caderno para comparar.
+6. Depois experimente **Memória de pulso**: guia no primeiro ciclo e clique nos dois primeiros, quando ligados. Os dois últimos ciclos não recebem novos ataques de referência.
 
-A interface usa tipografia serifada para títulos, texto sem serifa para leitura e monoespaçada para dados. Navegação de teclado e estados de seleção têm atributos acessíveis explícitos na web. A leitura musical pode ser rolada horizontalmente em telas pequenas.
+O [guia de estudo](docs/GUIA_DE_ESTUDO.md) desenvolve esse protocolo e os limites de interpretação das medidas.
 
-![Prática: escrita, posições, roda e parâmetros de estudo](docs/images/pratica.png)
+## Leitura e contagem
 
-Outras telas: [estudos e editor](docs/images/estudos.png), [atlas sonoro](docs/images/atlas.png), [caderno](docs/images/caderno.png) e [celular](docs/images/celular.png). O registro mostrado no caderno é um exemplo de conferência da interface, sem avaliação de um estudante.
+A leitura usa **uma linha de percussão**, com figuras de duração, pausas, clave de percussão, compassos e quiálteras. As letras sob as figuras identificam articulações do catálogo. O **Mapa de articulações** é uma grade separada, sem alturas afinadas.
 
-## Unidades musicais: o que o app assume
+O exemplo `ADBDPDBD`, com quatro unidades por semínima, contém **oito semicolcheias = duas semínimas**. Ao escolher 2/4, a tela mostra um compasso com dois tempos; cada tempo conta suas quatro subdivisões:
 
-**O BPM é sempre referido à semínima.** A subdivisão informa quantas unidades iguais cabem em uma semínima:
+```text
+Compasso 1    tempo 1             tempo 2
+Subdivisão    1  2  3  4          1  2  3  4
+Articulação   A  D  B  D          P  D  B  D
+Índice        01 02 03 04         05 06 07 08
+```
 
-| Unidades por semínima | Leitura da grade          |
-| --------------------- | ------------------------- |
-| 2                     | Colcheias                 |
-| 3                     | Tercinas de colcheias     |
-| 4                     | Semicolcheias             |
-| 6                     | Sextinas de semicolcheias |
-| 8                     | Fusas                     |
+Os índices 01… servem à edição e aos recortes. Eles não são tempos. A coordenada de inspeção informa semínima e subdivisão explicitamente, sem a antiga abreviação `1+1/4`.
+
+Em 2/4, 3/4 e 4/4, os tempos reiniciam em cada compasso. Em 6/8, 9/8 e 12/8, a contagem destaca pulsos de semínima pontuada. Em 7/8, os grupos são identificados, inclusive a escolha 2+2+3. Sem fórmula declarada, aparecem semínimas consecutivas do ciclo. A fórmula de estudo é uma escolha explícita, com opções limitadas às extensões e grupos representáveis na grade; o app não deduz a métrica só pelo nome do ritmo.
+
+As travessas quebram em pausas, compassos e fronteiras de quiálteras. Quiálteras incompletas são identificadas. A escrita representa os eventos da grade: cada letra inicia um ataque e cada ponto representa ausência de um novo ataque. As pausas desenhadas não executam abafamento nem cortam a ressonância do áudio. O modelo não edita livremente durações sustentadas, ligaduras, polifonia ou repertório MusicXML.
+
+![Exemplo corrigido: oito semicolcheias em 2/4](docs/images/escrita.png)
+
+## Andamento e referências
+
+O campo BPM refere-se sempre à **semínima**:
+
+| Unidades por semínima | Valor da unidade            |
+| --------------------- | --------------------------- |
+| 2                     | Colcheia                    |
+| 3                     | Colcheia em tercina 3:2     |
+| 4                     | Semicolcheia                |
+| 6                     | Semicolcheia em sextina 6:4 |
+| 8                     | Fusa                        |
 
 `duração da unidade = 60 / BPM / subdivisão`.
 
-**Ciclo não é sinônimo de compasso.** Um ciclo de sete semicolcheias dura 1,75 semínimas e não recebe automaticamente uma fórmula de compasso. A biblioteca identifica a origem da grade; alguns valores são inferidos das descrições ou adotados como grade operacional. O estudante pode reinterpretá-los. Fórmulas de compasso aparecem nos estudos originais em que foram explicitamente definidas.
+Em 6/8, seis colcheias somam três semínimas, organizadas em dois pulsos compostos. A 100 BPM de semínima, o pulso de semínima pontuada ocorre a aproximadamente 66,7 por minuto; a interface mostra essa conversão.
 
-O agrupamento aditivo também é independente: em 7/8, sete colcheias podem ser agrupadas como 2+2+3. Em 6/8, os dois grupos de três colcheias correspondem a semínimas pontuadas; a referência numérica do campo BPM continua sendo a semínima.
+O clique pode marcar semínimas, cada unidade da grade ou os grupos escolhidos. Em ciclos fracionários, a semínima continua através das voltas. Na exploração livre, o buffer fecha simultaneamente o ciclo e a fase do clique quando necessário; não usa reinício de mídia HTML a cada volta.
 
-### Três referências de clique
+| Programa           | Preparação     | Corpo da tomada                                                                                  |
+| ------------------ | -------------- | ------------------------------------------------------------------------------------------------ |
+| Exploração livre   | Sem preparação | Repetição contínua                                                                               |
+| Tomada de 4 ciclos | 4 semínimas    | 4 ciclos, referências conforme os controles                                                      |
+| Memória de pulso   | 4 semínimas    | Guia ligado no ciclo 1; clique ligado nos ciclos 1–2; ciclos 3–4 sem novos ataques de referência |
 
-- **Pulso:** semínimas regulares, mesmo que a volta do ciclo caia entre dois pulsos.
-- **Subd.:** cada unidade da grade, com indicação diferenciada da semínima.
-- **Grupos:** início de cada grupo do ciclo; os intervalos podem ser diferentes, por exemplo 2+2+3.
+A preparação não registra golpes. Os programas finitos encerram no próprio buffer de áudio. A frase escrita no objetivo e o programa usado acompanham o registro. No microfone, o guia é desligado; o clique pode ser ligado com fones. Caudas de samples podem continuar ressoando após o último ataque de referência. Nos dois últimos ciclos de Memória, o cursor, os contadores e os resultados parciais ficam ocultos, mantendo o registro dos golpes para o final.
 
-O buffer fecha simultaneamente o ciclo escrito e a fase da semínima por meio do mínimo múltiplo comum quando necessário. Em sete semicolcheias a 100 BPM, o ciclo dura 1,05 s e o buffer contém quatro ciclos (4,2 s). O clique continua a cada 0,6 s. Isso evita tanto a pausa do player HTML corrigida em 1.0.1 quanto um reinício artificial da pulsação em ciclos fracionários.
+## Escrever e conservar variações
 
-## Notação e articulações
+Em **Estudos e escrita**, use um dos oito estudos, traga a escrita atual ou escreva de 1 a 32 unidades. É possível pintar articulações/pausas, alternar acentos com a ferramenta `>`, girar o ciclo uma unidade, escolher subdivisão, grupos e compasso.
 
-A escrita em três linhas é **uma convenção didática própria**. A posição vertical indica famílias de articulação, sem equivalência a altura afinada ou frequência em Hz. As letras desambiguam os nove sons. Os símbolos não reproduzem os sistemas de Luiz Almeida da Anunciação ou Carlos Stasi.
+**Aplicar** envia a escrita para a prática. **Salvar escrita** conserva uma definição na biblioteca pessoal, com até 30 entradas. Salvar novamente uma definição idêntica não duplica; acentos, métrica ou nomes diferentes formam outras versões. Os rascunhos ainda não salvos permanecem apenas durante a sessão aberta. Ao editar o texto da sequência, os acentos são limpos para evitar posições órfãs.
 
-| Código | Vocabulário do catálogo           | Família                           |
-| ------ | --------------------------------- | --------------------------------- |
-| P      | Grave solto de polegar            | Membrana / graves                 |
-| A      | Grave abafado                     | Membrana / graves                 |
-| Q      | Grave de dedos                    | Membrana / graves                 |
-| D      | Pontas dos dedos                  | Condução                          |
-| B      | Base da mão, chamada punho no app | Condução                          |
-| M      | Médio, rótulo dos arquivos MEDIO  | Identificação técnica a confirmar |
-| T      | Tapa de mão                       | Ataque seco                       |
-| X      | Tapa de polegar                   | Ataque seco                       |
-| R      | Rulo gravado                      | Textura                           |
-| .      | Ausência de novo ataque           | Pausa da grade                    |
+A biblioteca pessoal permite reabrir, praticar, remover/desfazer e exportar JSON. Usa armazenamento local; não há sincronização em nuvem ou importador nesta versão. Falhas de leitura bloqueiam a sobrescrita e permitem exportar o conteúdo preservado. Falhas de espaço conservam o editor e os registros existentes.
 
-Cada unidade tem a mesma duração na grade. Uma pausa não corta automaticamente a ressonância do sample. Rulo é uma textura gravada; a captura atual não avalia a regularidade de um rulo executado. M não é apresentado como uma identificação anatômica confirmada. O app não mede afinação, altura temperada ou qualidade artística do timbre.
+## Atlas e escuta
 
-## Referência sonora
+| Código    | Articulação do catálogo                                                |
+| --------- | ---------------------------------------------------------------------- |
+| P / A / Q | Grave solto de polegar / grave abafado / grave de dedos                |
+| D / B     | Pontas dos dedos / base da mão, chamada punho no app                   |
+| T / X     | Tapa de mão / tapa de polegar                                          |
+| M         | Médio, rótulo dos arquivos MEDIO; identificação técnica a confirmar    |
+| R         | Rulo gravado; textura, sem avaliação de regularidade do rulo executado |
 
-Os 43 M4A de golpes isolados são preservados em `assets/samples/`. O clipe longo não identificado `a.m4a` foi retirado da distribuição do app; continua no ZIP original enviado pelo usuário.
+Os 43 M4A originais isolados permanecem em `assets/samples/`. O clipe longo não identificado `a.m4a` foi retirado da distribuição; permanece no anexo original do usuário. As variantes de reprodução são mono em 44,1 kHz, com silêncio inicial recortado, pico de referência 0,8 e fade final de 12 ms. As caudas não são limitadas a 500 ms. Metadados estão em `src/data/sound-catalog.json`.
 
-- **Reprodução:** variantes mono em 44,1 kHz, recorte do silêncio inicial, referência de pico 0,8 e fade final de 12 ms. As caudas não são limitadas artificialmente a 500 ms. Origem, número de frames, duração e recorte constam no catálogo.
-- **Análise de timbre:** banco separado em 16 kHz. A taxa efetiva da captura, quando disponível, aparece na calibração e nos dados exportados.
-- **p / mp / mf / f:** ganhos relativos aplicados ao guia. Acentos escritos aumentam o ganho de referência. Esses controles não simulam camadas acústicas de dinâmica nem medem intensidade em dB SPL.
-- **Volume de saída:** muda o volume sem zerar a tomada. A configuração exportada é um retrato do estado final; o volume pode ter variado durante a execução.
+Os níveis p/mp/mf/f e os acentos alteram ganhos relativos do guia; não são camadas acústicas gravadas nem medidas em dB SPL. O volume de saída pode mudar sem zerar a tomada; a configuração exportada registra seu estado final.
 
-Escolher outra amostra, escrita, recorte, clique, nível do guia ou compensação de captura inicia outra tomada. Reaplicar um estudo também cria uma tomada independente, mesmo quando as notas coincidem. Registre o resumo ou exporte os eventos antes de alterar esses parâmetros.
+O **Laboratório de escuta** oferece quatro pares: P/A, D/B, T/X e D/Q. Primeiro ouça referências identificadas; depois reconheça um arquivo oculto sorteado entre gravações do par. É necessário ouvir antes de responder e cada pergunta pontua uma vez. A revelação permite conferir o arquivo. Esse resultado mede identificação de referências, sem avaliar a execução física do instrumento. Os resultados da rodada não são persistidos.
 
-## Medidas e microfone
+## Caderno e dados
 
-Os golpes vêm de pads, teclado ou captura. Não há eventos de aluno simulados.
+O caderno guarda até 50 **resumos**, condições de estudo e observações. Os eventos individuais de tomadas antigas não são armazenados: exporte a tomada atual antes de mudar sua configuração.
 
-```ts
-{ t, nominal, kind, source?, confidence? }
-// t e nominal: segundos no relógio da reprodução
-// erro_ms = 1000 * (t - nominal)
-```
+- JSON: escrita original, recorte, objetivo, programa, métrica, configuração final, fontes, resumo e golpes.
+- CSV: um golpe por linha, com t/nominal em segundos, erro em ms, código esperado/tocado, origem, índice heurístico, taxas, ciclo e índice da unidade original. UTF-8 e vírgula, com aspas conforme RFC 4180; no Excel, importe escolhendo UTF-8 e separador vírgula.
+- CSV, JSON e resumo usam o mesmo identificador. Salvar novamente atualiza a mesma tomada.
+- A comparação de duas tomadas mostra erro médio absoluto, dispersão, viés, posições corretas e quantidade de golpes. Diferenças de escrita, andamento, entrada, ganho ou referências são explicitadas; números de protocolos diferentes não isolam uma mudança de desempenho.
+- Remoções podem ser desfeitas. Arquivos nativos usam gravação temporária e cópia anterior; conteúdo ilegível é preservado para recuperação. Exportações nativas compartilham arquivos de cache via expo-sharing.
 
-A associação usa a unidade mais próxima. Um acerto exige articulação correta e erro dentro da janela escolhida, uma vez por posição concluída. MAE é o erro médio absoluto; σ é o desvio-padrão populacional dos erros; o viés é a média com sinal. As métricas temporais incluem todos os golpes registrados, inclusive os de articulação divergente. O diagnóstico de ausência, articulação divergente, erro temporal, golpe em pausa e repetição usa categorias que podem se sobrepor.
+A associação temporal usa a unidade mais próxima. Acertos exigem articulação e tempo dentro da janela, uma vez por posição concluída. MAE, média com sinal e desvio-padrão populacional incluem todos os golpes registrados. Diagnósticos podem se sobrepor. As medidas descrevem ajuste local à grade; não reconhecem um deslocamento inteiro de frase ou avaliam interpretação artística.
 
-Essas medidas descrevem **ajuste local à grade**. Não identificam de maneira geral um deslocamento inteiro de frase e não constituem uma avaliação de interpretação musical.
+## Microfone
 
-A captura é experimental. O detector usa envelope de 2 ms, janela de timbre de 40 ms, intervalo mínimo entre ataques de 65 ms e referências espectrais. A medida de cruzamentos de zero é normalizada pela taxa da captura. O índice de semelhança é heurístico, sem significado de probabilidade calibrada.
+O detector/classificador é experimental: envelope de 2 ms, janela de timbre de 40 ms, intervalo mínimo entre ataques de 65 ms e referências espectrais em 16 kHz. A taxa efetiva da captura aparece no painel e na exportação; o índice de semelhança é heurístico, sem interpretação de probabilidade calibrada.
 
-Para calibrar, selecione Microfone, use fones e abra a articulação desejada em **Grade, fontes e calibração**. Toque três ataques isolados e selecione a letra novamente para concluir. Até oito exemplos por classe ficam na sessão. O guia e o clique são desligados ao ativar a captura, para reduzir a realimentação pelo alto-falante; o clique pode ser ligado com fones.
+Na web, use HTTPS ou localhost com AudioWorklet. No celular, a captura requer development build. Para calibrar: selecione Microfone, abra **Grade, fontes e calibração**, escolha a letra, toque três ataques isolados e selecione a mesma letra novamente. Até oito exemplos por classe ficam na sessão. Use fones; a pré-escuta fica desativada durante a captura.
 
-A compensação manual desconta um atraso fixo configurado. Não há certificação de precisão física de ±15 ms, alinhamento automático de latência, taxa de reconhecimento medida em alunos ou avaliação validada de dinâmica, rulos e golpes sobrepostos. Erros do classificador podem aparecer como desacordos musicais; confirme a execução por escuta e observação externas.
-
-Na web, o microfone requer HTTPS ou localhost e AudioWorklet. No celular, requer development build. Permissões e callbacks de tentativas canceladas são isolados, e a captura é encerrada ao voltar para Toque ou sair do app. A pré-escuta não funciona durante a captura, evitando contaminar a análise.
-
-## Caderno e exportação
-
-O caderno guarda **resumos e observações**, sem áudio ou eventos individuais de tomadas antigas. Para preservar os golpes de uma execução, exporte a tomada atual antes de mudar sua configuração.
-
-- JSON: escrita original, recorte, configuração final, amostras, observações, unidades, resumo e todos os golpes da tomada atual.
-- CSV: um golpe por linha; t e nominal em segundos, erro em ms, código, origem e índice heurístico. Usa UTF-8 e vírgulas conforme RFC 4180. No Excel, importe escolhendo UTF-8 e separador vírgula.
-- Mesmo identificador de tomada em CSV, JSON e resumo salvo. Salvar novamente atualiza o resumo, sem duplicá-lo.
-- Falhas de leitura ou espaço não apagam os dados existentes. Um caderno ilegível pode ser exportado como texto de recuperação.
-- O armazenamento é local ao navegador/origem ou ao app nativo. Limpar os dados do navegador pode apagá-lo. Faça exportações externas; não há nuvem ou importador de cadernos nesta versão.
-- Na web, o arquivo é baixado; no Android/iOS, o compartilhamento nativo usa arquivos de cache via expo-sharing.
-
-Leia o [guia de estudo](docs/GUIA_DE_ESTUDO.md) para um protocolo de comparação de tomadas e os [critérios de validação](docs/VALIDACAO.md) para as verificações e limites.
+A compensação manual desconta um atraso fixo e inicia outra tomada ao mudar. Não foram medidas latência ponta a ponta ou taxa de reconhecimento em alunos; rulos, ataques sobrepostos e diferenças de instrumento/sala exigem ensaio físico. A tolerância configurada não certifica resolução física de ±15 ms. Confira os [testes e limites](docs/VALIDACAO.md).
 
 ## Desenvolvimento
 
@@ -129,46 +127,23 @@ npm test
 npm run web
 ```
 
-Expo web: http://localhost:8081. Para pads no Expo Go: `npm start -- --go`.
-
-```sh
-npm run android:build
-# No macOS com Xcode:
-npm run ios:build
-```
-
-O módulo nativo de PCM é `@siteed/audio-studio`. A exportação de bundles não equivale à compilação ou instalação de APK/IPA.
+Expo web: http://localhost:8081. Para pads no Expo Go: `npm start -- --go`. Microfone nativo: `npm run android:build`, ou `npm run ios:build` no macOS com Xcode. Exportar bundles não compila APK/IPA.
 
 ```sh
 npx playwright install chromium
 npm run test:browser
-# Linux/macOS: incluir captura de um WAV conhecido pelo microfone virtual
 python tools/mic-fixture.py
 PANDEIRO_MIC_WAV="$PWD/.test-fixtures/microphone-fixture.wav" npm run test:browser
 ```
 
-No PowerShell, defina `$env:PANDEIRO_MIC_WAV` com o caminho absoluto. O teste alimenta o dispositivo de captura virtual; o detector real produz os eventos.
+No PowerShell, defina `$env:PANDEIRO_MIC_WAV` com o caminho absoluto. O WAV alimenta o dispositivo de captura virtual do Chromium; o detector real produz os eventos.
 
-Regerar dados: `npm run import:rhythms`. Regerar análise e reprodução: `npm run build:sounds` (exige FFmpeg). Os arquivos derivados já estão incluídos; FFmpeg não é necessário para usar o app. Exportar plataformas: `npx expo export --platform all`.
+Regerar catálogos: `npm run import:rhythms`. Regerar análise e reprodução: `npm run build:sounds` (FFmpeg). Regerar os contornos: `python tools/build-glyphs.py` (fontTools). Os derivados já vêm no projeto; essas ferramentas não são necessárias para usar a preview. Exportar plataformas: `npx expo export --platform all`.
 
-## Organização do código
+## Fontes e licenças
 
-```text
-App.tsx                       composição das áreas e da tomada
-src/music/                    agrupamentos, unidades, articulações e estudos
-src/components/               leitura, atlas, editor, caderno e controles
-src/audio/                    reprodução, samples, microfone e análise
-src/study/records.ts           resumos, diagnóstico, validação e CSV
-src/storage/                  persistência e exportação por plataforma
-src/hooks/                    sessão e caderno
-src/pandeiro-ui-base/          três visualizações e tipos compartilhados
-src/data/                     catálogos e bancos derivados
-assets/samples/               43 originais isolados
-assets/kit-44100/              WAVs de reprodução
-assets/kit/                   referências antigas de análise em 16 kHz
-tests/                        lógica, áudio e navegação no Chromium
-```
+Catálogos originais: `src/data/ritmos.source.js` e `src/data/ritmos-PADBT.json`, preservados dos anexos. Referência sobre notação: GIANESELLA, Eduardo F. _O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro_. Música Hodie, v. 12, n. 2 (2012), p. 188–200, publicado em 2013. [Página editorial](https://revistas.ufg.br/musica/article/view/23359) e [artigo](https://revistas.ufg.br/musica/article/download/23359/13753/0). O artigo discute sistemas de Anunciação e Stasi e exemplifica o samba como oito semicolcheias em 2/4. O app usa leitura de duração em linha única e letras próprias do catálogo; não reproduz aqueles sistemas ou partituras.
 
-Fontes dos ritmos: `ritmos.source.js` e `ritmos-PADBT.json`, preservados dos anexos. Bibliografia sobre sistemas de notação: GIANESELLA, Eduardo F. _O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro_. Música Hodie, v. 12, 2012. [Página da revista](https://revistas.ufg.br/musica/article/view/23359). Os metadados foram conferidos na página editorial; a grafia do app é independente.
+Os contornos Bravura e as fontes de interface têm licenças em `licenses/`; veja [materiais e dependências](THIRD_PARTY_NOTICES.md). As referências bibliográficas dos ritmos foram preservadas, sem conferência integral de cada obra citada. Não são distribuídos PDFs de métodos ou partituras protegidas.
 
-Licenças das fontes Inter Tight, JetBrains Mono e Cormorant Garamond em `licenses/`. Dependências mantêm as licenças dos pacotes oficiais. Não há PDFs de métodos ou partituras protegidas distribuídos.
+Capturas: [prática](docs/images/pratica.png), [escrita corrigida](docs/images/escrita.png), [estudos](docs/images/estudos.png), [escuta](docs/images/escuta.png), [caderno](docs/images/caderno.png), [comparação](docs/images/comparacao.png) e [celular](docs/images/celular.png).

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import { useJournal } from "../hooks/useJournal";
 import { exportFile } from "../storage/exportFile";
 import { SessionExport, sessionCsv } from "../study/records";
 import { THEME as T } from "../pandeiro-ui-base/types";
 import { Button, Label, fonts } from "./ui";
+import { TakeComparison } from "./TakeComparison";
+import { PROGRAMS } from "../music/program";
 export function StudyJournal({
   journal,
   notes,
@@ -22,6 +24,7 @@ export function StudyJournal({
   savedMessage: string;
   exportError: (message: string) => void;
 }) {
+  const [compared, setCompared] = useState<string[]>([]);
   const current = session();
   const download = async (format: "json" | "csv") => {
     try {
@@ -210,9 +213,36 @@ export function StudyJournal({
             · erro médio absoluto {record.metrics.mae.toFixed(1)} ms · σ{" "}
             {record.metrics.std.toFixed(1)} ms · {record.metrics.count} golpes
           </Text>
+          {!!record.settings.goal && (
+            <Text style={body}>Intenção: {record.settings.goal}</Text>
+          )}
+          <Text style={body}>
+            {
+              PROGRAMS.find(
+                (program) => program.id === (record.settings.program ?? "free"),
+              )?.name
+            }{" "}
+            · {record.settings.meter ?? "sem fórmula declarada"} ·{" "}
+            {record.elapsed.toFixed(1)} s
+          </Text>
           {!!record.notes && (
             <Text style={{ ...body, color: T.ivory }}>{record.notes}</Text>
           )}
+          <Button
+            label={`Comparar tomada ${record.id}`}
+            active={compared.includes(record.id)}
+            onPress={() =>
+              setCompared((current) =>
+                current.includes(record.id)
+                  ? current.filter((id) => id !== record.id)
+                  : [...current.slice(-1), record.id],
+              )
+            }
+          >
+            {compared.includes(record.id)
+              ? "Selecionada para comparar"
+              : "Selecionar para comparar"}
+          </Button>
           <Button
             label={`Remover tomada ${record.id}`}
             onPress={() => void journal.remove(record.id).catch(() => {})}
@@ -221,6 +251,11 @@ export function StudyJournal({
           </Button>
         </View>
       ))}
+      <TakeComparison
+        records={journal.records.filter((record) =>
+          compared.includes(record.id),
+        )}
+      />
     </View>
   );
 }

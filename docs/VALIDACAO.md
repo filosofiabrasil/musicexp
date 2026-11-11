@@ -1,55 +1,41 @@
-# Validação 1.1.0 — 10 de novembro de 2026
+# Validação 1.2.0 — 10 de novembro de 2026
 
-## Executado neste ambiente
+## Verificações
 
-- `npm install`: concluído; `package-lock.json` incluído. Os módulos Expo Asset, Constants e Core foram fixados nas versões do SDK 54 para evitar resolução automática de peers de outro SDK.
-- `npm run typecheck`: aprovado, TypeScript estrito.
-- `npm test`: 33 testes aprovados. Cobrem catálogos, os oito estudos originais, escrita válida/inválida, recortes, métrica, continuidade do pulso, os 43 WAVs de reprodução, classificação, diagnóstico, exportação CSV e cinco cenários de persistência com falha de disco simulada.
-- Chromium/Playwright: 26 testes aprovados. Incluem os 12 testes anteriores e verificações de pulso em ciclo fracionário, 6/8, editor, reaplicação de escrita, recortes, isolamento, volume, variantes, compensação de captura, exportações, recuperação/limite de armazenamento, fontes, teclado e layout de 320 px.
-- O teste de captura injeta um WAV dos samples no **dispositivo virtual de áudio do Chromium**. O AudioWorklet, o detector e o classificador do app processam o sinal. Não há injeção de eventos de golpe.
-- Inspeção visual das três visualizações e das quatro áreas, em desktop e celular. As telas ficam contidas no viewport; a escrita extensa tem rolagem interna. Capturas da versão estão em `docs/images/`.
-- Versão web de produção testada com reprodução, teclado, pausa, troca de visualização, estudos, variante sonora, caderno e download JSON. Confirmados versão 1.1.0, quatro golpes exportados e nenhum erro de console, JavaScript ou carregamento de recursos nesse percurso.
-- O ZIP foi extraído em outra pasta, sem `node_modules`. `npm run preview` iniciou com os módulos internos do Node, e o mesmo percurso de navegador passou nessa cópia. CRC, quantidade de samples e inclusão das fontes da preview foram conferidos no arquivo.
-- `npx expo install --check`: versões compatíveis com o SDK.
-- `npx expo config --type prebuild --json`: plugins de configuração avaliados.
-- `npx expo export --platform all`: bundles web, Android e iOS gerados.
+- `npm install` e `npm run typecheck`: concluídos; TypeScript estrito e lockfile incluído.
+- `npm test`: **43 testes aprovados**. Incluem os catálogos, os 43 WAVs, o modelo temporal, classificação, persistência e os novos casos de notação, métricas de compasso, programas, biblioteca pessoal, comparação e seleção das perguntas de escuta.
+- Playwright/Chromium: **35 testes aprovados**, incluindo captura por dispositivo virtual. Os casos acrescentados exercitam o exemplo da imagem (oito semicolcheias em 2/4), contagem composta de 6/8, preparação sem pontuação, término finito, silêncio do exercício de memória, salvamento/recarga/desfazer de escritas, corrupção/quota, identificação auditiva e comparação de protocolos.
+- Após ocultar o apoio visual no exercício de memória, os testes afetados foram executados novamente: preparação, ausência de cursor no silêncio e retorno dos resultados ao terminar. Os ensaios usam andamentos mais lentos para observar os estados sem depender de janelas de 250 ms.
+- O teste de captura injeta WAV no dispositivo virtual do Chromium. AudioWorklet, detector e classificador produzem os eventos a partir do PCM, sem injeção de golpes fictícios.
+- O teste da tomada finita compara quantidade de frames, duração de preparação/corpo e término do buffer. O teste de memória verifica ausência de amostras diferentes de zero no trecho final e ausência do cursor naquele trecho.
+- `npx expo install --check`: dependências compatíveis com SDK 54.
+- Bundles de produção web, Android e iOS exportados. A exportação JavaScript/Hermes não compila o código Kotlin/Swift.
 
-## Limites da validação
+## Evidência musical
 
-- Não foi compilado ou instalado um APK/IPA; não há Android SDK ou Xcode neste ambiente. A exportação de JavaScript/Hermes não compila o código Kotlin/Swift do módulo de microfone.
-- O adaptador de captura nativa está implementado e configurado para development build, mas a compatibilidade em execução do módulo `@siteed/audio-studio` com cada dispositivo ainda precisa ser validada no hardware.
-- Não foi medida a latência ponta a ponta nem uma taxa de reconhecimento de alunos. O ensaio com um WAV conhecido verifica a integração; ele não mede generalização para outro pandeiro, sala, microfone ou técnica.
-- As métricas de ms refletem os timestamps e a compensação disponíveis. A tolerância de 15 ms é configurável, sem promessa de resolução física de 15 ms.
-- A janela de classificação adiciona 40 ms; a entrega do buffer nativo pode adicionar mais atraso. O intervalo mínimo entre ataques é 65 ms. Rulos e sobreposição exigem validação adicional.
-- Os oito estudos são propostas originais do projeto, sem validação pedagógica externa. A escrita própria não foi certificada como sistema notacional para repertório erudito. Não há importador MusicXML, edição de alturas afinadas ou avaliação automática de interpretação/dinâmica.
-- As falhas de disco nativas foram exercitadas com um adaptador de arquivos em memória. A exportação Android/iOS verifica tipos e integração do bundle; os mecanismos reais de armazenamento e compartilhamento ainda requerem ensaio em dispositivo.
+O exemplo ADBDPDBD é tratado como oito semicolcheias a quatro unidades por semínima, somando duas semínimas. Em 2/4, o teste confere dois tempos e as subdivisões 1–4 em cada um. A contagem reinicia por compasso em ciclos de mais de uma barra. Em 6/8 com colcheias, o teste confere dois pulsos de três unidades; em 7/8, confere grupos aditivos.
 
-## Conteúdo da entrega
+As durações, clave, bandeirolas e pausas são contornos Bravura/SMuFL. A representação em linha única foi separada da grade de articulações. O modelo ainda é uma grade de ataques: pontos não comandam abafamento e não há edição livre de durações sustentadas, ligaduras ou polifonia. Fórmulas com fronteiras que não cabem na grade ficam desabilitadas, sem afirmar que essas combinações sejam impossíveis na teoria musical.
 
-O ZIP contém o projeto completo, fontes de dados preservadas, sons originais/derivados, testes, lockfile e uma versão web exportada para conferência local. Não inclui `node_modules`, caches, gravações de sessão, vídeos antigos, projetos Remotion ou builds assinados.
+Foi consultado o artigo de Gianesella na Música Hodie, inclusive o exemplo textual de oito semicolcheias de samba em 2/4. O app não implementa ou certifica os sistemas de Anunciação/Stasi. As fontes dos 148 ritmos são dados preservados dos anexos, sem revisão integral das obras citadas.
 
-## Revisão musical e funcional 1.1.0
+## Limites físicos e pedagógicos
 
-O teste do ciclo de sete semicolcheias captura o `AudioBuffer` usado pelo app, mede seus ataques de clique e confirma intervalos de 0,6 s a 100 BPM, inclusive na virada de um buffer de 4,2 s. A interface continua mostrando os ciclos escritos de 1,05 s. A propriedade de fechamento entre pulso e ciclo foi conferida para todas as extensões de 1 a 32 unidades e as cinco subdivisões disponíveis.
+- Não foram compilados ou instalados APK/IPA; o ambiente não tem Android SDK ou Xcode. Os mecanismos nativos de captura, arquivos e compartilhamento requerem ensaio em dispositivo.
+- Os cenários de falha de disco foram testados com adaptador em memória. Os testes de quota/corrupção web exercitam o armazenamento do navegador.
+- O microfone não tem taxa de reconhecimento medida em alunos, instrumentos ou salas diferentes. O índice de semelhança é heurístico e não probabilístico. A janela de timbre adiciona 40 ms; o intervalo mínimo entre ataques é 65 ms. Rulos e sobreposição não têm avaliação validada.
+- Não foi medida a latência ponta a ponta ou certificada precisão física de ±15 ms. A atribuição à unidade mais próxima não alinha frases inteiras.
+- A comparação de duas tomadas é descritiva e verifica configurações registradas; o ganho final pode não representar todo o percurso e ajustes de calibração pessoal podem ter mudado. Ela não prova evolução, equivalência acústica ou significância estatística.
+- A identificação auditiva mede respostas sobre arquivos do banco e não técnica de execução. Os oito estudos e o percurso proposto não receberam validação pedagógica externa.
 
-Os 43 WAVs foram inspecionados em teste quanto a cabeçalho, taxa de 44.100 Hz, duração em frames, valores finitos e pico de referência. A seleção de variantes, os acentos e o ganho foram comparados no PCM resultante. O banco de análise em 16 kHz permanece independente.
+## Distribuição
 
-Os testes de caderno verificam persistência após recarga, atualização do mesmo identificador, remoção/desfazer, JSON/CSV coerentes, conteúdo ilegível preservado, erro de quota sem registro fictício e recuperação de uma gravação de arquivo interrompida. Reaplicar a mesma escrita e alterar a compensação de captura iniciam uma tomada independente.
+O percurso de produção foi executado no bundle web exportado: versão 1.2.0, salvamento de escrita após recarga, programa de memória, tomada concluída com 4 s de execução, dois golpes exportados em JSON, comparação de dois registros e identificação auditiva 1/1. Não foram observados erros de JavaScript, console ou carregamento de recursos nesse percurso. As capturas da produção estão em `docs/images/`. O mesmo percurso passou no ZIP extraído em outra pasta, sem `node_modules`, usando somente `npm run preview`. CRC, versões, quantidade de samples e inclusão das fontes foram conferidos no arquivo.
 
-Os metadados da referência de Gianesella foram conferidos na página editorial da Música Hodie. Os demais vínculos bibliográficos dos ritmos são dados de origem preservados; não representam conferência integral das obras citadas. As posições em três linhas são categorias de articulação, sem equivalência a frequência ou altura afinada.
+O ZIP inclui código, dados de origem, sons originais/derivados, símbolos/licenças, testes, lockfile e preview web. Não inclui dependências instaladas, caches, dados pessoais de sessão, projetos antigos de vídeo ou builds assinados. As imagens do caderno e as tomadas feitas para testar o pacote são exemplos de interface, sem avaliação de estudante.
 
-## Correção 1.0.1: intervalo entre voltas na web
+## Histórico relevante
 
-Foi reproduzido um ciclo nominal de 2,4 segundos com intervalos medidos de 2,5094, 2,5163 e 2,5332 segundos entre voltas usando o player HTML. Os samples do kit iniciam o ataque a cerca de 1 ms; não havia uma batida vazia adicionada ao padrão.
+Na versão 1.0.1, um ciclo nominal de 2,4 s foi medido em 2,5094–2,5332 s no player HTML. A troca por AudioBufferSourceNode removeu o intervalo entre voltas na web. O teste continua renderizando três voltas do buffer real em OfflineAudioContext e comparando a repetição dos frames.
 
-A reprodução web passou a usar um AudioBufferSourceNode em loop com o relógio do AudioContext. O teste de regressão renderiza três voltas do buffer efetivamente usado pelo app em OfflineAudioContext e compara todos os frames com a repetição exata do ciclo. Outro teste verifica a duração em frames de todos os 148 ritmos.
-
-Essa correção é específica do motor web; a reprodução nativa ainda exige validação em aparelho.
-
-## Revisão 1.0.2
-
-Antes das correções foram reproduzidas falhas em quatro testes de navegador: duas fontes simultâneas ao iniciar, áudio iniciando depois de alterar o BPM, erro tardio de permissão cancelada e atalho de início durante calibração. Um teste de lógica reproduziu a rejeição incorreta de golpes em exatamente ±15 ms.
-
-A suíte passou após as correções, com testes adicionais para serialização dos pedidos de microfone, foco do teclado, seleção de golpes nas barras, normalização entre taxas de captura e cancelamento de listeners/timeouts. O ensaio de captura continua usando o microfone virtual do Chromium; ele não mede taxa de acerto de reconhecimento acústico em hardware.
-
-O ajuste do ciclo de vida nativo foi verificado por tipos, testes da espera de carregamento e exportação Android/iOS. Não foi feito teste em celular físico nem compilação de APK/IPA nesta revisão.
+A versão 1.0.2 corrigiu início concorrente, reprodução tardia após mudança de configuração, permissões canceladas, foco de teclado, limite de ±15 ms e callbacks de captura obsoletos. A versão 1.1.0 separou reprodução em 44,1 kHz de análise em 16 kHz e manteve o clique de semínima regular em ciclos fracionários. Esses testes permanecem na suíte 1.2.0.

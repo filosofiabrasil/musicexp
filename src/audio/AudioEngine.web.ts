@@ -29,6 +29,11 @@ export class AudioEngine {
   private starting: Promise<boolean> | null = null;
   private output: GainNode | null = null;
   private volume = 1;
+  private intro = 0;
+  private looping = true;
+  private target: number | null = null;
+  finished = false;
+  onFinish?: () => void;
   running = false;
   ready = false;
 
@@ -37,6 +42,10 @@ export class AudioEngine {
     const playback = mixPlayback(config);
     this.buffer = bufferFromPcm(playback.pcm);
     this.durationScale = playback.logicalDuration / this.buffer.duration;
+    this.intro = playback.introDuration;
+    this.looping = playback.loop;
+    this.target = playback.targetDuration;
+    this.finished = false;
     this.output = audioContext().createGain();
     this.output.gain.value = this.volume;
     this.output.connect(audioContext().destination);
@@ -47,6 +56,7 @@ export class AudioEngine {
     if (this.starting) return this.starting;
     if (!this.ready || !this.buffer)
       return Promise.reject(new Error("O áudio ainda está sendo preparado."));
+    if (this.finished) return Promise.resolve(false);
     const generation = this.generation;
     const buffer = this.buffer;
     const ctx = audioContext();
@@ -60,14 +70,27 @@ export class AudioEngine {
         return false;
       const source = ctx.createBufferSource();
       source.buffer = buffer;
-      source.loop = true;
-      source.loopStart = 0;
+      source.loop = this.looping;
+      source.loopStart = this.intro / this.durationScale;
       source.loopEnd = buffer.duration;
       source.connect(this.output ?? ctx.destination);
       this.startedAt = ctx.currentTime;
+      const bodyDuration = buffer.duration - source.loopStart;
+      const position = this.elapsed / this.durationScale;
+      source.onended = () => {
+        if (this.source !== source || this.looping) return;
+        this.elapsed = (this.target ?? 0) + this.intro;
+        this.finished = true;
+        this.running = false;
+        source.disconnect();
+        this.source = null;
+        this.onFinish?.();
+      };
       source.start(
         this.startedAt,
-        (this.elapsed / this.durationScale) % buffer.duration,
+        this.looping && position >= source.loopStart
+          ? source.loopStart + ((position - source.loopStart) % bodyDuration)
+          : position,
       );
       this.source = source;
       this.running = true;
@@ -84,17 +107,24 @@ export class AudioEngine {
     this.volume = Math.max(0, Math.min(1, value));
     if (this.output) this.output.gain.value = this.volume;
   }
-  getTime = () =>
+  private rawTime = () =>
     this.elapsed +
     (this.running
       ? Math.max(0, audioContext().currentTime - this.startedAt) *
         this.durationScale
       : 0);
+  getTime = () => {
+    const time = this.rawTime() - this.intro;
+    return this.target === null ? time : Math.min(time, this.target);
+  };
   pause() {
     this.generation++;
     this.starting = null;
-    this.elapsed = this.getTime();
+    this.elapsed = this.rawTime();
+    if (this.target !== null && this.elapsed >= this.intro + this.target - 1e-8)
+      this.finished = true;
     this.running = false;
+    if (this.source) this.source.onended = null;
     this.source?.stop();
     this.source?.disconnect();
     this.source = null;
@@ -105,6 +135,9 @@ export class AudioEngine {
     this.output = null;
     this.buffer = null;
     this.elapsed = 0;
+    this.intro = 0;
+    this.target = null;
+    this.finished = false;
     this.ready = false;
   }
 }
@@ -138,7 +171,7 @@ export class PadSounds {
     const generation = this.generation,
       ctx = audioContext();
     if (ctx.state !== "running") await ctx.resume();
-    if (generation !== this.generation || !this.output) return;
+    if (generation !== this.generation || !this.output) return false;
     const voice = ctx.createBufferSource();
     voice.buffer = buffer;
     voice.connect(this.output);
@@ -148,8 +181,9 @@ export class PadSounds {
       this.voices.delete(voice);
     };
     voice.start();
+    return true;
   }
-  dispose() {
+  silence() {
     this.generation++;
     for (const voice of this.voices) {
       voice.onended = null;
@@ -157,6 +191,9 @@ export class PadSounds {
       voice.disconnect();
     }
     this.voices.clear();
+  }
+  dispose() {
+    this.silence();
     this.buffers.clear();
     this.output?.disconnect();
     this.output = null;

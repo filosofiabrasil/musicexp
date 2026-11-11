@@ -1,63 +1,60 @@
-# Guia de estudo: leitura, escuta e comparação
+# Protocolo de estudo: uma pergunta por tomada
 
-Esta proposta organiza observação musical e registro de dados. Não é um currículo certificado, uma transcrição de repertório de concerto ou substituição de acompanhamento docente.
+O objetivo é relacionar leitura, escuta e observação. Os exercícios do projeto são propostas próprias; esta organização não representa currículo certificado ou edição de repertório de concerto.
 
-## 1. Definir uma pergunta
+## Escolher a pergunta
 
-Escolha uma variável por tomada. Exemplos: o intervalo D–B se mantém regular? O grave abafado tem decaimento diferente do grave solto? O acento deslocado altera involuntariamente os ataques vizinhos? As pausas são lidas sem perder a referência da semínima?
+Defina algo observável: consigo alternar D e B sem alterar os intervalos? Mantenho a pulsação quando o clique desaparece? O acento provoca uma antecipação nos ataques vizinhos? Consigo identificar P/A por ataque e ressonância, sem olhar o nome do arquivo?
 
-Anote a pergunta no Caderno. Escolha uma gravação de referência no Atlas e mantenha-a durante a comparação.
+Escreva a intenção na Prática. Mantenha o mesmo instrumento, referência, andamento e entrada ao comparar.
 
-## 2. Tornar a escrita explícita
+## Conferir o que está escrito
 
-O BPM usa a semínima. A grade define 2, 3, 4, 6 ou 8 unidades por semínima. O agrupamento organiza essas unidades; não determina sozinho uma fórmula de compasso.
+Uma letra inicia um ataque. Um ponto representa ausência de novo ataque, desenhada como pausa da unidade. Isso não abafa o instrumento nem comanda o fim do sample. A grade ainda não representa livremente ligaduras ou durações sustentadas.
 
-No estudo 6/8, seis colcheias formam dois grupos de três. A 100 BPM de semínima, cada colcheia dura 0,3 s; cada grupo dura 0,9 s, equivalente a uma semínima pontuada a aproximadamente 66,67 pulsos por minuto. O ciclo inteiro dura 1,8 s.
+No exemplo ADBDPDBD a quatro unidades por semínima, há oito semicolcheias. Em 2/4 são dois tempos, cada um subdividido em quatro; os índices 01 a 08 não são oito tempos. A leitura rítmica em uma linha trata duração e contagem; o mapa separado trata articulações.
 
-No estudo 7/8 em 2+2+3, o mesmo andamento produz grupos de 0,6 s, 0,6 s e 0,9 s. Alterne Pulso e Grupos para ouvir a diferença, registrando tomadas separadas.
+Em 6/8, seis colcheias constituem dois pulsos de semínima pontuada. Se o campo de semínima está em 100, o pulso composto ocorre a aproximadamente 66,7 por minuto. Em 7/8 com 2+2+3, os grupos têm durações diferentes. O app limita as fórmulas de estudo às extensões e grupos representáveis na grade.
 
-Para um ciclo de sete semicolcheias, a duração é 1,75 semínimas; o app não o declara automaticamente como um compasso específico. Com Pulso selecionado, a semínima atravessa as voltas do ciclo sem reiniciar.
+## Escutar antes de tocar
 
-## 3. Relacionar articulação e som
+Use o atlas para comparar os arquivos. B indica base da mão; M conserva um nome de arquivo cuja técnica precisa de confirmação; R é uma textura gravada. Essas letras não são nomes de alturas afinadas.
 
-Use o Atlas para comparar P/A, D/Q e T/X. Observe ataque, ressonância e presença de platinelas. As letras representam articulações do catálogo; a posição vertical é categórica, sem altura afinada.
+No laboratório de escuta, ouça referências identificadas e depois o exemplo oculto. Tente identificar pela qualidade do ataque, platinelas e decaimento. Confira a revelação e repita. O placar descreve o reconhecimento dos arquivos usados; não é uma nota de execução instrumental.
 
-B significa base da mão, não o pulso anatômico. M preserva um rótulo de gravação sem identificação técnica definitiva. R é uma textura: ouvir um sample de rulo não equivale a avaliar a regularidade de um rulo executado.
+## Fazer tomadas comparáveis
 
-As pausas da grade indicam ausência de novo ataque, não abafamento automático da pele. Para estudar interrupção da ressonância, defina essa intenção nas observações e avalie-a por escuta; a referência digital não executa uma técnica de abafamento adicional entre notas.
+1. Comece com Exploração livre. Leia, ouça e escolha um andamento confortável.
+2. Selecione Tomada de 4 ciclos. Os quatro pulsos de entrada são semínimas e não pontuam. Execute durante os quatro ciclos seguintes.
+3. Ao terminar, anote o que ouviu e sentiu. Registre o resumo e exporte JSON/CSV para conservar os eventos.
+4. Reinicie e repita com as mesmas condições. Selecione os dois resumos no caderno.
+5. Observe diferenças de erro médio absoluto, dispersão, viés e quantidade de golpes. Verifique primeiro os avisos sobre mudanças de protocolo.
+6. Só então altere uma variável: andamento, articulação, recorte, acento ou referência. Faça outra comparação.
 
-## 4. Construir tomadas comparáveis
+Na Memória de pulso, o guia ligado atua no primeiro ciclo, o clique ligado nos dois primeiros e não há novos ataques de referência nos dois últimos. As ressonâncias anteriores podem continuar. Use o silêncio para observar sua referência interna; o cursor, os contadores e os resultados parciais ficam ocultos nos dois últimos ciclos. Os golpes continuam registrados e os resultados reaparecem ao concluir.
 
-1. Escolha um estudo, andamento confortável, amostra, recorte e referência de clique.
-2. Ouça sem tocar. Identifique os grupos e as posições selecionadas na escrita.
-3. Execute uma tomada e pause. Anote dificuldades percebidas antes de olhar apenas os números.
-4. Registre o resumo. Exporte JSON/CSV se quiser guardar os eventos individuais.
-5. Repita mantendo os parâmetros. Depois altere uma única variável e registre outra tomada.
+## Construir uma variação
 
-Não interprete uma janela de 15 ms como padrão universal de qualidade artística. Ela é um critério operacional ajustável. Regularidade temporal, intenção de acento, controle de ressonância e adequação de timbre são dimensões distintas.
+Traga a escrita da Prática para o editor. Duplique a intenção no nome, altere apenas um acento ou gire uma unidade e salve uma definição. A rotação desloca ataques e acentos juntos; grupos e métrica permanecem e precisam ser relidos. Aplicar envia o resultado à prática; salvar conserva a escrita na biblioteca pessoal. O texto manual da sequência limpa acentos para não manter posições sem relação com a nova escrita.
 
-## 5. Interpretar as medidas
+Mantenha uma versão de referência e outra de investigação. Exporte as escritas para fora do navegador/app.
 
-- Erro com sinal: positivo é atraso; negativo é adiantamento em relação à unidade atribuída.
-- MAE: média dos valores absolutos dos erros.
-- Viés: média com sinal; pode indicar tendência local de antecipação ou atraso.
-- σ: dispersão populacional dos erros em torno da média.
-- Acertos: posições já concluídas com pelo menos um golpe da articulação esperada e dentro da janela. Repetições não multiplicam pontos.
+## Interpretar as medidas
 
-A associação à unidade mais próxima pode transformar um golpe muito deslocado em um evento de outra unidade. Não é um alinhador de frases. No microfone, as classificações também são hipóteses: rejeição ou timbre divergente pode ser falha da captura/classificador. Use observação externa antes de atribuir o desacordo ao estudante.
+Erro positivo é atraso; negativo é antecipação em relação à unidade atribuída. MAE é a média dos valores absolutos; o viés é a média com sinal; σ é a dispersão populacional em torno da média. Um acerto exige a articulação esperada e o erro na janela, sem multiplicar pontos por repetição.
 
-Os contadores de ausência, articulação divergente, erro temporal, golpe em pausa e repetição podem se sobrepor. Não some essas categorias para obter um total de erros.
+A unidade é atribuída pela posição mais próxima. Um deslocamento grande pode ser associado a outra unidade; o sistema não alinha frases inteiras. No microfone, a classificação também pode errar. Compare entradas da mesma origem e confirme desacordos por escuta e observação externa.
 
-## 6. Preservar os dados
+A comparação de dois resumos é descritiva. Mudanças de ganho, samples, andamento, entrada ou escrita comprometem uma leitura direta da diferença. Poucos ataques não fornecem estabilidade estatística; duas tomadas não provam evolução. Uma janela de 15 ms é um critério operacional, sem equivalência universal a qualidade musical.
 
-O caderno guarda resumos, configuração e observações. Os eventos individuais só ficam na tomada atual e na exportação feita pelo estudante. Antes de mudar a escrita, recorte, amostra ou referência, exporte os dados que pretende analisar.
+## Conservar os dados
 
-JSON e CSV compartilham o identificador da tomada. A configuração exportada representa o estado final; o volume de saída pode variar durante a execução. O CSV explicita semínimas/minuto, unidades por semínima, intervalos em segundos e erros em milissegundos. O índice de semelhança do microfone não é uma probabilidade calibrada.
+O caderno guarda até 50 resumos e observações; a biblioteca pessoal guarda até 30 escritas. Ambos são locais. Os eventos individuais de uma execução só ficam na tomada atual e nas exportações feitas. Exporte antes de mudar configurações que iniciem outra tomada.
 
-Compare tomadas de mesma origem de entrada: teclado/pads e microfone possuem cadeias de latência diferentes. A captura no celular ainda exige calibração e validação físicas.
+JSON e CSV compartilham o identificador da tomada. A configuração é um retrato final, e o volume pode ter mudado durante a execução. O CSV informa segundos, milissegundos, programa, métrica, objetivo, ciclo e posição original. Faça cópias externas; não há nuvem ou importação de bibliotecas nesta versão.
 
-## Referência de notação
+## Referência
 
-GIANESELLA, Eduardo F. _O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro_. Música Hodie, v. 12, 2012. https://revistas.ufg.br/musica/article/view/23359
+GIANESELLA, Eduardo F. O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro. Música Hodie, v. 12, n. 2 (2012), p. 188–200. https://revistas.ufg.br/musica/article/view/23359
 
-A referência é apresentada para estudo dos sistemas notacionais. A grafia em três linhas e letras deste aplicativo é uma convenção própria, não uma edição ou reprodução das figuras do artigo.
+A referência sustenta o estudo das diferenças entre sistemas. A leitura de durações e o mapa com letras do aplicativo são escolhas próprias, sem reprodução das figuras do artigo.

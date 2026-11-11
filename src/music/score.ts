@@ -70,7 +70,7 @@ export function clampRange(start: number, end: number, length: number) {
 export function scorePosition(index: number, subdivision: number) {
   const beat = Math.floor(index / subdivision) + 1,
     part = index % subdivision;
-  return part ? `${beat}+${part}/${subdivision}` : String(beat);
+  return `semínima ${beat} · subdivisão ${part + 1}/${subdivision}`;
 }
 export function buildCustomRhythm(
   name: string,

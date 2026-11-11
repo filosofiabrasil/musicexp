@@ -1,23 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import Svg, {
-  Circle,
-  Ellipse,
-  G,
-  Line,
-  Path,
-  Text as SText,
-} from "react-native-svg";
+import Svg, { G, Line, Path, Rect, Text as SText } from "react-native-svg";
 import {
   Rhythm,
   StrokeCode,
   Kind,
   STROKES,
+  CODES,
   THEME as T,
 } from "../pandeiro-ui-base/types";
-import { defaultGroups, groupStarts, scorePosition } from "../music/score";
-import { TECHNIQUES } from "../music/techniques";
-import { fonts, Label } from "./ui";
+import {
+  METERS,
+  beamRuns,
+  meterFits,
+  meterUnits,
+  noteValue,
+  metricDescription,
+  readingGroups,
+  countingGroups,
+} from "../music/notation";
+import { MusicGlyph, TimeValue, GlyphName } from "./MusicGlyph";
+import { fonts, Label, Button } from "./ui";
 
 export function ScoreStrip({
   rhythm,
@@ -27,6 +30,8 @@ export function ScoreStrip({
   selected,
   range,
   isolation,
+  meter,
+  onMeter,
   onSelect,
 }: {
   rhythm: Rhythm;
@@ -36,36 +41,100 @@ export function ScoreStrip({
   selected: number;
   range: { start: number; end: number };
   isolation: Kind | null;
+  meter: string | null;
+  onMeter: (meter: string | null) => void;
   onSelect: (index: number) => void;
 }) {
-  const steps = rhythm.sequence.length,
-    cell = 38,
-    margin = 42;
-  const full = Math.max(width, margin + steps * cell + 12),
-    spacing = (full - margin - 12) / steps;
-  const groups =
-      rhythm.subdivision === subdivision && rhythm.groups
-        ? rhythm.groups
-        : defaultGroups(steps, subdivision),
-    starts = groupStarts(groups);
-  const beams =
-    subdivision === 8 ? 3 : subdivision === 4 || subdivision === 6 ? 2 : 1;
+  const [view, setView] = useState<"rhythm" | "map">("rhythm");
+  const steps = rhythm.sequence.length;
+  const validMeter =
+    meter && meterFits(meter, steps, subdivision) ? meter : undefined;
+  const groups = readingGroups(rhythm, subdivision, validMeter);
+  const present = CODES.filter((c) => rhythm.sequence.includes(c));
+  const margin = view === "map" ? 160 : validMeter ? 95 : 55;
+  const full = Math.max(width, margin + steps * 40 + 14);
+  const spacing = (full - margin - 14) / steps;
+  const x = (i: number) => margin + (i + 0.5) * spacing;
+  const measure = validMeter ? meterUnits(validMeter, subdivision)! : null;
+  const value = noteValue(subdivision),
+    runs = beamRuns(rhythm.sequence, subdivision, groups, measure);
+  const beamed = new Set(runs.filter((run) => run.length > 1).flat());
+  const counts = countingGroups(steps, subdivision, validMeter, groups);
+  const groupLabel = groups.join("+");
+  const compound = validMeter && ["6/8", "9/8", "12/8"].includes(validMeter);
+  const height = view === "map" ? Math.max(130, present.length * 28 + 45) : 174;
+  const inside = (i: number) =>
+    i >= range.start &&
+    i < range.end &&
+    (!isolation ||
+      STROKES[rhythm.sequence[i] as StrokeCode]?.kind === isolation);
   return (
-    <View style={{ gap: 10 }}>
+    <View style={{ gap: 13 }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+        <Button active={view === "rhythm"} onPress={() => setView("rhythm")}>
+          Leitura rítmica
+        </Button>
+        <Button active={view === "map"} onPress={() => setView("map")}>
+          Mapa de articulações
+        </Button>
+      </View>
+      {view === "rhythm" && (
+        <>
+          <Label>MÉTRICA DE ESTUDO</Label>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+            <Button active={!validMeter} onPress={() => onMeter(null)}>
+              Sem fórmula
+            </Button>
+            {METERS.map((m) => (
+              <Button
+                key={m}
+                label={`Métrica ${m}`}
+                active={m === validMeter}
+                disabled={!meterFits(m, steps, subdivision)}
+                onPress={() => onMeter(m)}
+              >
+                {m}
+              </Button>
+            ))}
+          </View>
+          <Text style={caption}>
+            {metricDescription(steps, subdivision, validMeter)} Opções ativas
+            fecham compassos completos com grupos representáveis nesta grade. A
+            escolha define a leitura deste estudo.
+          </Text>
+        </>
+      )}
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          gap: 10,
+          gap: 8,
+          flexWrap: "wrap",
         }}
       >
-        <Label>LEITURA RÍTMICA · TRÊS LINHAS</Label>
+        <Label>
+          {view === "rhythm"
+            ? "RITMO · LINHA ÚNICA DE PERCUSSÃO"
+            : "ARTICULAÇÕES · LEGENDA DO CATÁLOGO"}
+        </Label>
         <Label orange>
-          {rhythm.meter && subdivision === rhythm.subdivision
-            ? rhythm.meter
-            : "CICLO / GRADE"}
+          {view === "rhythm"
+            ? `1 unidade = ${value.denominator === 8 ? "colcheia" : value.denominator === 16 ? "semicolcheia" : "fusa"}${value.tuplet ? " em quiáltera" : ""}`
+            : "POSIÇÃO VERTICAL = ARTICULAÇÃO"}
         </Label>
       </View>
+      {view === "rhythm" && (
+        <Label>
+          CONTAGEM ·{" "}
+          {validMeter === "7/8"
+            ? `GRUPOS ${groupLabel} UNIDADES`
+            : compound
+              ? "PULSOS DE SEMÍNIMA PONTUADA"
+              : validMeter
+                ? "TEMPOS DE SEMÍNIMA"
+                : "SEMÍNIMAS DO CICLO"}
+        </Label>
+      )}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator
@@ -74,205 +143,272 @@ export function ScoreStrip({
         <View style={{ width: full }}>
           <Svg
             width={full}
-            height={145}
-            accessibilityLabel={`Leitura rítmica de ${steps} unidades, sem altura definida`}
+            height={height}
+            accessibilityLabel={
+              view === "rhythm"
+                ? `Leitura rítmica de ${steps} unidades, ${steps / subdivision} semínimas${validMeter ? `, compasso ${validMeter}` : ""}`
+                : `Mapa das articulações de ${steps} unidades`
+            }
           >
-            {[65, 81, 97].map((y, i) => (
-              <G key={y}>
+            {view === "rhythm" ? (
+              <>
                 <Line
-                  x1={margin - 14}
+                  x1={20}
                   x2={full - 8}
-                  y1={y}
-                  y2={y}
+                  y1={100}
+                  y2={100}
                   stroke={T.silver}
-                  opacity={0.3}
+                  strokeWidth={0.7}
                 />
-                <SText x={4} y={y + 3} fontSize={8} fill={T.muted}>
-                  {["SEC", "CON", "GRV"][i]}
-                </SText>
-              </G>
-            ))}
-            {starts.map((start, g) => {
-              const positions = Array.from(
-                { length: groups[g] },
-                (_, i) => start + i,
-              ).filter((i) => rhythm.sequence[i] !== ".");
-              return (
-                <G key={start}>
-                  <Line
-                    x1={margin + start * spacing - 12}
-                    x2={margin + start * spacing - 12}
-                    y1={51}
-                    y2={108}
-                    stroke={T.silver}
-                    opacity={0.12}
-                  />
-                  {positions.length > 1 &&
-                    Array.from({ length: beams }, (_, b) => (
-                      <Line
-                        key={b}
-                        x1={margin + (positions[0] + 0.5) * spacing + 4}
-                        x2={
-                          margin +
-                          (positions[positions.length - 1] + 0.5) * spacing +
-                          4
-                        }
-                        y1={36 + b * 5}
-                        y2={36 + b * 5}
-                        stroke={T.ivory}
-                        strokeWidth={2.8}
-                      />
-                    ))}
-                  {(subdivision === 3 || subdivision === 6) &&
-                    groups[g] === subdivision && (
-                      <SText
-                        x={margin + (start + groups[g] / 2) * spacing}
-                        y={25}
-                        fill={T.silver}
-                        fontSize={11}
-                        textAnchor="middle"
-                      >
-                        {subdivision === 3 ? "3:2" : "6:4"}
-                      </SText>
-                    )}
-                </G>
-              );
-            })}
-            {[...rhythm.sequence].map((code, i) => {
-              const x = margin + (i + 0.5) * spacing,
-                stroke = code === "." ? null : STROKES[code as StrokeCode],
-                y = stroke ? TECHNIQUES[code as StrokeCode].lane + 15 : 81;
-              const included =
-                i >= range.start &&
-                i < range.end &&
-                (!isolation || stroke?.kind === isolation);
-              const ink = i === current ? T.orange : T.ivory;
-              const groupIndex = starts.findIndex(
-                (start, g) => i >= start && i < start + groups[g],
-              );
-              const solo =
-                [
-                  ...rhythm.sequence.slice(
-                    starts[groupIndex],
-                    starts[groupIndex] + groups[groupIndex],
-                  ),
-                ].filter((c) => c !== ".").length === 1;
-              return (
-                <G key={i} opacity={included ? 1 : 0.28}>
-                  {i === current && (
-                    <Line
-                      x1={x}
-                      x2={x}
-                      y1={10}
-                      y2={140}
-                      stroke={T.orange}
-                      opacity={0.25}
+                <MusicGlyph
+                  name="percussionClef"
+                  x={22}
+                  y={100}
+                  color={T.ivory}
+                />
+                {validMeter && (
+                  <G>
+                    <TimeValue
+                      value={validMeter.split("/")[0]}
+                      x={48}
+                      y={89}
+                      color={T.ivory}
                     />
-                  )}
-                  {stroke ? (
-                    <>
-                      {code === "T" || code === "X" ? (
-                        <G stroke={ink} strokeWidth={1.8}>
-                          <Line x1={x - 4} x2={x + 4} y1={y - 4} y2={y + 4} />
-                          <Line x1={x - 4} x2={x + 4} y1={y + 4} y2={y - 4} />
-                        </G>
-                      ) : (
-                        <Ellipse
-                          cx={x}
-                          cy={y}
-                          rx={5.2}
-                          ry={3.6}
-                          fill={ink}
-                          transform={`rotate(-15 ${x} ${y})`}
-                        />
-                      )}
-                      <Line
-                        x1={x + 4}
-                        x2={x + 4}
-                        y1={y}
-                        y2={36}
-                        stroke={ink}
-                        strokeWidth={1.3}
-                      />
-                      {solo &&
-                        Array.from({ length: beams }, (_, b) => (
-                          <Path
-                            key={b}
-                            d={`M ${x + 4} ${36 + b * 6} Q ${x + 15} ${44 + b * 6} ${x + 7} ${53 + b * 6}`}
-                            stroke={ink}
-                            fill="none"
-                            strokeWidth={1.5}
-                          />
-                        ))}
-                      {code === "R" && (
-                        <SText
-                          x={x}
-                          y={22}
-                          fill={ink}
-                          textAnchor="middle"
-                          fontSize={11}
-                        >
-                          tr
-                        </SText>
-                      )}
-                      {rhythm.accents?.includes(i) && (
-                        <SText
-                          x={x}
-                          y={12}
-                          fill={T.orange}
-                          textAnchor="middle"
-                          fontSize={16}
-                        >
-                          ›
-                        </SText>
-                      )}
-                    </>
-                  ) : (
-                    <G stroke={ink} fill={ink}>
-                      <Path
-                        d={`M ${x + 4} 70 L ${x - 3} 94`}
-                        strokeWidth={1.5}
-                      />
-                      {Array.from({ length: beams }, (_, b) => (
-                        <G key={b}>
-                          <Circle cx={x - 3 - b} cy={72 + b * 7} r={2.2} />
+                    <TimeValue
+                      value={validMeter.split("/")[1]}
+                      x={48}
+                      y={111}
+                      color={T.ivory}
+                    />
+                  </G>
+                )}
+                {counts.map((count) => (
+                  <SText
+                    key={count.start}
+                    x={(x(count.start) + x(count.start + count.size - 1)) / 2}
+                    y={17}
+                    textAnchor="middle"
+                    fontSize={11}
+                    fill={T.silver}
+                  >{`${count.bar ? `C${count.bar} · ` : ""}${validMeter ? "" : "♩ "}${count.number}`}</SText>
+                ))}
+                {Array.from(
+                  { length: Math.ceil(steps / subdivision) },
+                  (_, q) => {
+                    const start = q * subdivision,
+                      end = Math.min(start + subdivision, steps);
+                    return (
+                      <G key={q}>
+                        {start > 0 && (!measure || start % measure !== 0) && (
                           <Line
-                            x1={x - 3 - b}
-                            x2={x + 3 - b * 2}
-                            y1={73 + b * 7}
-                            y2={75 + b * 7}
+                            x1={margin + start * spacing}
+                            x2={margin + start * spacing}
+                            y1={52}
+                            y2={113}
+                            stroke={T.line}
+                            strokeDasharray="2 4"
                           />
-                        </G>
+                        )}
+                        {value.tuplet && (
+                          <G>
+                            <Path
+                              d={`M ${x(start) - 10} 39 V 35 H ${x(end - 1) + 10} V 39`}
+                              fill="none"
+                              stroke={T.silver}
+                              strokeWidth={0.7}
+                            />
+                            <SText
+                              x={(x(start) + x(end - 1)) / 2}
+                              y={31}
+                              textAnchor="middle"
+                              fontSize={11}
+                              fill={T.ivory}
+                            >{`${value.tuplet[0]}:${value.tuplet[1]}${end - start < subdivision ? "…" : ""}`}</SText>
+                          </G>
+                        )}
+                      </G>
+                    );
+                  },
+                )}
+                {measure &&
+                  Array.from({ length: steps / measure + 1 }, (_, n) => {
+                    const at = margin + n * measure * spacing;
+                    return (
+                      <G key={n}>
+                        <Line
+                          x1={at}
+                          x2={at}
+                          y1={78}
+                          y2={112}
+                          stroke={T.ivory}
+                          strokeWidth={n === steps / measure ? 2 : 0.9}
+                        />
+                        {n === steps / measure && (
+                          <Line
+                            x1={at - 5}
+                            x2={at - 5}
+                            y1={78}
+                            y2={112}
+                            stroke={T.ivory}
+                          />
+                        )}
+                      </G>
+                    );
+                  })}
+                {runs
+                  .filter((run) => run.length > 1)
+                  .map((run) => (
+                    <G key={run[0]}>
+                      {Array.from({ length: value.beams }, (_, b) => (
+                        <Line
+                          key={b}
+                          x1={x(run[0]) + 4.5}
+                          x2={x(run[run.length - 1]) + 4.5}
+                          y1={60 + b * 5.5}
+                          y2={60 + b * 5.5}
+                          stroke={T.ivory}
+                          strokeWidth={2.7}
+                        />
                       ))}
                     </G>
-                  )}
-                  <SText
-                    x={x}
-                    y={122}
-                    textAnchor="middle"
-                    fill={i === selected ? T.orange : T.muted}
-                    fontSize={11}
-                  >
-                    {code === "." ? "pausa" : code}
-                  </SText>
-                  <SText
-                    x={x}
-                    y={139}
-                    textAnchor="middle"
-                    fill={T.muted}
-                    fontSize={8}
-                  >
-                    {scorePosition(i, subdivision)}
-                  </SText>
-                </G>
-              );
-            })}
+                  ))}
+                {[...rhythm.sequence].map((code, i) => {
+                  const ink = i === current ? T.orange : T.ivory;
+                  return (
+                    <G key={i} opacity={inside(i) ? 1 : 0.35}>
+                      {i === current && (
+                        <Rect
+                          x={margin + i * spacing}
+                          y={52}
+                          width={spacing}
+                          height={115}
+                          fill={T.orange}
+                          opacity={0.08}
+                        />
+                      )}
+                      {code === "." ? (
+                        <MusicGlyph
+                          name={`rest${value.denominator}` as GlyphName}
+                          x={x(i) - 4.5}
+                          y={94}
+                          color={ink}
+                        />
+                      ) : (
+                        <>
+                          <MusicGlyph
+                            name="noteheadBlack"
+                            x={x(i) - 4.7}
+                            y={100}
+                            color={ink}
+                          />
+                          <Line
+                            x1={x(i) + 4.5}
+                            x2={x(i) + 4.5}
+                            y1={99}
+                            y2={60}
+                            stroke={ink}
+                            strokeWidth={1.15}
+                          />
+                          {!beamed.has(i) && (
+                            <MusicGlyph
+                              name={`flag${value.denominator}` as GlyphName}
+                              x={x(i) + 4.5}
+                              y={60}
+                              color={ink}
+                            />
+                          )}
+                          {rhythm.accents?.includes(i) && (
+                            <Path
+                              d={`M ${x(i) - 5} 44 L ${x(i) + 5} 47 L ${x(i) - 5} 50`}
+                              stroke={T.ivory}
+                              strokeWidth={1.5}
+                              fill="none"
+                            />
+                          )}
+                        </>
+                      )}
+                      <SText
+                        x={x(i)}
+                        y={132}
+                        textAnchor="middle"
+                        fontSize={12}
+                        fill={i === selected ? T.orange : T.silver}
+                      >
+                        {code === "." ? "·" : code}
+                      </SText>
+                      <SText
+                        x={x(i)}
+                        y={160}
+                        textAnchor="middle"
+                        fontSize={12}
+                        fill={T.ivory}
+                      >
+                        {i -
+                          counts.find(
+                            (count) =>
+                              i >= count.start && i < count.start + count.size,
+                          )!.start +
+                          1}
+                      </SText>
+                    </G>
+                  );
+                })}
+                <SText x={3} y={160} fontSize={8} fill={T.muted}>
+                  SUB.
+                </SText>
+              </>
+            ) : (
+              <>
+                {present.map((code, row) => (
+                  <G key={code}>
+                    <SText
+                      x={4}
+                      y={30 + row * 28}
+                      fontSize={10}
+                      fill={T.silver}
+                    >
+                      {code} · {STROKES[code].name}
+                    </SText>
+                    {[...rhythm.sequence].map((cell, i) => (
+                      <G key={i} opacity={inside(i) ? 1 : 0.35}>
+                        <Rect
+                          x={margin + i * spacing + 2}
+                          y={13 + row * 28}
+                          width={spacing - 4}
+                          height={25}
+                          fill={
+                            cell === code
+                              ? i === current
+                                ? T.orange
+                                : T.ivory
+                              : "none"
+                          }
+                          opacity={cell === code ? 0.16 : 1}
+                          stroke={cell === code ? T.ivory : T.line}
+                        />
+                        {cell === code && (
+                          <SText
+                            x={x(i)}
+                            y={30 + row * 28}
+                            textAnchor="middle"
+                            fill={i === current ? T.orange : T.ivory}
+                            fontSize={12}
+                          >
+                            {code}
+                          </SText>
+                        )}
+                      </G>
+                    ))}
+                  </G>
+                ))}
+              </>
+            )}
           </Svg>
           <View
             style={{
               flexDirection: "row",
               paddingLeft: margin,
-              paddingRight: 12,
+              paddingRight: 14,
             }}
           >
             {[...rhythm.sequence].map((code, i) => (
@@ -283,20 +419,19 @@ export function ScoreStrip({
                 onPress={() => onSelect(i)}
                 style={{
                   width: spacing,
-                  minHeight: 36,
-                  justifyContent: "center",
+                  minHeight: 38,
                   alignItems: "center",
+                  justifyContent: "center",
                   borderWidth: 1,
                   borderColor: selected === i ? T.orange : T.line,
-                  backgroundColor: current === i ? "#2B1D13" : "transparent",
-                  opacity: i >= range.start && i < range.end ? 1 : 0.45,
+                  opacity: i >= range.start && i < range.end ? 1 : 0.4,
                 }}
               >
                 <Text
                   style={{
-                    color: selected === i ? T.orange : T.muted,
                     fontFamily: fonts.mono,
                     fontSize: 10,
+                    color: selected === i ? T.orange : T.muted,
                   }}
                 >
                   {String(i + 1).padStart(2, "0")}
@@ -306,18 +441,23 @@ export function ScoreStrip({
           </View>
         </View>
       </ScrollView>
-      <Text
-        style={{
-          color: T.muted,
-          fontFamily: fonts.text,
-          fontSize: 12,
-          lineHeight: 18,
-        }}
-      >
-        As letras identificam articulações. A posição vertical não representa
-        notas afinadas. Cada símbolo ocupa uma unidade da grade; pausas indicam
-        ausência de novo ataque e não cortam a ressonância.
+      <Text style={caption}>
+        {view === "rhythm"
+          ? `Acima: ${validMeter === "7/8" ? `grupos de ${groupLabel} unidades` : compound ? "pulsos de semínima pontuada" : validMeter ? "tempos de semínima" : "semínimas do ciclo"}${validMeter ? "; C1, C2… identificam os compassos" : ""}. Abaixo: subdivisões contadas a partir de 1 em cada ${validMeter === "7/8" ? "grupo" : compound ? "pulso composto" : "semínima"}. Figuras = duração; letras = golpes; 01… = índices de edição. Pausas não cortam a ressonância.`
+          : "Este mapa mostra qual articulação ocupa cada unidade. As linhas são categorias; a leitura das durações está na aba Leitura rítmica."}
       </Text>
+      {value.tuplet && steps % subdivision !== 0 && view === "rhythm" && (
+        <Text style={caption}>
+          A última quiáltera está incompleta neste ciclo. As reticências indicam
+          o trecho parcial; não foram acrescentadas pausas.
+        </Text>
+      )}
     </View>
   );
 }
+const caption = {
+  color: T.muted,
+  fontFamily: fonts.text,
+  fontSize: 12,
+  lineHeight: 19,
+};

@@ -21,6 +21,12 @@ export class AudioEngine {
   private startRevision = 0;
   private cancelLoad: (() => void) | null = null;
   private volume = 1;
+  private intro = 0;
+  private looping = true;
+  private target: number | null = null;
+  private endListener: { remove: () => void } | null = null;
+  finished = false;
+  onFinish?: () => void;
   running = false;
   ready = false;
   async prepare(config: PlaybackConfig) {
@@ -48,8 +54,19 @@ export class AudioEngine {
     this.disposeSource = source.dispose;
     this.duration = playback.logicalDuration;
     this.actualDuration = pcm.length / PLAYBACK_RATE;
+    this.intro = playback.introDuration;
+    this.looping = playback.loop;
+    this.target = playback.targetDuration;
+    this.finished = false;
     player.volume = this.volume;
-    player.loop = true;
+    player.loop = playback.loop;
+    this.endListener = player.addListener("playbackStatusUpdate", (status) => {
+      if (!this.looping && player === this.player && status.didJustFinish) {
+        this.finished = true;
+        this.running = false;
+        this.onFinish?.();
+      }
+    });
     const load = waitForAudioLoad(player);
     this.cancelLoad = load.cancel;
     try {
@@ -61,6 +78,7 @@ export class AudioEngine {
   }
   async start() {
     if (this.running) return true;
+    if (this.finished) return false;
     if (!this.player || !this.ready)
       throw new Error("O áudio ainda está sendo preparado.");
     const generation = this.startRevision,
@@ -84,15 +102,22 @@ export class AudioEngine {
   }
   getTime = () => {
     if (!this.player) return 0;
+    if (this.finished) return this.target ?? 0;
     const position = this.player.currentTime;
-    if (position < this.previous - this.actualDuration * 0.5) this.cycles++;
+    if (this.looping && position < this.previous - this.actualDuration * 0.5)
+      this.cycles++;
     this.previous = position;
-    return (this.cycles + position / this.actualDuration) * this.duration;
+    return (
+      (this.cycles + position / this.actualDuration) * this.duration -
+      this.intro
+    );
   };
   private releasePlayer() {
     this.startRevision++;
     this.cancelLoad?.();
     this.cancelLoad = null;
+    this.endListener?.remove();
+    this.endListener = null;
     this.running = false;
     this.player?.pause();
     this.player?.remove();
@@ -104,6 +129,7 @@ export class AudioEngine {
     this.generation++;
     this.releasePlayer();
     this.ready = false;
+    this.finished = false;
   }
 }
 
@@ -147,13 +173,20 @@ export class PadSounds {
       generation = this.generation;
     try {
       await player.seekTo(0);
-      if (generation === this.generation) player.play();
+      if (generation !== this.generation) return false;
+      player.play();
+      return true;
     } catch (error) {
       if (generation === this.generation) throw error;
+      return false;
     }
   }
-  dispose() {
+  silence() {
     this.generation++;
+    this.players.forEach((pool) => pool.forEach((player) => player.pause()));
+  }
+  dispose() {
+    this.silence();
     this.players.forEach((pool) => pool.forEach((player) => player.remove()));
     this.players.clear();
     this.index.clear();

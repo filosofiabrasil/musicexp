@@ -3,10 +3,15 @@ import {
   Rhythm,
   Pattern,
   kindCode,
+  STROKES,
+  StrokeCode,
 } from "../pandeiro-ui-base/types";
 import { sessionMetrics, withinTolerance } from "../audio/timing";
 import { ClickMode, Dynamic, SampleChoices } from "../music/score";
 import { PLAYBACK_RATE } from "../audio/sampleLibrary";
+import { StudyProgram } from "../music/program";
+import { METERS, StudyMeter } from "../music/notation";
+import { programPlan } from "../music/program";
 export type StudySettings = {
   bpm: number;
   subdivision: number;
@@ -23,6 +28,9 @@ export type StudySettings = {
   guide: boolean;
   click: boolean;
   latencyMs: number;
+  meter?: string | null;
+  program?: StudyProgram;
+  goal?: string;
 };
 export type StudyRecord = {
   id: string;
@@ -136,6 +144,11 @@ export function parseJournal(raw: string | null): StudyRecord[] {
       settings.volume < 0 ||
       settings.volume > 1 ||
       !Number.isFinite(settings.latencyMs) ||
+      (settings.program !== undefined &&
+        !["free", "steady", "memory"].includes(settings.program)) ||
+      (settings.meter != null &&
+        !METERS.includes(settings.meter as StudyMeter)) ||
+      (settings.goal !== undefined && typeof settings.goal !== "string") ||
       !Number.isFinite(settings.tolerance) ||
       settings.tolerance < 0 ||
       !["count", "correct", "expected"].every(
@@ -223,9 +236,20 @@ export function sessionCsv(data: SessionExport) {
       "heuristic_similarity",
       "capture_rate_hz",
       "reference_buffer_rate_hz",
+      "meter",
+      "program",
+      "goal",
+      "preparation_quarters",
+      "cycle_1based",
+      "original_unit_1based",
+      "expected_code",
     ],
   ];
-  for (const hit of data.hits)
+  for (const hit of data.hits) {
+    const slot = Math.round(
+      hit.nominal / (60 / record.settings.bpm / record.settings.subdivision),
+    );
+    const step = slot % record.sequence.length;
     rows.push([
       record.id,
       record.title,
@@ -243,6 +267,18 @@ export function sessionCsv(data: SessionExport) {
       hit.confidence ?? "",
       record.settings.captureRate ?? "",
       PLAYBACK_RATE,
+      record.settings.meter ?? "",
+      record.settings.program ?? "free",
+      record.settings.goal ?? "",
+      programPlan(record.settings.program ?? "free").countIn,
+      Math.floor(slot / record.sequence.length) + 1,
+      record.settings.range.start + step + 1,
+      record.settings.isolation &&
+      STROKES[record.sequence[step] as StrokeCode]?.kind !==
+        record.settings.isolation
+        ? "."
+        : record.sequence[step],
     ]);
+  }
   return rows.map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
 }

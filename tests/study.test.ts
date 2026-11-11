@@ -66,7 +66,7 @@ test("agrupamento explicita a soma e recortes preservam os fragmentos", () => {
   assert.deepEqual(groupStarts([2, 2, 3]), [0, 2, 4]);
   assert.deepEqual(defaultGroups(7, 4), [4, 3]);
   assert.deepEqual(clampRange(9, 2, 8), { start: 7, end: 8 });
-  assert.equal(scorePosition(5, 4), "2+1/4");
+  assert.equal(scorePosition(5, 4), "semínima 2 · subdivisão 2/4");
 });
 test("estudos originais têm fórmula compatível, grupos completos e acentos válidos", () => {
   assert.equal(ETUDES.length, 8);
