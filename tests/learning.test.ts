@@ -12,7 +12,7 @@ import {
 import { programPlan, programStage, StudyProgram } from "../src/music/program";
 import { mixPlayback } from "../src/audio/mixCycle";
 import { PLAYBACK_RATE, SOUND_BANK } from "../src/audio/sampleLibrary";
-import { toPattern } from "../src/pandeiro-ui-base/types";
+import { CODES, STROKES, toPattern } from "../src/pandeiro-ui-base/types";
 import { ETUDES } from "../src/music/etudes";
 import { makeRecord, StudySettings } from "../src/study/records";
 import { compareTakes } from "../src/study/compare";
@@ -98,6 +98,12 @@ test("símbolos de duração são contornos Bravura reais e não dependem de fon
     assert.ok(glyph.bounds.every(Number.isFinite));
     assert.ok(!glyph.path.includes("NaN"));
   }
+});
+test("nove articulações têm posições distintas nas nove alturas da pauta", () => {
+  assert.deepEqual(
+    CODES.map((code) => STROKES[code].staffStep).sort((a, b) => a - b),
+    [0, 1, 2, 3, 4, 5, 6, 7, 8],
+  );
 });
 test("programas explicitam entrada, limite e as três fases de memória", () => {
   assert.equal(programPlan("free").cycles, 0);

@@ -1,6 +1,6 @@
 # PANDEIRO.APP — Ler, investigar, comparar
 
-Laboratório de estudo do pandeiro em React Native / Expo SDK 54. A versão **1.2.0** conecta leitura, escuta e prática: formule uma pergunta, prepare uma escrita, execute uma tomada de duração conhecida e compare as condições e os resultados.
+Laboratório de estudo do pandeiro em React Native / Expo SDK 54. A versão **1.2.1** conecta leitura, escuta e prática: formule uma pergunta, prepare uma escrita, execute uma tomada de duração conhecida e compare as condições e os resultados.
 
 A tela inicial abre um estudo original em 4/4. A biblioteca conserva os 148 ritmos e suas referências; o atlas organiza 43 gravações em nove famílias. Os oito estudos técnicos são propostas originais do projeto, sem atribuição a compositores ou métodos externos.
 
@@ -12,7 +12,7 @@ Instale Node.js LTS, extraia o ZIP e abra um terminal na pasta que contém `pack
 npm run preview
 ```
 
-Acesse **http://localhost:8080**. A preview incluída funciona sem instalar dependências. Deixe o terminal aberto; Ctrl+C encerra. Para atualizar, encerre o servidor anterior, extraia em outra pasta e recarregue com Ctrl+F5. Confira **v1.2.0** no rodapé.
+Acesse **http://localhost:8080**. A preview incluída funciona sem instalar dependências. Deixe o terminal aberto; Ctrl+C encerra. Para atualizar, encerre o servidor anterior, extraia em outra pasta e recarregue com Ctrl+F5. Confira **v1.2.1** no rodapé.
 
 ## Um primeiro estudo
 
@@ -27,7 +27,7 @@ O [guia de estudo](docs/GUIA_DE_ESTUDO.md) desenvolve esse protocolo e os limite
 
 ## Leitura e contagem
 
-A leitura usa **uma linha de percussão**, com figuras de duração, pausas, clave de percussão, compassos e quiálteras. As letras sob as figuras identificam articulações do catálogo. O **Mapa de articulações** é uma grade separada, sem alturas afinadas.
+A leitura usa **uma pauta de percussão com cinco linhas**, figuras de duração, pausas, clave, compassos e quiálteras. Cada articulação tem uma posição fixa: P, A, Q, B, M, R, X, T e D ocupam posições próprias, da região grave à aguda. Uma legenda explicita esse mapa. Essas posições identificam golpes; não representam alturas afinadas. O **Mapa de articulações** continua disponível como grade separada.
 
 O exemplo `ADBDPDBD`, com quatro unidades por semínima, contém **oito semicolcheias = duas semínimas**. Ao escolher 2/4, a tela mostra um compasso com dois tempos; cada tempo conta suas quatro subdivisões:
 
@@ -142,7 +142,7 @@ Regerar catálogos: `npm run import:rhythms`. Regerar análise e reprodução: `
 
 ## Fontes e licenças
 
-Catálogos originais: `src/data/ritmos.source.js` e `src/data/ritmos-PADBT.json`, preservados dos anexos. Referência sobre notação: GIANESELLA, Eduardo F. _O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro_. Música Hodie, v. 12, n. 2 (2012), p. 188–200, publicado em 2013. [Página editorial](https://revistas.ufg.br/musica/article/view/23359) e [artigo](https://revistas.ufg.br/musica/article/download/23359/13753/0). O artigo discute sistemas de Anunciação e Stasi e exemplifica o samba como oito semicolcheias em 2/4. O app usa leitura de duração em linha única e letras próprias do catálogo; não reproduz aqueles sistemas ou partituras.
+Catálogos originais: `src/data/ritmos.source.js` e `src/data/ritmos-PADBT.json`, preservados dos anexos. Referência sobre notação: GIANESELLA, Eduardo F. _O Uso Idiomático dos Instrumentos de Percussão Brasileiros: principais sistemas notacionais para o pandeiro brasileiro_. Música Hodie, v. 12, n. 2 (2012), p. 188–200, publicado em 2013. [Página editorial](https://revistas.ufg.br/musica/article/view/23359) e [artigo](https://revistas.ufg.br/musica/article/download/23359/13753/0). O artigo discute sistemas de Anunciação e Stasi e exemplifica o samba como oito semicolcheias em 2/4. A pauta de cinco linhas deste app usa posições próprias para as articulações; não reproduz aqueles sistemas ou partituras.
 
 Os contornos Bravura e as fontes de interface têm licenças em `licenses/`; veja [materiais e dependências](THIRD_PARTY_NOTICES.md). As referências bibliográficas dos ritmos foram preservadas, sem conferência integral de cada obra citada. Não são distribuídos PDFs de métodos ou partituras protegidas.
 

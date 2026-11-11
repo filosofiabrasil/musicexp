@@ -10,6 +10,7 @@ import {
   groupStarts,
   parseGroups,
   parseSequence,
+  resizeGroups,
   scorePosition,
   sliceGroups,
 } from "../src/music/score";
@@ -67,6 +68,13 @@ test("agrupamento explicita a soma e recortes preservam os fragmentos", () => {
   assert.deepEqual(defaultGroups(7, 4), [4, 3]);
   assert.deepEqual(clampRange(9, 2, 8), { start: 7, end: 8 });
   assert.equal(scorePosition(5, 4), "semínima 2 · subdivisão 2/4");
+});
+test("adicionar ou retirar unidades conserva os grupos válidos do fim para trás", () => {
+  assert.equal(resizeGroups("4+4", 8, 9), "4+5");
+  assert.equal(resizeGroups("4+5", 9, 8), "4+4");
+  assert.equal(resizeGroups("2+1+1", 4, 2), "2");
+  assert.throws(() => resizeGroups("4+3", 8, 9));
+  assert.throws(() => resizeGroups("4", 4, 33));
 });
 test("estudos originais têm fórmula compatível, grupos completos e acentos válidos", () => {
   assert.equal(ETUDES.length, 8);

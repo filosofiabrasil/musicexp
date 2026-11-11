@@ -1,5 +1,12 @@
 # Alterações
 
+## 1.2.1 — Continuidade de escrita e áudio
+
+- A pauta passou a usar cinco linhas e posições fixas para cada uma das nove articulações, com legenda explícita. As posições classificam golpes e não indicam alturas afinadas.
+- Ao adicionar ou retirar uma unidade pelo editor, o último grupo válido é ajustado junto com a escrita, evitando que a ferramenta de pausa deixe o exercício inválido.
+- Os pads nativos preferem vozes livres e ampliam o pool até oito reproduções simultâneas por amostra antes de reutilizar uma voz ativa, reduzindo cortes nas caudas de ataques rápidos.
+- Revisão adicional da suíte web, da lógica de áudio, da persistência e do typecheck.
+
 ## 1.2.0 — Ler, investigar, comparar
 
 - Substituída a escrita categórica em três linhas por leitura rítmica em linha única e mapa de articulações separado. Figuras, pausas, bandeirolas e clave usam contornos Bravura/SMuFL com licença incluída.

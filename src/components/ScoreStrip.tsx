@@ -62,6 +62,20 @@ export function ScoreStrip({
   const counts = countingGroups(steps, subdivision, validMeter, groups);
   const groupLabel = groups.join("+");
   const compound = validMeter && ["6/8", "9/8", "12/8"].includes(validMeter);
+  const staffTop = 78,
+    staffSpace = 8,
+    staffBottom = staffTop + staffSpace * 4,
+    staffCenter = staffTop + staffSpace * 2;
+  const noteY = (i: number) =>
+    staffBottom -
+    STROKES[rhythm.sequence[i] as StrokeCode].staffStep * (staffSpace / 2);
+  const beamY = new Map<number, number>();
+  runs
+    .filter((run) => run.length > 1)
+    .forEach((run) => {
+      const y = Math.min(...run.map(noteY)) - 32;
+      run.forEach((i) => beamY.set(i, y));
+    });
   const height = view === "map" ? Math.max(130, present.length * 28 + 45) : 174;
   const inside = (i: number) =>
     i >= range.start &&
@@ -114,7 +128,7 @@ export function ScoreStrip({
       >
         <Label>
           {view === "rhythm"
-            ? "RITMO · LINHA ÚNICA DE PERCUSSÃO"
+            ? "RITMO · PAUTA DE PERCUSSÃO EM CINCO LINHAS"
             : "ARTICULAÇÕES · LEGENDA DO CATÁLOGO"}
         </Label>
         <Label orange>
@@ -146,24 +160,31 @@ export function ScoreStrip({
             height={height}
             accessibilityLabel={
               view === "rhythm"
-                ? `Leitura rítmica de ${steps} unidades, ${steps / subdivision} semínimas${validMeter ? `, compasso ${validMeter}` : ""}`
+                ? `Leitura rítmica de ${steps} unidades, ${steps / subdivision} semínimas${validMeter ? `, compasso ${validMeter}` : ""}, pauta de percussão em cinco linhas`
                 : `Mapa das articulações de ${steps} unidades`
             }
           >
             {view === "rhythm" ? (
               <>
-                <Line
-                  x1={20}
-                  x2={full - 8}
-                  y1={100}
-                  y2={100}
-                  stroke={T.silver}
-                  strokeWidth={0.7}
-                />
+                {Array.from({ length: 5 }, (_, line) => {
+                  const y = staffTop + line * staffSpace;
+                  return (
+                    <Line
+                      key={line}
+                      x1={margin - 8}
+                      x2={full - 8}
+                      y1={y}
+                      y2={y}
+                      stroke={T.silver}
+                      strokeWidth={0.7}
+                      opacity={0.78}
+                    />
+                  );
+                })}
                 <MusicGlyph
                   name="percussionClef"
                   x={22}
-                  y={100}
+                  y={staffCenter + 6}
                   color={T.ivory}
                 />
                 {validMeter && (
@@ -203,8 +224,8 @@ export function ScoreStrip({
                           <Line
                             x1={margin + start * spacing}
                             x2={margin + start * spacing}
-                            y1={52}
-                            y2={113}
+                            y1={staffTop - 2}
+                            y2={staffBottom + 4}
                             stroke={T.line}
                             strokeDasharray="2 4"
                           />
@@ -238,8 +259,8 @@ export function ScoreStrip({
                         <Line
                           x1={at}
                           x2={at}
-                          y1={78}
-                          y2={112}
+                          y1={staffTop - 1}
+                          y2={staffBottom + 2}
                           stroke={T.ivory}
                           strokeWidth={n === steps / measure ? 2 : 0.9}
                         />
@@ -247,8 +268,8 @@ export function ScoreStrip({
                           <Line
                             x1={at - 5}
                             x2={at - 5}
-                            y1={78}
-                            y2={112}
+                            y1={staffTop - 1}
+                            y2={staffBottom + 2}
                             stroke={T.ivory}
                           />
                         )}
@@ -264,8 +285,8 @@ export function ScoreStrip({
                           key={b}
                           x1={x(run[0]) + 4.5}
                           x2={x(run[run.length - 1]) + 4.5}
-                          y1={60 + b * 5.5}
-                          y2={60 + b * 5.5}
+                          y1={beamY.get(run[0])! + b * 5.5}
+                          y2={beamY.get(run[0])! + b * 5.5}
                           stroke={T.ivory}
                           strokeWidth={2.7}
                         />
@@ -273,15 +294,17 @@ export function ScoreStrip({
                     </G>
                   ))}
                 {[...rhythm.sequence].map((code, i) => {
-                  const ink = i === current ? T.orange : T.ivory;
+                  const ink = i === current ? T.orange : T.ivory,
+                    headY = code === "." ? staffCenter : noteY(i),
+                    stemTip = beamY.get(i) ?? headY - 32;
                   return (
                     <G key={i} opacity={inside(i) ? 1 : 0.35}>
                       {i === current && (
                         <Rect
                           x={margin + i * spacing}
-                          y={52}
+                          y={staffTop - 20}
                           width={spacing}
-                          height={115}
+                          height={staffBottom - staffTop + 50}
                           fill={T.orange}
                           opacity={0.08}
                         />
@@ -290,7 +313,7 @@ export function ScoreStrip({
                         <MusicGlyph
                           name={`rest${value.denominator}` as GlyphName}
                           x={x(i) - 4.5}
-                          y={94}
+                          y={staffCenter}
                           color={ink}
                         />
                       ) : (
@@ -298,14 +321,14 @@ export function ScoreStrip({
                           <MusicGlyph
                             name="noteheadBlack"
                             x={x(i) - 4.7}
-                            y={100}
+                            y={headY}
                             color={ink}
                           />
                           <Line
                             x1={x(i) + 4.5}
                             x2={x(i) + 4.5}
-                            y1={99}
-                            y2={60}
+                            y1={headY - 1}
+                            y2={stemTip}
                             stroke={ink}
                             strokeWidth={1.15}
                           />
@@ -313,13 +336,13 @@ export function ScoreStrip({
                             <MusicGlyph
                               name={`flag${value.denominator}` as GlyphName}
                               x={x(i) + 4.5}
-                              y={60}
+                              y={stemTip}
                               color={ink}
                             />
                           )}
                           {rhythm.accents?.includes(i) && (
                             <Path
-                              d={`M ${x(i) - 5} 44 L ${x(i) + 5} 47 L ${x(i) - 5} 50`}
+                              d={`M ${x(i) - 5} ${headY - 18} L ${x(i) + 5} ${headY - 15} L ${x(i) - 5} ${headY - 12}`}
                               stroke={T.ivory}
                               strokeWidth={1.5}
                               fill="none"
@@ -443,7 +466,7 @@ export function ScoreStrip({
       </ScrollView>
       <Text style={caption}>
         {view === "rhythm"
-          ? `Acima: ${validMeter === "7/8" ? `grupos de ${groupLabel} unidades` : compound ? "pulsos de semínima pontuada" : validMeter ? "tempos de semínima" : "semínimas do ciclo"}${validMeter ? "; C1, C2… identificam os compassos" : ""}. Abaixo: subdivisões contadas a partir de 1 em cada ${validMeter === "7/8" ? "grupo" : compound ? "pulso composto" : "semínima"}. Figuras = duração; letras = golpes; 01… = índices de edição. Pausas não cortam a ressonância.`
+          ? `Acima: ${validMeter === "7/8" ? `grupos de ${groupLabel} unidades` : compound ? "pulsos de semínima pontuada" : validMeter ? "tempos de semínima" : "semínimas do ciclo"}${validMeter ? "; C1, C2… identificam os compassos" : ""}. Abaixo: subdivisões contadas a partir de 1 em cada ${validMeter === "7/8" ? "grupo" : compound ? "pulso composto" : "semínima"}. Da linha inferior à superior: P grave · A abafado · Q grave de dedos · B punho · M médio · R rulo · X tapa de polegar · T tapa · D dedos. As cinco linhas são posições de articulação, não alturas afinadas. Figuras = duração; letras = golpes; 01… = índices de edição. Pausas não cortam a ressonância.`
           : "Este mapa mostra qual articulação ocupa cada unidade. As linhas são categorias; a leitura das durações está na aba Leitura rítmica."}
       </Text>
       {value.tuplet && steps % subdivision !== 0 && view === "rhythm" && (

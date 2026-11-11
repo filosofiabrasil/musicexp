@@ -12,7 +12,7 @@ Escreva a intenção na Prática. Mantenha o mesmo instrumento, referência, and
 
 Uma letra inicia um ataque. Um ponto representa ausência de novo ataque, desenhada como pausa da unidade. Isso não abafa o instrumento nem comanda o fim do sample. A grade ainda não representa livremente ligaduras ou durações sustentadas.
 
-No exemplo ADBDPDBD a quatro unidades por semínima, há oito semicolcheias. Em 2/4 são dois tempos, cada um subdividido em quatro; os índices 01 a 08 não são oito tempos. A leitura rítmica em uma linha trata duração e contagem; o mapa separado trata articulações.
+No exemplo ADBDPDBD a quatro unidades por semínima, há oito semicolcheias. Em 2/4 são dois tempos, cada um subdividido em quatro; os índices 01 a 08 não são oito tempos. A pauta de percussão com cinco linhas trata duração e contagem. Cada articulação tem uma posição fixa na pauta, indicada pela legenda do app; as posições não são alturas afinadas. O mapa separado também permite conferir onde cada articulação aparece.
 
 Em 6/8, seis colcheias constituem dois pulsos de semínima pontuada. Se o campo de semínima está em 100, o pulso composto ocorre a aproximadamente 66,7 por minuto. Em 7/8 com 2+2+3, os grupos têm durações diferentes. O app limita as fórmulas de estudo às extensões e grupos representáveis na grade.
 

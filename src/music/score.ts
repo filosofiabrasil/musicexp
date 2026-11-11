@@ -39,6 +39,26 @@ export function parseGroups(input: string, steps: number) {
     throw new Error(`A soma dos grupos deve ser ${steps}, o tamanho do ciclo.`);
   return groups;
 }
+/** Redimensiona o último grupo sem apagar a intenção dos grupos anteriores. */
+export function resizeGroups(input: string, previousSteps: number, nextSteps: number) {
+  if (!Number.isInteger(nextSteps) || nextSteps < 1 || nextSteps > 32)
+    throw new Error("A escrita precisa ter de 1 a 32 unidades.");
+  const groups = parseGroups(input, previousSteps);
+  let difference = nextSteps - previousSteps;
+  if (difference > 0) {
+    groups[groups.length - 1] += difference;
+  } else {
+    difference = -difference;
+    while (difference > 0 && groups.length) {
+      const index = groups.length - 1;
+      const removed = Math.min(difference, groups[index]);
+      groups[index] -= removed;
+      difference -= removed;
+      if (groups[index] === 0) groups.pop();
+    }
+  }
+  return groups.join("+");
+}
 export function defaultGroups(steps: number, subdivision: number) {
   return Array.from({ length: Math.ceil(steps / subdivision) }, (_, i) =>
     Math.min(subdivision, steps - i * subdivision),

@@ -13,6 +13,7 @@ import {
   SUBDIVISION_NAMES,
   buildCustomRhythm,
   parseSequence,
+  resizeGroups,
 } from "../music/score";
 import { Button, Label, Separator, fonts } from "./ui";
 import { METERS, meterFits } from "../music/notation";
@@ -76,6 +77,14 @@ export function ExerciseLibrary({
   }
   const update = (patch: Partial<EditorDraft>) =>
     setDraft((value) => ({ ...value, ...patch }));
+  const resizeGrouping = (nextLength: number) => {
+    try {
+      return resizeGroups(draft.grouping, sequence.length, nextLength);
+    } catch {
+      // Preserve an in-progress or invalid grouping so the user can correct it.
+      return draft.grouping;
+    }
+  };
   const load = (rhythm: Rhythm) => {
     setDraft({
       name: rhythm.name,
@@ -258,7 +267,12 @@ export function ExerciseLibrary({
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           <Button
             disabled={!sequence || sequence.length >= 32}
-            onPress={() => update({ sequence: sequence + "." })}
+            onPress={() =>
+              update({
+                sequence: sequence + ".",
+                grouping: resizeGrouping(sequence.length + 1),
+              })
+            }
           >
             + Pausa no fim
           </Button>
@@ -280,6 +294,7 @@ export function ExerciseLibrary({
             onPress={() =>
               update({
                 sequence: sequence.slice(0, -1),
+                grouping: resizeGrouping(sequence.length - 1),
                 accents: (draft.accents ?? []).filter(
                   (i) => i < sequence.length - 1,
                 ),

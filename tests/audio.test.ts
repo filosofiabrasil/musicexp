@@ -16,6 +16,28 @@ import { toPattern, barDuration } from "../src/pandeiro-ui-base/types";
 import rhythms from "../src/data/rhythms.json";
 import { PLAYBACK_RATE } from "../src/audio/sampleLibrary";
 import { waitForAudioLoad } from "../src/audio/waitForAudioLoad";
+import {
+  acquireVoice,
+  MAX_SAMPLE_VOICES,
+} from "../src/audio/voicePool";
+
+test("pool de samples prefere vozes livres e cresce antes de cortar uma cauda", () => {
+  assert.deepEqual(
+    acquireVoice([{ playing: true }, { playing: false }], 0),
+    { index: 1, grow: false },
+  );
+  assert.deepEqual(
+    acquireVoice([{ playing: true }, { playing: true }], 0),
+    { index: 2, grow: true },
+  );
+  assert.deepEqual(
+    acquireVoice(
+      Array.from({ length: MAX_SAMPLE_VOICES }, () => ({ playing: true })),
+      9,
+    ),
+    { index: 1, grow: false },
+  );
+});
 
 test("o timbre normaliza cruzamentos de zero entre 16, 44,1 e 48 kHz", () => {
   const features = [16000, 44100, 48000].map((rate) =>

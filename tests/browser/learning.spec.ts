@@ -33,7 +33,7 @@ test("exemplo da imagem mostra oito semicolcheias, duas semínimas e leitura 2/4
     .click();
   await page.getByRole("button", { name: "Métrica 2/4", exact: true }).click();
   const score = page.getByLabel(
-    "Leitura rítmica de 8 unidades, 2 semínimas, compasso 2/4",
+    "Leitura rítmica de 8 unidades, 2 semínimas, compasso 2/4, pauta de percussão em cinco linhas",
   );
   await expect(score).toBeVisible();
   const labels = await score.locator("text").allTextContents();
@@ -61,7 +61,9 @@ test("6/8 tem dois pulsos compostos e contagem de três colcheias por pulso", as
     .getByRole("button", { name: "Praticar 07 · Composto em 6/8", exact: true })
     .click();
   const labels = await page
-    .getByLabel("Leitura rítmica de 6 unidades, 3 semínimas, compasso 6/8")
+    .getByLabel(
+      "Leitura rítmica de 6 unidades, 3 semínimas, compasso 6/8, pauta de percussão em cinco linhas",
+    )
     .locator("text")
     .allTextContents();
   expect(labels.filter((value) => /^\d$/.test(value))).toEqual([
@@ -78,6 +80,34 @@ test("6/8 tem dois pulsos compostos e contagem de três colcheias por pulso", as
   await expect(
     page.getByRole("button", { name: "Clique Grupos", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
+});
+test("a partitura põe cada articulação em sua posição fixa na pauta de cinco linhas", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const score = page.getByLabel(
+    "Leitura rítmica de 16 unidades, 4 semínimas, compasso 4/4, pauta de percussão em cinco linhas",
+  );
+  const staffYs = await score.locator("line").evaluateAll((elements) =>
+    Array.from(
+      new Set(
+        elements
+          .map((element) => {
+            const line = element as SVGLineElement;
+            return {
+              y1: Number(line.getAttribute("y1")),
+              y2: Number(line.getAttribute("y2")),
+            };
+          })
+          .filter(({ y1, y2 }) => y1 === y2 && y1 >= 78 && y1 <= 110)
+          .map(({ y1 }) => y1),
+      ),
+    ).sort((a, b) => a - b),
+  );
+  expect(staffYs).toEqual([78, 86, 94, 102, 110]);
+  await expect(
+    page.getByText(/As cinco linhas são posições de articulação/),
+  ).toBeVisible();
 });
 test("preparação não registra golpes e tomada finita encerra no áudio sem voltar ao início", async ({
   page,
@@ -158,6 +188,32 @@ test("memória usa um buffer sem loop com silêncio real no trecho final", async
   await expect(page.getByText("TOMADA CONCLUÍDA", { exact: true })).toBeVisible(
     { timeout: 5000 },
   );
+});
+test("adicionar e retirar pausa no editor mantém o agrupamento válido", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await section(page, "Estudos e escrita");
+  const sequence = page.getByRole("textbox", {
+      name: "Sequência de articulações",
+    }),
+    grouping = page.getByRole("textbox", {
+      name: "Agrupamento do estudo pessoal",
+    });
+  await sequence.fill("PDBD");
+  await grouping.fill("4");
+  await page.getByRole("button", { name: "+ Pausa no fim" }).click();
+  await expect(sequence).toHaveValue("PDBD.");
+  await expect(grouping).toHaveValue("5");
+  await expect(
+    page.getByRole("button", { name: "Aplicar estudo pessoal" }),
+  ).toBeEnabled();
+  await page.getByRole("button", { name: "− Última unidade" }).click();
+  await expect(sequence).toHaveValue("PDBD");
+  await expect(grouping).toHaveValue("4");
+  await expect(
+    page.getByRole("button", { name: "Aplicar estudo pessoal" }),
+  ).toBeEnabled();
 });
 test("escrita pessoal salva acentos e métrica, volta após recarga e permite desfazer remoção", async ({
   page,

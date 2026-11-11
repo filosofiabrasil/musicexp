@@ -58,17 +58,78 @@ export const THEME = {
 };
 export const STROKES: Record<
   StrokeCode,
-  { kind: Kind; name: string; height: number; key: string }
+  {
+    kind: Kind;
+    name: string;
+    height: number;
+    key: string;
+    /** Posição editorial de percussão, em meios espaços a partir da linha inferior. */
+    staffStep: number;
+  }
 > = {
-  P: { kind: "grave", name: "Grave · polegar", height: 1, key: "a" },
-  D: { kind: "dedos", name: "Dedos", height: 0.36, key: "s" },
-  T: { kind: "tapa", name: "Tapa", height: 0.78, key: "d" },
-  B: { kind: "punho", name: "Punho", height: 0.53, key: "f" },
-  A: { kind: "abafado", name: "Abafado", height: 0.87, key: "g" },
-  X: { kind: "tapaPolegar", name: "Tapa de polegar", height: 0.73, key: "h" },
-  Q: { kind: "graveDedos", name: "Grave de dedos", height: 0.94, key: "j" },
-  M: { kind: "medio", name: "Médio", height: 0.62, key: "k" },
-  R: { kind: "rulo", name: "Rulo", height: 0.67, key: "l" },
+  P: {
+    kind: "grave",
+    name: "Grave · polegar",
+    height: 1,
+    key: "a",
+    staffStep: 0,
+  },
+  D: {
+    kind: "dedos",
+    name: "Dedos",
+    height: 0.36,
+    key: "s",
+    staffStep: 8,
+  },
+  T: {
+    kind: "tapa",
+    name: "Tapa",
+    height: 0.78,
+    key: "d",
+    staffStep: 7,
+  },
+  B: {
+    kind: "punho",
+    name: "Punho",
+    height: 0.53,
+    key: "f",
+    staffStep: 3,
+  },
+  A: {
+    kind: "abafado",
+    name: "Abafado",
+    height: 0.87,
+    key: "g",
+    staffStep: 1,
+  },
+  X: {
+    kind: "tapaPolegar",
+    name: "Tapa de polegar",
+    height: 0.73,
+    key: "h",
+    staffStep: 6,
+  },
+  Q: {
+    kind: "graveDedos",
+    name: "Grave de dedos",
+    height: 0.94,
+    key: "j",
+    staffStep: 2,
+  },
+  M: {
+    kind: "medio",
+    name: "Médio",
+    height: 0.62,
+    key: "k",
+    staffStep: 4,
+  },
+  R: {
+    kind: "rulo",
+    name: "Rulo",
+    height: 0.67,
+    key: "l",
+    staffStep: 5,
+  },
 };
 export const CODES = Object.keys(STROKES) as StrokeCode[];
 export const kindCode = (kind: Kind) =>

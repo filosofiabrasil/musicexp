@@ -1,3 +1,21 @@
+# Validação 1.2.1 — 11 de novembro de 2026
+
+## Verificações desta versão
+
+- `npm run typecheck` e `npx expo install --check`: aprovados.
+- `npm test`: **46 testes aprovados**. Incluem nove posições de pauta distintas, seleção de voz para sons sobrepostos, ajuste de agrupamento no editor, WAVs, grade temporal, classificação e persistência.
+- Playwright/Chromium: **37 testes aprovados**, sem casos pulados. O Chromium recebeu um WAV conhecido pelo dispositivo virtual; AudioWorklet, detector e classificador geraram os eventos a partir do PCM. Os testes também conferiram cinco linhas da pauta, contagem em 2/4 e 6/8, editor, armazenamento, exportação e layout estreito.
+- `npx expo export --platform all`: bundles web, iOS e Android gerados. Isso verifica a exportação JavaScript/Hermes; não compila APK/IPA nem substitui execução nativa em aparelho.
+- O ZIP 1.2.1 foi extraído em outra pasta sem `node_modules`; a prévia abriu e o percurso de estudo, salvamento após recarga, exportação, comparação e escuta completou sem erros de console ou recursos.
+- A captura [da escrita](images/escrita.png) agora mostra o exemplo ADBDPDBD distribuído nas posições de articulação da pauta de cinco linhas.
+
+## Limites desta versão
+
+- A distribuição de articulações na pauta é uma convenção editorial do app, explicitada de grave a agudo. Não afirma alturas afinadas nem reproduz ou certifica um sistema de notação publicado.
+- Os testes de microfone exercitam a captura web com um WAV conhecido; o reconhecimento continua sem taxa medida em alunos, instrumentos ou salas. O pool de vozes nativo tem teste de seleção, mas sua reprodução requer ensaio em um build de dispositivo.
+- Não foram compilados ou instalados APK/IPA; o ambiente não tem Android SDK ou Xcode.
+- O modelo musical ainda é uma grade de ataques: pontos não comandam abafamento e não há edição livre de durações sustentadas, ligaduras ou polifonia.
+
 # Validação 1.2.0 — 10 de novembro de 2026
 
 ## Verificações

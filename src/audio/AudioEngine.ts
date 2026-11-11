@@ -8,6 +8,7 @@ export { mixCycle, PlaybackConfig } from "./mixCycle";
 import { PLAYBACK_RATE, soundVariant } from "./sampleLibrary";
 import { SAMPLE_ASSETS } from "../data/sampleAssets";
 import { SampleChoices } from "../music/score";
+import { acquireVoice, MAX_SAMPLE_VOICES } from "./voicePool";
 
 /** Um WAV por ciclo: o agendamento está nos frames de áudio, sem setInterval. */
 export class AudioEngine {
@@ -150,6 +151,11 @@ export class PadSounds {
     }
     return { id: variant.id, players: this.players.get(variant.id)! };
   }
+  private createVoice(variantId: string) {
+    const player = createAudioPlayer(SAMPLE_ASSETS[variantId]);
+    player.volume = this.volume;
+    return player;
+  }
   prepare(choices: SampleChoices = {}) {
     this.dispose();
     for (const code of CODES) {
@@ -167,8 +173,14 @@ export class PadSounds {
   }
   async play(kind: Kind, variantId?: string) {
     const { id, players } = this.pool(kind, variantId);
-    const index = (this.index.get(id) || 0) % players.length;
-    this.index.set(id, index + 1);
+    const acquired = acquireVoice(
+      players,
+      this.index.get(id) || 0,
+      MAX_SAMPLE_VOICES,
+    );
+    if (acquired.grow) players.push(this.createVoice(id));
+    const index = acquired.index;
+    this.index.set(id, (index + 1) % players.length);
     const player = players[index],
       generation = this.generation;
     try {
