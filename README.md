@@ -147,3 +147,7 @@ Catálogos originais: `src/data/ritmos.source.js` e `src/data/ritmos-PADBT.json`
 Os contornos Bravura e as fontes de interface têm licenças em `licenses/`; veja [materiais e dependências](THIRD_PARTY_NOTICES.md). As referências bibliográficas dos ritmos foram preservadas, sem conferência integral de cada obra citada. Não são distribuídos PDFs de métodos ou partituras protegidas.
 
 Capturas: [prática](docs/images/pratica.png), [escrita corrigida](docs/images/escrita.png), [estudos](docs/images/estudos.png), [escuta](docs/images/escuta.png), [caderno](docs/images/caderno.png), [comparação](docs/images/comparacao.png) e [celular](docs/images/celular.png).
+
+### Percurso guiado
+
+Em **Estudos e escrita**, escolha uma das 11 etapas, abra o estudo na prática e marque sua conclusão. O progresso é salvo neste dispositivo e pode ser desmarcado. As etapas de dinâmica, abafamento e criação usam escuta e autoavaliação.

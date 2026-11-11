@@ -1,3 +1,7 @@
+# 1.2.2
+
+- Percurso guiado com 11 etapas, acesso à prática e progresso local reversível.
+
 # Alterações
 
 ## 1.2.1 — Continuidade de escrita e áudio

@@ -8,6 +8,7 @@ import {
   THEME as T,
 } from "../pandeiro-ui-base/types";
 import { ETUDES } from "../music/etudes";
+import { LearningPath } from "./LearningPath";
 import {
   SUBDIVISIONS,
   SUBDIVISION_NAMES,
@@ -120,6 +121,9 @@ export function ExerciseLibrary({
           referido à semínima; grupos e compassos são informados separadamente.
         </Text>
       </View>
+      <LearningPath onChoose={onChoose} />
+      <Separator />
+      <Label orange>ESTUDOS TÉCNICOS</Label>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 14 }}>
         {ETUDES.map((r) => (
           <View

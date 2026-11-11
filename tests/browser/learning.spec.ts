@@ -380,3 +380,15 @@ test("caderno compara duas tomadas e explicita mudança de andamento", async ({
   await choices.nth(1).click();
   await expect(page.getByText(/Condições diferentes: andamento/)).toBeVisible();
 });
+
+test('percurso abre prática e conserva conclusão após recarregar', async ({page}) => {
+  await page.goto('/');
+  await section(page, 'Estudos e escrita');
+  await page.getByRole('button', {name: 'Concluir etapa Pulso e ressonância'}).click();
+  await expect(page.getByText('PERCURSO GUIADO · 1/11 ETAPAS')).toBeVisible();
+  await page.reload();
+  await section(page, 'Estudos e escrita');
+  await expect(page.getByRole('button', {name: 'Desmarcar etapa Pulso e ressonância'})).toBeVisible();
+  await page.getByRole('button', {name: 'Praticar etapa Aberto e abafado'}).click();
+  await expect(page.getByText('Aberto e abafado', {exact: true}).first()).toBeVisible();
+});
