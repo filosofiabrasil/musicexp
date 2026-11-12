@@ -22,7 +22,7 @@ import {
 import { MusicGlyph, TimeValue, GlyphName } from "./MusicGlyph";
 import { fonts, Label, Button } from "./ui";
 
-export function ScoreStrip({
+function ScoreStripSystem({
   rhythm,
   subdivision,
   width,
@@ -483,3 +483,40 @@ const caption = {
   fontSize: 12,
   lineHeight: 19,
 };
+
+
+/** Divide ciclos longos em sistemas legíveis, mantendo os índices absolutos. */
+export function ScoreStrip(props: React.ComponentProps<typeof ScoreStripSystem>) {
+  const maxUnits = 16;
+  const total = props.rhythm.sequence.length;
+  if (total <= maxUnits) return <ScoreStripSystem {...props} />;
+  const systems = [];
+  for (let start = 0; start < total; start += maxUnits) {
+    const end = Math.min(start + maxUnits, total);
+    const sequence = props.rhythm.sequence.slice(start, end);
+    const localRange = {
+      start: Math.max(0, props.range.start - start),
+      end: Math.min(end - start, props.range.end - start),
+    };
+    systems.push(
+      <View key={start} style={{ gap: 4 }}>
+        <Label orange>PAUTA {Math.floor(start / maxUnits) + 1} · UNIDADES {start + 1}–{end}</Label>
+        <ScoreStripSystem
+          {...props}
+          rhythm={{
+            ...props.rhythm,
+            id: `${props.rhythm.id}-system-${start}`,
+            sequence,
+            groups: undefined,
+            meter: end - start === maxUnits ? props.meter ?? undefined : undefined,
+          }}
+          current={props.current !== null && props.current >= start && props.current < end ? props.current - start : null}
+          selected={props.selected >= start && props.selected < end ? props.selected - start : -1}
+          range={localRange}
+          onSelect={(index) => props.onSelect(start + index)}
+        />
+      </View>,
+    );
+  }
+  return <View style={{ gap: 24 }}>{systems}</View>;
+}

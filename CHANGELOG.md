@@ -1,5 +1,7 @@
 # 1.3.0
 
+- Partituras longas agora se dividem em sistemas de até 16 unidades, mantendo contagem, índices e seleção.
+
 - Cadeira vazia com bases reais de 84 e 92 BPM, modelo de pandeiro opcional e níveis por instrumento.
 - Dominó de frases com ordem e repetições editáveis, preparação, clique e reprodução numa linha de tempo compartilhada.
 - Salvamento local de montagem e exportação de roteiro JSON e áudio WAV.

@@ -54,7 +54,7 @@ Em 2/4, 3/4 e 4/4, os tempos reiniciam em cada compasso. Em 6/8, 9/8 e 12/8, a c
 
 As travessas quebram em pausas, compassos e fronteiras de quiálteras. Quiálteras incompletas são identificadas. A escrita representa os eventos da grade: cada letra inicia um ataque e cada ponto representa ausência de um novo ataque. As pausas desenhadas não executam abafamento nem cortam a ressonância do áudio. O modelo não edita livremente durações sustentadas, ligaduras, polifonia ou repertório MusicXML.
 
-A pauta apresenta três linhas para as articulações e usa X para os tapas.
+A pauta apresenta três linhas para as articulações e usa X para os tapas. Ciclos longos são divididos em sistemas de até 16 unidades para manter a leitura e a contagem legíveis.
 
 ## Andamento e referências
 
