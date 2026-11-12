@@ -38,8 +38,10 @@ export class AudioEngine {
   ready = false;
 
   async prepare(config: PlaybackConfig) {
+    return this.prepareRendered(mixPlayback(config));
+  }
+  async prepareRendered(playback: ReturnType<typeof mixPlayback>) {
     this.dispose();
-    const playback = mixPlayback(config);
     this.buffer = bufferFromPcm(playback.pcm);
     this.durationScale = playback.logicalDuration / this.buffer.duration;
     this.intro = playback.introDuration;

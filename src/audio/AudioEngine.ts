@@ -31,6 +31,9 @@ export class AudioEngine {
   running = false;
   ready = false;
   async prepare(config: PlaybackConfig) {
+    return this.prepareRendered(mixPlayback(config));
+  }
+  async prepareRendered(playback: ReturnType<typeof mixPlayback>) {
     const generation = ++this.generation;
     this.releasePlayer();
     this.ready = false;
@@ -40,7 +43,6 @@ export class AudioEngine {
       playsInSilentMode: true,
       shouldPlayInBackground: false,
     });
-    const playback = mixPlayback(config);
     const pcm = playback.pcm;
     const source = await wavSource(wavBytes(pcm, PLAYBACK_RATE));
     if (generation !== this.generation) {

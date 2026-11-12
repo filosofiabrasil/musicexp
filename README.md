@@ -1,6 +1,6 @@
 # PANDEIRO.APP — Ler, investigar, comparar
 
-Laboratório de estudo do pandeiro em React Native / Expo SDK 54. A versão **1.2.1** conecta leitura, escuta e prática: formule uma pergunta, prepare uma escrita, execute uma tomada de duração conhecida e compare as condições e os resultados.
+Laboratório de estudo do pandeiro em React Native / Expo SDK 54. A versão **1.3.0** conecta leitura, escuta e prática: formule uma pergunta, prepare uma escrita, execute uma tomada de duração conhecida e compare as condições e os resultados.
 
 A tela inicial abre um estudo original em 4/4. A biblioteca conserva os 148 ritmos e suas referências; o atlas organiza 43 gravações em nove famílias. Os oito estudos técnicos são propostas originais do projeto, sem atribuição a compositores ou métodos externos.
 
@@ -12,7 +12,7 @@ Instale Node.js LTS, extraia o ZIP e abra um terminal na pasta que contém `pack
 npm run preview
 ```
 
-Acesse **http://localhost:8080**. A preview incluída funciona sem instalar dependências. Deixe o terminal aberto; Ctrl+C encerra. Para atualizar, encerre o servidor anterior, extraia em outra pasta e recarregue com Ctrl+F5. Confira **v1.2.1** no rodapé.
+Acesse **http://localhost:8080**. A preview incluída funciona sem instalar dependências. Deixe o terminal aberto; Ctrl+C encerra. Para atualizar, encerre o servidor anterior, extraia em outra pasta e recarregue com Ctrl+F5. Confira **v1.3.0** no rodapé.
 
 ## Um primeiro estudo
 
@@ -24,6 +24,16 @@ Acesse **http://localhost:8080**. A preview incluída funciona sem instalar depe
 6. Depois experimente **Memória de pulso**: guia no primeiro ciclo e clique nos dois primeiros, quando ligados. Os dois últimos ciclos não recebem novos ataques de referência.
 
 O [guia de estudo](docs/GUIA_DE_ESTUDO.md) desenvolve esse protocolo e os limites de interpretação das medidas.
+
+## Roda e frases — Cadeira vazia e Dominó
+
+Na aba **Roda e frases**, a Cadeira vazia oferece surdo a 84 BPM ou surdo, agogô e reco-reco a 92 BPM. O pandeiro fica desligado por padrão: ocupe esse lugar com seu instrumento e ative o modelo quando quiser comparar. Escolha 4, 8, 16 ou 32 pulsos, ajuste os níveis, a preparação e o clique.
+
+No **Dominó de frases**, adicione levadas, viradas, breques e finais; mova peças, repita ou remova. A montagem aceita até 12 peças e 64 pulsos. Cada peça mostra sua extensão, incluindo finais de seis pulsos. Alterar a base abre uma sequência inicial compatível com o novo andamento. Desligue o modelo para tocar sua própria versão sobre o acompanhamento.
+
+Preparação, acompanhamento, modelo e clique usam um único buffer finito. Pausar conserva a posição; Voltar ao início reinicia. Sair da sala interrompe a reprodução. **Salvar montagem** conserva uma montagem local; **Abrir salva** recupera. Exporte o roteiro JSON para guardar versões e o WAV para ouvir a composição. O WAV contém as referências escolhidas, sem gravação ao vivo do aluno. A sala não atribui pontuação de golpes nem inventa uma partitura para as gravações.
+
+O banco inicial contém 14 trechos alinhados dos anexos, com contagens ACID e origem rastreável em `src/data/ensemble.json`. Reprodução e exportação usam PCM mono de 16 bits a 44,1 kHz; os derivados de origem eram 24 bits. Esta seleção exclui contagens estimadas e a virada ambígua. Os ataques internos e a interpretação continuam sendo os das gravações. Não há alteração livre de BPM nesta sala: as bases disponíveis são 84 e 92.
 
 ## Leitura e contagem
 
@@ -70,7 +80,7 @@ O clique pode marcar semínimas, cada unidade da grade ou os grupos escolhidos. 
 | Tomada de 4 ciclos | 4 semínimas    | 4 ciclos, referências conforme os controles                                                      |
 | Memória de pulso   | 4 semínimas    | Guia ligado no ciclo 1; clique ligado nos ciclos 1–2; ciclos 3–4 sem novos ataques de referência |
 
-A preparação não registra golpes. Os programas finitos encerram no próprio buffer de áudio. A frase escrita no objetivo e o programa usado acompanham o registro. No microfone, o guia é desligado; o clique pode ser ligado com fones. Caudas de samples podem continuar ressoando após o último ataque de referência. Nos dois últimos ciclos de Memória, o cursor, os contadores e os resultados parciais ficam ocultos, mantendo o registro dos golpes para o final.
+A preparação não registra golpes. Os programas finitos encerram no próprio buffer de áudio. A frase escrita no objetivo e o programa usado acompanham o registro. No microfone, o guia é desligado e o clique é ativado; use fones para reduzir vazamento. Caudas de samples podem continuar ressoando após o último ataque de referência. Nos dois últimos ciclos de Memória, o cursor, os contadores e os resultados parciais ficam ocultos, mantendo o registro dos golpes para o final.
 
 ## Escrever e conservar variações
 

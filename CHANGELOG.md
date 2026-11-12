@@ -1,3 +1,10 @@
+# 1.3.0
+
+- Cadeira vazia com bases reais de 84 e 92 BPM, modelo de pandeiro opcional e níveis por instrumento.
+- Dominó de frases com ordem e repetições editáveis, preparação, clique e reprodução numa linha de tempo compartilhada.
+- Salvamento local de montagem e exportação de roteiro JSON e áudio WAV.
+- Banco de 14 trechos com origem rastreável e testes de duração, composição e retomada.
+
 # 1.2.2
 
 - Percurso guiado com 11 etapas, acesso à prática e progresso local reversível.

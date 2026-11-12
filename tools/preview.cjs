@@ -3,6 +3,8 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '../preview-web');
+const port = Number(process.env.PANDEIRO_PREVIEW_PORT || 8080);
+if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Porta de preview inválida.');
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.wav': 'audio/wav', '.ttf': 'font/ttf', '.png': 'image/png' };
 if (!fs.existsSync(path.join(root, 'index.html'))) {
   console.error('A exportação web não está presente. Execute npm run web para abrir o projeto Expo.');
@@ -22,4 +24,4 @@ http.createServer((request, response) => {
   } catch {
     response.writeHead(400); response.end('Requisição inválida.');
   }
-}).listen(8080, '127.0.0.1', () => console.log('PANDEIRO.APP: http://localhost:8080 — Ctrl+C para encerrar.'));
+}).listen(port, '127.0.0.1', () => console.log(`PANDEIRO.APP: http://localhost:${port} — Ctrl+C para encerrar.`));

@@ -45,15 +45,19 @@ import { useProjects } from "./src/hooks/useProjects";
 import { ETUDES } from "./src/music/etudes";
 import { Button, Label, Separator, fonts } from "./src/components/ui";
 
+import { EnsembleStudio } from "./src/components/EnsembleStudio";
+import { defaultEnsemble } from "./src/music/ensemble";
+
 const MODES = [
   { id: "ring", number: "01", name: "Roda do tempo" },
   { id: "bars", number: "02", name: "Barras no tempo" },
   { id: "scatter", number: "03", name: "Precisão" },
 ] as const;
-type Section = "practice" | "studies" | "sounds" | "journal";
+type Section = "practice" | "studies" | "sounds" | "journal" | "ensemble";
 const SECTIONS: { id: Section; name: string }[] = [
   { id: "practice", name: "Prática" },
   { id: "studies", name: "Estudos e escrita" },
+  { id: "ensemble", name: "Roda e frases" },
   { id: "sounds", name: "Articulações e sons" },
   { id: "journal", name: "Caderno" },
 ];
@@ -86,6 +90,7 @@ export default function App() {
   );
 }
 function Laboratory() {
+  const [ensembleScene, setEnsembleScene] = useState(defaultEnsemble);
   const [rhythm, setRhythm] = useState(ETUDES[1]);
   const [section, setSection] = useState<Section>("practice"),
     [modeIndex, setModeIndex] = useState(0),
@@ -163,6 +168,7 @@ function Laboratory() {
   const navigate = (next: Section) => {
     if (next === section) return;
     practice.setCalibrating(null);
+    if (next === "ensemble") void practice.disableMicrophone();
     setSection(next);
   };
   const openLibrary = () => {
@@ -748,6 +754,9 @@ function Laboratory() {
             projects={projects}
             current={rhythm}
           />
+        )}
+        {section === "ensemble" && (
+          <EnsembleStudio scene={ensembleScene} setScene={setEnsembleScene} />
         )}
         {section === "sounds" && <SoundAtlas practice={practice} />}
         {section === "journal" && (
